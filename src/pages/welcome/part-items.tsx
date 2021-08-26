@@ -39,7 +39,7 @@ export default (props: IProps) => {
                         props.openServerAction(data.index);
                         e.preventDefault();
                       }}
-                      activeClassName="none">{data.server.name}</NavLink>
+                      activeClassName="none"><i className="bi bi-caret-right-fill"/> {data.server.name}</NavLink>
                     <button type="button" onClick={() => props.openEditAction(data.server)} className="edit-button"><i className="bi bi-pencil-fill"/></button>
                   </div>
                 ))}
