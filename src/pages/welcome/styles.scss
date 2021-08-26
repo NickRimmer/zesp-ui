@@ -1,0 +1,53 @@
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .card {
+    width: 430px;
+  }
+
+  .servers-list {
+    border-radius: 3px;
+    border: solid 1px #d4d4d4;
+
+    .item {
+      display: flex;
+      border-top: solid 1px #d4d4d4;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      &:hover {
+        background-color: #00000005;
+      }
+
+      a.server-button {
+        flex-grow: 1;
+        padding: 10px;
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+          color: black;
+        }
+      }
+
+      .edit-button {
+        background-color: #00000011;
+        width: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #00000077;
+        border: none;
+
+        &:hover {
+          color: black;
+        }
+      }
+    }
+  }
+}

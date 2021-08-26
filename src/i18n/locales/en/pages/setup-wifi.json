@@ -1,0 +1,22 @@
+{
+  "ssid": {
+    "label": "WIFI SSID",
+    "placeholder": "Enter SSID of your wifi AP (e.g. MySecretWifi)"
+  },
+  "pass": {
+    "label": "WIFI Password",
+    "placeholder": "Enter your connection password (e.g. super-duper-password)"
+  },
+  "ip": {
+    "label": "Local address",
+    "placeholder": "Enter static IP address and port of device with ZESP (e.g. 192.168.1.2:8082)"
+  },
+  "mask": {
+    "label": "Local mask address",
+    "placeholder": "Enter device network mask (e.g. 255.255.255.0)"
+  },
+  "gw": {
+    "label": "Gateway address",
+    "placeholder": "Enter gateway address (e.g. 192.168.1.1)"
+  }
+}

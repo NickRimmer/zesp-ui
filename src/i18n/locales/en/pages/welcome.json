@@ -1,0 +1,17 @@
+{
+  "list": {
+    "title": "Welcome here, stranger!",
+    "add_button": "Add a new server",
+    "add_message": "There is no servers added. Please, click this big blue button bellow to add your awesome server."
+  },
+  "edit": {
+    "title": "Connection settings",
+    "delete_button": "Delete",
+    "delete_title": "Delete confirmation",
+    "delete_message": "Are you <strong>sure</strong> you want to delete it?<br/>Just asking, no pressure... if you want to continue, smash <span class='badge bg-danger'>Delete</span> button bellow one more time.",
+    "save_button": "Save changes",
+    "add_button": "Add server",
+    "name_input_placeholder": "Enter display name (e.g. My hub4fun)",
+    "address_input_placeholder": "Your server address (e.g. 192.168.1.1)"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "topic": {
+    "label": "Topic name",
+    "placeholder": "Enter MQTT topic name (e.g. zesp32)"
+  },
+  "server": {
+    "label": "Server address",
+    "placeholder": "Enter MQTT server address (e.g. 192.168.1.1)"
+  },
+  "port": {
+    "label": "Server port",
+    "placeholder": "Enter MQTT server port (e.g. 1883)"
+  },
+  "login": {
+    "label": "MQTT Login",
+    "placeholder": "Enter MQTT user login (e.g. mqtt)"
+  },
+  "password": {
+    "label": "MQTT Password",
+    "placeholder": "Enter MQTT user password (e.g. pa$vv0rd)"
+  },
+  "is_enabled": {
+    "label": "Client is enable"
+  },
+  "is_ha_enabled": {
+    "label": "Home Assistant"
+  }
+}

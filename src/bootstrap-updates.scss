@@ -1,0 +1,21 @@
+//$font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+//$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+//
+//body {
+//  font-family: $font-family-sans-serif
+//}
+
+@mixin space_between($n, $size) {
+  .space-between-#{$n} {
+    & > div:nth-child(n+2), & > span:nth-child(n+2) {
+      margin-left: $size;
+    }
+  }
+}
+
+$space_between_spacer: 1rem;
+@include space_between(1, .25 * $space_between_spacer);
+@include space_between(2, .5 * $space_between_spacer);
+@include space_between(3, 1 * $space_between_spacer);
+@include space_between(4, 1.5 * $space_between_spacer);
+@include space_between(5, 3 * $space_between_spacer);
