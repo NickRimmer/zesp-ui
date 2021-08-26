@@ -24,6 +24,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          pwd
+          rm -rf node_modules package-lock.json
+          npm install
           ls
           npm run build
