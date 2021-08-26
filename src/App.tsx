@@ -22,11 +22,11 @@ const Content = () => {
       : servers[globalState.state.selectedServerIndex!]
   );
 
-  return selectedServer ? (<App/>) : (<WelcomePage/>);
+  return selectedServer ? (<App server={selectedServer}/>) : (<WelcomePage/>);
   // return <WelcomePage/>;
 }
 
-const App = () => {
+const App = (props: { server: IServerInfo }) => {
   const globalState = useGlobalState();
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const App = () => {
     Single.Spinner.show();
 
     Single.ZespConnectorPromise
-      .then(zesp => zesp.connectAsync(globalState))
+      .then(zesp => zesp.connectAsync(globalState, props.server))
       .then(() => ZespService.general.initAsync())
       .then(() => {
         globalState.setState(prev => ({...prev, ...{appInitialized: true}}))

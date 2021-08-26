@@ -17,7 +17,7 @@ const Result = {
       const id = $(input).prop("id");
       if (id == null) return;
 
-      if ($(input).prop("type") == "checkbox") {
+      if ($(input).prop("type") === "checkbox") {
         if ($(input).prop("checked") === true) data[id] = $(input).attr("checked_value") || "true";
         else data[id] = $(input).attr("unchecked_value") || "false";
       } else {

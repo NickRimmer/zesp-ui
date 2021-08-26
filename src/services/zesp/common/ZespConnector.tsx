@@ -6,15 +6,17 @@ import {IZespConnector, ZespConnectorHandler, ZespConnectorListener} from "../in
 import {Single} from "../../single";
 import {CloseEventCodes} from "../enums/CloseEventCodes";
 import {IZespResponseValidator} from "../interfaces/IZespResponseValidator";
+import {IServerInfo} from "../../../pages/welcome/interfaces";
 
-const zespHost = "192.168.3.30"; //TODO read host from config
+// const zespHost = "192.168.3.30"; //TODO read host from config
 
 let _ws: Websocket;
 let _globalState: IGlobalState;
+let _server: IServerInfo;
 const onMessageEvent = new EventTarget();
 
 const ZespConnector: IZespConnector = {
-  connectAsync: (globalState) => new Promise<IZespConnector>((resolve, reject) => {
+  connectAsync: (globalState, server) => new Promise<IZespConnector>((resolve, reject) => {
     if (_globalState) {
       console.warn("ZespConnector already initialized");
       resolve(Single.ZespConnector);
@@ -22,6 +24,7 @@ const ZespConnector: IZespConnector = {
     }
 
     _globalState = globalState;
+    _server = server;
 
     // start with delay
     setTimeout(() => ZespConnector.reconnectAsync(true)
@@ -44,6 +47,11 @@ const ZespConnector: IZespConnector = {
       // throw new Error("ZespConnector is not initialized yet")
     }
 
+    if (!_server) {
+      reject("Server configuration missed");
+      // throw new Error("ZespConnector is not initialized yet")
+    }
+
     // check if already connected
     if (_ws?.underlyingWebsocket?.readyState === 1 && !force) {
       resolve();
@@ -59,7 +67,7 @@ const ZespConnector: IZespConnector = {
     }
 
     _globalState.setState(prevState => ({...prevState, ...{zespConnected: false}}))
-    _ws = new WebsocketBuilder(`ws://${zespHost}:81`)
+    _ws = new WebsocketBuilder(`ws://${_server.address}:81`)
       .onOpen(() => {
         onConnectionOpen();
         resolve();

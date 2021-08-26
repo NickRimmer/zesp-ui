@@ -1,6 +1,7 @@
 import {IGlobalState} from "../../../global-state";
 import {IZespResponseValidator} from "./IZespResponseValidator";
 import {ZespDataEvent} from "../common/ZespDataEvent";
+import {IServerInfo} from "../../../pages/welcome/interfaces";
 
 interface IRequestAsyncArgs {
   data: string | ArrayBufferLike | Blob | ArrayBufferView,
@@ -19,7 +20,7 @@ export type OnSuccessEvent = (event: ZespDataEvent) => void;
 export type OnErrorEvent = (error: string) => void;
 
 export interface IZespConnector {
-  connectAsync: (globalState: IGlobalState) => Promise<IZespConnector>;
+  connectAsync: (globalState: IGlobalState, server: IServerInfo) => Promise<IZespConnector>;
   reconnectAsync: (force: boolean) => Promise<void>;
   send: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void;
   requestAsync: (args: IRequestAsyncArgs) => Promise<ZespDataEvent>;
