@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/zesp-ui/static/css/main.341b2b27.chunk.css",
+    "main.js": "/zesp-ui/static/js/main.cd07b053.chunk.js",
+    "main.js.map": "/zesp-ui/static/js/main.cd07b053.chunk.js.map",
+    "runtime-main.js": "/zesp-ui/static/js/runtime-main.50a2d0e7.js",
+    "runtime-main.js.map": "/zesp-ui/static/js/runtime-main.50a2d0e7.js.map",
+    "static/css/2.0d1561fe.chunk.css": "/zesp-ui/static/css/2.0d1561fe.chunk.css",
+    "static/js/2.0abea8f8.chunk.js": "/zesp-ui/static/js/2.0abea8f8.chunk.js",
+    "static/js/2.0abea8f8.chunk.js.map": "/zesp-ui/static/js/2.0abea8f8.chunk.js.map",
+    "static/js/3.e30fa41e.chunk.js": "/zesp-ui/static/js/3.e30fa41e.chunk.js",
+    "static/js/3.e30fa41e.chunk.js.map": "/zesp-ui/static/js/3.e30fa41e.chunk.js.map",
+    "index.html": "/zesp-ui/index.html",
+    "static/css/2.0d1561fe.chunk.css.map": "/zesp-ui/static/css/2.0d1561fe.chunk.css.map",
+    "static/css/main.341b2b27.chunk.css.map": "/zesp-ui/static/css/main.341b2b27.chunk.css.map",
+    "static/js/2.0abea8f8.chunk.js.LICENSE.txt": "/zesp-ui/static/js/2.0abea8f8.chunk.js.LICENSE.txt",
+    "static/media/index.scss": "/zesp-ui/static/media/bootstrap-icons.dfd0ea12.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.50a2d0e7.js",
+    "static/css/2.0d1561fe.chunk.css",
+    "static/js/2.0abea8f8.chunk.js",
+    "static/css/main.341b2b27.chunk.css",
+    "static/js/main.cd07b053.chunk.js"
+  ]
+}
