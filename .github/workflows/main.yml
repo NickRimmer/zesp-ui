@@ -26,5 +26,6 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
           npm install
-          ls
+          git config --global user.email "xan@dipteam.com"
+          git config --global user.name "NickRimmer"
           npm run deploy
