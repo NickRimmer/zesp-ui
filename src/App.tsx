@@ -7,7 +7,7 @@ import LoadingSpinner from "./shared/loading-spinner";
 import {GlobalStateProvider, useGlobalState} from "./shared/global-state-provider";
 import {Single} from "./services/single";
 import {ZespService} from "./services/zesp";
-import {Toaster} from "react-hot-toast";
+import toast, {Toaster} from "react-hot-toast";
 import {Routes} from "./Routes";
 import {WelcomePage} from "./pages/welcome";
 import {useLocalStorage} from "./services/localStorage";
@@ -30,6 +30,7 @@ const App = (props: { server: IServerInfo }) => {
   const globalState = useGlobalState();
 
   useEffect(() => {
+    console.log(globalState.state);
     Single.Spinner.init(globalState);
     Single.Spinner.show();
 
@@ -41,10 +42,16 @@ const App = (props: { server: IServerInfo }) => {
         Single.Spinner.hide();
       })
       .catch(error => {
-        globalState.setState(prev => ({...prev, ...{appInitialized: false}}))
+        globalState.setState(prev => ({
+          ...prev, ...{
+            appInitialized: false,
+            selectedServerIndex: null,
+          }
+        }))
+        Single.ZespConnector.disconnect();
+        Single.Spinner.hide();
 
-        //TODO show error message lockscreen
-        alert(error);
+        toast.error(`Ooops, cannot connect to the server (${props.server.address}). ${error}`); //TODO localization
       });
   }, []);
 

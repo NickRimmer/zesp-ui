@@ -12,12 +12,13 @@ import {IServerInfo} from "../../../pages/welcome/interfaces";
 
 let _ws: Websocket;
 let _globalState: IGlobalState;
-let _server: IServerInfo;
+let _server: IServerInfo | null;
 const onMessageEvent = new EventTarget();
+let _reconnecter: NodeJS.Timeout | null | undefined;
 
 const ZespConnector: IZespConnector = {
   connectAsync: (globalState, server) => new Promise<IZespConnector>((resolve, reject) => {
-    if (_globalState) {
+    if (_globalState && _server) {
       console.warn("ZespConnector already initialized");
       resolve(Single.ZespConnector);
       return;
@@ -29,17 +30,48 @@ const ZespConnector: IZespConnector = {
     // start with delay
     setTimeout(() => ZespConnector.reconnectAsync(true)
         .then(() => resolve(Single.ZespConnector))
-        .catch(error => reject(error)),
+        .catch(error => {
+          _globalState.setState(prev => ({...prev, ...{zespConnected: false}}));
+          reject(error);
+        }),
       Constants.ConnectionStartTimeout);
 
     // setup watchdog
-    setInterval(() => ZespConnector.reconnectAsync(false)
+    _reconnecter = setInterval(() => ZespConnector.reconnectAsync(false)
         .then(() => resolve(Single.ZespConnector))
-        .catch(error => reject(error)),
+        .catch(error => {
+          console.warn(`Reconnection is failed: ${error}`);
+          _globalState.setState(prev => ({...prev, ...{zespConnected: false}}));
+          reject(error);
+        }),
       Constants.VerifyConnectionTimeout);
 
     return ZespConnector;
   }),
+
+  disconnect: () => {
+    if (_reconnecter) {
+      clearInterval(_reconnecter);
+      _reconnecter = null;
+    }
+    _server = null;
+    _globalState.setState(prev => ({...prev, ...{zespConnected: false}}));
+
+    try {
+      if (_ws?.underlyingWebsocket?.readyState === 3 || _ws?.underlyingWebsocket?.readyState == null) {
+        console.debug("zesp connection already closed");
+        return;
+      } else if (_ws?.underlyingWebsocket?.readyState === 1) {
+        console.debug("zesp connection closing...");
+        _ws.close(1000); // closed normal
+        return;
+      } else {
+        _ws?.close(1000); // closed normal
+      }
+    } catch {
+      //it's ok (;
+    }
+  },
 
   reconnectAsync: (force) => new Promise<void>((resolve, reject) => {
     if (!_globalState) {
@@ -50,6 +82,11 @@ const ZespConnector: IZespConnector = {
     if (!_server) {
       reject("Server configuration missed");
       // throw new Error("ZespConnector is not initialized yet")
+    }
+
+    if (_ws?.underlyingWebsocket?.readyState === 0) {
+      reject("Already connecting");
+      return;
     }
 
     // check if already connected
@@ -67,7 +104,8 @@ const ZespConnector: IZespConnector = {
     }
 
     _globalState.setState(prevState => ({...prevState, ...{zespConnected: false}}))
-    _ws = new WebsocketBuilder(`ws://${_server.address}:81`)
+    const protocol = document.location.protocol === "https:" ? "wss" : "ws";
+    _ws = new WebsocketBuilder(`${protocol}://${_server!.address}:81`)
       .onOpen(() => {
         onConnectionOpen();
         resolve();

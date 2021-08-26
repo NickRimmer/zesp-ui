@@ -49,7 +49,7 @@ export default (props: IProps) => {
             <Card.Body>
               <FormControl className="mb-2" id="name" defaultValue={props.editServer?.name} placeholder={t("edit.name_input_placeholder")}/>
               <InputGroup>
-                <InputGroup.Text id="basic-addon3">ws://</InputGroup.Text>
+                <InputGroup.Text id="basic-addon3">{document.location.protocol === "https:" ? "wss" : "ws"}://</InputGroup.Text>
                 <FormControl id="address" defaultValue={props.editServer?.address} aria-describedby="basic-addon3" placeholder={t("edit.address_input_placeholder")}/>
               </InputGroup>
             </Card.Body>
