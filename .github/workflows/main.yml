@@ -27,6 +27,7 @@ jobs:
           rm -rf node_modules package-lock.json
           npm install
           npm build
+          ls
 
       # Deploy to gh-pages
       - name: Deploy to gh-pages
