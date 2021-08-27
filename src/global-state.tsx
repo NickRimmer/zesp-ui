@@ -1,5 +1,6 @@
 import {Dispatch, SetStateAction} from "react";
 import {ZespSettings} from "./services/zesp/models/ZespSettings";
+import {DeviceInfo} from "./services/zesp/models/DeviceInfo";
 
 interface GlobalStateInterface {
   spinnerLoadingShow: boolean,
@@ -7,6 +8,7 @@ interface GlobalStateInterface {
   appInitialized: boolean,
   zespSettings?: ZespSettings,
   selectedServerIndex: number | null,
+  devices: DeviceInfo[],
 }
 
 export interface IGlobalState {
@@ -22,6 +24,7 @@ const GetDefaultGlobalStateValues = (useGlobalState: () => IGlobalState): Global
     appInitialized: false,
     zespSettings: undefined,
     selectedServerIndex: null,
+    devices: []
   });
 };
 

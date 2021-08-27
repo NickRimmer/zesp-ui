@@ -1,0 +1,7 @@
+{
+  "default": {
+    "root": "zesp.jpg",
+    "unknown": "unknown.png",
+    "bulb": "bulb-default.jpg"
+  }
+}

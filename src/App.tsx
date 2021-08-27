@@ -30,13 +30,12 @@ const App = (props: { server: IServerInfo }) => {
   const globalState = useGlobalState();
 
   useEffect(() => {
-    console.log(globalState.state);
     Single.Spinner.init(globalState);
     Single.Spinner.show();
 
     Single.ZespConnectorPromise
       .then(zesp => zesp.connectAsync(globalState, props.server))
-      .then(() => ZespService.general.initAsync())
+      .then(() => ZespService.general.initAsync(globalState))
       .then(() => {
         globalState.setState(prev => ({...prev, ...{appInitialized: true}}))
         Single.Spinner.hide();
