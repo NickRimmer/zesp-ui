@@ -1,0 +1,42 @@
+.devices {
+  .card {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .group {
+    margin-bottom: 25px;
+
+    & > .title .badge {
+      font-size: .8rem;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .item, a.item {
+    $item_width: 270px;
+    color: var(--bs-body-color);
+    text-decoration: none;
+
+    width: $item_width;
+    transition: background-color 300ms;
+
+    &:hover {
+      background-color: #00000011;
+      border-radius: 5px;
+    }
+
+    .title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: $item_width - 85px;
+    }
+  }
+}
