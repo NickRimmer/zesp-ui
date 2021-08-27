@@ -26,7 +26,7 @@ const Result = () => {
             <InputGroupHorizontal controlId="mqtt" defaultValue={settings.mqtt} label={t("server.label")} placeholder={t("server.placeholder")}/>
             <InputGroupHorizontal controlId="mqttPort" defaultValue={(settings.mqttPort)?.toString()} label={t("port.label")} placeholder={t("port.placeholder")}/>
             <InputGroupHorizontal controlId="mqttLogin" defaultValue={settings.mqttLogin} label={t("login.label")} placeholder={t("login.placeholder")}/>
-            <InputGroupHorizontal controlId="mqttPassw" defaultValue={settings.mqttPassw} label={t("password.label")} placeholder={t("password.placeholder")}/>
+            <InputGroupHorizontal type="password" controlId="mqttPassw" defaultValue={settings.mqttPassw} label={t("password.label")} placeholder={t("password.placeholder")}/>
             <Row>
               <Col md="3" lg="2"/>
               <Col className="space-between-4">

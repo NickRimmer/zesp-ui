@@ -24,7 +24,7 @@ const Result = () => {
           <Card>
             <Card.Body>
               <InputGroupHorizontal controlId="ssid" defaultValue={settings?.ssid} label={t("ssid.label")} placeholder={t("ssid.placeholder")}/>
-              <InputGroupHorizontal controlId="pass" defaultValue={settings?.pass} label={t("pass.label")} placeholder={t("pass.placeholder")}/>
+              <InputGroupHorizontal type="password" controlId="pass" defaultValue={settings?.pass} label={t("pass.label")} placeholder={t("pass.placeholder")}/>
               <InputGroupHorizontal controlId="ip" defaultValue={settings?.ip} label={t("ip.label")} placeholder={t("ip.placeholder")}/>
               <InputGroupHorizontal controlId="mask" defaultValue={settings?.mask} label={t("mask.label")} placeholder={t("mask.placeholder")}/>
               <InputGroupHorizontal controlId="gw" defaultValue={settings?.gw} label={t("gw.label")} placeholder={t("gw.placeholder")}/>
