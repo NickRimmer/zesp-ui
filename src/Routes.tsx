@@ -6,8 +6,8 @@ import {NotImplementedYetPage, SetupMqttPage, SetupWifiPage} from "./pages/setup
 export const Routes = () => (
   <Fragment>
       <Route exact path="/" component={MainPage}/>
-      <Route exact path="/devices" component={DevicesPage}/>
-      <Route path="/devices/:ieee-:device" component={DeviceInfoPage}/>
+        <Route path="/devices" component={DevicesPage}/>
+        <Route path="/devices/:ieee-:device" component={DeviceInfoPage}/>
       <Route path="/setup" component={SetupPage}/>
       <Route exact path="/setup" component={SetupWifiPage}/>
       <Route path="/setup/mqtt" component={SetupMqttPage}/>
