@@ -8,6 +8,7 @@ const namespaces = [
     "pages.setup-mqtt",
     "pages.setup-wifi",
     "pages.welcome",
+    "pages.devices",
 ];
 
 const i18next = i18n.use(initReactI18next);

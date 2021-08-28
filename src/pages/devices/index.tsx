@@ -5,9 +5,11 @@ import {Card} from "react-bootstrap";
 import Item from "./item";
 import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
+import {useTranslation} from "react-i18next";
 
 const Result = () => {
   const globalState = useGlobalState();
+  const {t} = useTranslation("pages.devices");
 
   //TODO style and translate it
   if (!globalState.state.devices || globalState.state.devices.length == 0) return (
@@ -36,16 +38,16 @@ const Result = () => {
         <Card>
           <Card.Body>
             <div className="group">
-              <div className="title h5 pb-3">Hub devices</div>
+              <div className="title h5 pb-3">{t("groups.hub")}</div>
               <div className="items d-flex flex-wrap">
                 <Item device={rootDevice}/>
               </div>
             </div>
 
-            <DevicesGroup title="Light devices" devices={lightDevices}/>
-            <DevicesGroup title="Sensors or monitoring systems" devices={sensorDevices}/>
-            <DevicesGroup title="Switches" devices={switchDevices}/>
-            <DevicesGroup title="Other or unknown devices" devices={otherDevices}/>
+            <DevicesGroup title={t("groups.lights")} devices={lightDevices}/>
+            <DevicesGroup title={t("groups.sensors")} devices={sensorDevices}/>
+            <DevicesGroup title={t("groups.switches")} devices={switchDevices}/>
+            <DevicesGroup title={t("groups.other")} devices={otherDevices}/>
           </Card.Body>
         </Card>
       </div>
