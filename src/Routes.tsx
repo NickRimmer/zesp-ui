@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 import {Route} from "react-router-dom";
-import {DevicesPage, MainPage, SetupPage, DeviceInfoPage} from "./pages";
+import {DevicesPage, MainPage, SetupPage, DeviceInfoPage, SocketTestPage} from "./pages";
 import {NotImplementedYetPage, SetupMqttPage, SetupWifiPage} from "./pages/setup/setup-pages";
 
 export const Routes = () => (
@@ -14,6 +14,7 @@ export const Routes = () => (
       <Route path="/setup/zigbee" component={NotImplementedYetPage}/>
       <Route path="/setup/telegram" component={NotImplementedYetPage}/>
       <Route path="/setup/z2m" component={NotImplementedYetPage}/>
-      <Route path="/setup/zesp-ui" component={NotImplementedYetPage}/>
+    <Route path="/setup/zesp-ui" component={NotImplementedYetPage}/>
+    <Route path="/socket-test" component={SocketTestPage}/>
   </Fragment>
 )
