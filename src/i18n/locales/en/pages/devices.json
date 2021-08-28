@@ -1,0 +1,9 @@
+{
+  "groups": {
+    "hub": "Hub devices",
+    "sensors": "Sensors or monitoring systems",
+    "switches": "Switches",
+    "lights": "Lights, bulbs",
+    "other": "Other or unknown devices"
+  }
+}

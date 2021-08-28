@@ -27,5 +27,7 @@ export interface IZespConnector {
   requestAsync: (args: IRequestAsyncArgs) => Promise<ZespDataEvent>;
   request: (args: IRequestArgs) => Promise<IZespConnector>;
   subscribe: (validator: IZespResponseValidator, handler: ZespConnectorHandler) => ZespConnectorListener
-  unsubscribe: (listener: ZespConnectorListener) => void
+  unsubscribe: (listener: ZespConnectorListener) => void,
+
+  getGlobalState: () => IGlobalState
 }

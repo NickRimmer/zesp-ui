@@ -1,12 +1,15 @@
 import {Single} from "../single";
 import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
+import {IGlobalState} from "../../global-state";
+import ServiceDevices from "./service-devices";
 
 const send = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => Single.ZespConnector.send(data);
 let isInitialized = false;
+// let _globalState: IGlobalState;
 
 export default {
-  initAsync: (): Promise<void> => new Promise<void>((resolve, reject) => {
+  initAsync: (globalState: IGlobalState): Promise<void> => new Promise<void>((resolve, reject) => {
     if (isInitialized) {
       console.warn("zesp service already initialized");
       resolve();
@@ -14,13 +17,15 @@ export default {
     }
 
     isInitialized = true;
+    // _globalState = globalState
     console.debug("Load initial data from zesp...");
 
+    //TODO move each promise to fn
     Single.ZespConnectorPromise
       .then(zesp => zesp.request({data: "LoadJson|/groups.json", responseValidator: JsonZespResponseValidator("groups"), onSuccess: onGroupsReceived}))
       .then(zesp => zesp.request({data: "LoadJson|/location.json", responseValidator: JsonZespResponseValidator("location"), onSuccess: onLocationsReceived}))
       .then(zesp => zesp.request({data: "get_Mi_lamp", responseValidator: TypedZespResponseValidator("Mi_lamp"), onSuccess: onMiLampDataReceived}))
-      .then(zesp => zesp.request({data: "getDeviceList", responseValidator: TypedZespResponseValidator("alldev"), onSuccess: onDevicesListReceived}))
+      .then(ServiceDevices.requestData)
       .then(zesp => zesp.subscribe(TypedZespResponseValidator("rep"), onDevicesUpdate))
       .then(() => resolve())
       .catch(error => {
@@ -43,10 +48,6 @@ function onLocationsReceived(event: ZespDataEvent) {
 
 function onMiLampDataReceived(event: ZespDataEvent) {
   console.log("MI Lamp data received");
-}
-
-function onDevicesListReceived(event: ZespDataEvent) {
-  console.log("List of devices received");
 }
 
 function onDevicesUpdate(event: ZespDataEvent) {

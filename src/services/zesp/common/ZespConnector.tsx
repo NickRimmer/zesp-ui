@@ -189,7 +189,9 @@ const ZespConnector: IZespConnector = {
     return listener;
   },
 
-  unsubscribe: (listener: ZespConnectorListener) => onMessageEvent.removeEventListener(ZespDataEventType, listener)
+  unsubscribe: (listener: ZespConnectorListener) => onMessageEvent.removeEventListener(ZespDataEventType, listener),
+
+  getGlobalState: () => _globalState
 };
 
 const onConnectionOpen = () => {

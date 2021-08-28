@@ -1,0 +1,58 @@
+.devices {
+  .card {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .group {
+    margin-bottom: 25px;
+
+    & > .title .badge {
+      font-size: .8rem;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .items {
+    margin: -5px;
+  }
+
+  .item, a.item {
+    $item_width: 310px;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    margin: 3px;
+    width: $item_width;
+
+
+    .title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: $item_width - 105px;
+    }
+
+    .badges .badge {
+      margin-right: 3px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .item-image {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}

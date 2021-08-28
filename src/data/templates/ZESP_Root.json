@@ -1,0 +1,71 @@
+{
+  "Device": "6F39",
+  "Name": "ZESP_Router",
+  "IEEE": "00158D0003F0DB37",
+  "ModelId": "ZESP_Router",
+  "Location": "undefined",
+  "EP": {
+    "01": {
+      "PrfId": "0104",
+      "ClI": [
+        "0000",
+        "0004",
+        "0003",
+        "0006",
+        "0008",
+        "0005",
+        "0300",
+        "FFFF",
+        "1000"
+      ],
+      "ClO": []
+    },
+    "F2": {
+      "PrfId": "A1E0",
+      "ClI": [
+        "0021"
+      ],
+      "ClO": [
+        "0021"
+      ]
+    }
+  },
+  "DevType": "ZR",
+  "Report": {
+    "0100060000": {
+      "label": "On_Off",
+      "val": "",
+      "mat": "1",
+      "role": "light",
+      "parsed": ""
+    },
+    "0100080000": {
+      "label": "Level_Control",
+      "val": "",
+      "mat": "1",
+      "role": "light",
+      "parsed": ""
+    },
+    "0103000000": {
+      "label": "Color_Control",
+      "val": "",
+      "mat": "1",
+      "role": "light",
+      "parsed": ""
+    },
+    "0103000003": {
+      "label": "X",
+      "val": "",
+      "mat": "1",
+      "role": "sensor&{\"device_class\":\"none\"}",
+      "parsed": ""
+    },
+    "0103000004": {
+      "label": "Y",
+      "val": "",
+      "mat": "1",
+      "role": "sensor&{\"device_class\":\"none\"}",
+      "parsed": ""
+    }
+  }
+}
