@@ -19,7 +19,7 @@ Definitely yes.
 
 # Contributing
 
-We love your input. This all is possible only because of you ~_~
+We love your input. This all is possible only because of you 🥳
 
 - [General information](docs/contributing.md) about how to make changes.
 - What if your device is unfairly unknown - [change it with templates](docs/templates.md) right now.
