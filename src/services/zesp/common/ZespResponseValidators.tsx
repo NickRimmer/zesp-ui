@@ -16,3 +16,8 @@ export const TypedZespResponseValidator = (dataType: string): IZespResponseValid
   name: TypedZespResponseValidator.name,
   isValid: (event: ZespDataEvent) => event.dataType === dataType
 });
+
+export const AllMessagesZespResponseValidator: IZespResponseValidator = ({
+  name: "AllZespResponseValidator",
+  isValid: (event => true)
+});

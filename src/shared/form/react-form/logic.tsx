@@ -3,7 +3,7 @@ import $ from "jquery";
 
 // we need this 'any' type to provide general solution
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type IAction = (arg: any) => Promise<void>;
+type IAction = (arg: any) => void;
 
 const Result = {
   handleSubmit: function handleSubmit(e: FormEvent, action: IAction) {

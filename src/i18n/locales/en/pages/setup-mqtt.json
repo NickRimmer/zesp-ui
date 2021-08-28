@@ -20,7 +20,7 @@
     "placeholder": "Enter MQTT user password (e.g. pa$vv0rd)"
   },
   "is_enabled": {
-    "label": "Client is enable"
+    "label": "Client is enabled"
   },
   "is_ha_enabled": {
     "label": "Home Assistant"
