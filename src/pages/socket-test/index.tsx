@@ -7,7 +7,7 @@ import {AllMessagesZespResponseValidator} from "../../services/zesp/common/ZespR
 
 const maxMessagesCount = 15;
 const predefinedMessages = ["getDeviceList", "get_Mi_lamp", "LoadJson|/location.json", "LoadJson|/groups.json"];
-const predefinedBinary = ["01 0000 01 0000", "01 0000 01 0100"];
+const predefinedBinary = ["01 0000 01 0100", "01 0000 01 0000"];
 
 interface IFormData {
   messageToSend?: string,
@@ -79,7 +79,7 @@ export default () => {
     <FadeIn>
       <ReactForm onSubmit={onSend}>
         <Card>
-          <Card.Header>WebSocket tester</Card.Header>
+          <Card.Header>WebSocket tester (FOR DEVELOPMENT ONLY)</Card.Header>
           <Card.Body>
             <div className="row mb-2">
               <label className="col-md-3 col-lg-2">Message to send</label>
