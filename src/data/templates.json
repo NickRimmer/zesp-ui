@@ -1,0 +1,34 @@
+[
+  {
+    "modelIds": [
+      "ZESP_Root"
+    ],
+    "group": "root",
+    "image": "zesp.jpg",
+    "template": "ZESP_Root.json"
+  },
+  {
+    "modelIds": [
+      "lumi.sensor_switch"
+    ],
+    "group": "switch",
+    "image": "default-sensor-switch.jpg",
+    "template": "lumi.sensor_switch.json"
+  },
+  {
+    "modelIds": [
+      "lumi.sensor_motion"
+    ],
+    "group": "sensor",
+    "image": "default-sensor-motion.jpg",
+    "template": "lumi.sensor_motion.json"
+  },
+  {
+    "modelIds": [
+      "lumi.sensor_magnet"
+    ],
+    "group": "sensor",
+    "image": "default-sensor-magnet.jpg",
+    "template": "lumi.sensor_magnet.json"
+  }
+]

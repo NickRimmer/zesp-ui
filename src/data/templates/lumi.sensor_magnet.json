@@ -1,0 +1,21 @@
+{
+  "Device": "DEDA",
+  "Name": "",
+  "IEEE": "00158D0003FA6B8A",
+  "ModelId": "lumi.sensor_magnet",
+  "EP": {},
+  "Report": {
+    "0100060000": {
+      "label": "win_open",
+      "val": "0x00",
+      "mat": "1",
+      "role": "binary_sensor&{\"device_class\": \"door\",\"payload_on\": \"1\",\"payload_off\": \"0\"}"
+    },
+    "010000FF02": {
+      "label": "Battery",
+      "val": "3.02",
+      "mat": "[{\"label\":\"Battery\",\"sig\":\"0121\",\"dl\":\"2\",\"mat\":\"0.001\",\"role\":\"sensor\"}]",
+      "role": "sensor&{\"device_class\": \"battery\", \"unit_of_measurement\":\"V\"}"
+    }
+  }
+}

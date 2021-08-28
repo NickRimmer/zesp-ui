@@ -1,9 +1,11 @@
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {DeviceInfo} from "./models/DeviceInfo";
-import DataHaClusterIds from "./data/ha-cluster-ids.json";
+import DataHaClusterIds from "../../data/zigbee/ha-cluster-ids.json";
 import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
+import templates from "../../data/templates.json";
+import {TemplateInfo} from "./models/TemplateInfo";
 
 const ServiceDevices = {
   requestData: (zesp: IZespConnector) => {
@@ -20,8 +22,12 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   const devices: DeviceInfo[] = [];
   Object.assign(devices, JSON.parse(jsonString))
 
-  // additional data to devices extracting
+  // additional device data extraction
   for (const device of devices) {
+    // read template information
+    device.templateInfo = templates.find(x => x.modelIds.findIndex(y => y === device.ModelId) >= 0) as TemplateInfo | null;
+
+    // read report information
     for (const key of Object.keys(device.Report)) {
       const report = device.Report[key];
       report.reportIdInfo = {

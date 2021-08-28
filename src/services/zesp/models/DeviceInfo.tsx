@@ -1,3 +1,5 @@
+import {TemplateInfo} from "./TemplateInfo";
+
 export type DeviceInfo = {
   Device: string,
   Name: string | null,
@@ -5,6 +7,7 @@ export type DeviceInfo = {
   ModelId: string,
   Report: ReportDictionary,
   // EP: object,
+  templateInfo: TemplateInfo | null,
 }
 
 type ReportDictionary = { [reportId: string]: DeviceReportInfo };
@@ -16,7 +19,7 @@ type DeviceReportInfo = {
   role: string,
   parsed: string,
   time: string,
-  reportIdInfo: DeviceReportIdInfo
+  reportIdInfo: DeviceReportIdInfo,
 }
 
 export type DeviceReportIdInfo = {

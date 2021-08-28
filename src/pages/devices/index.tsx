@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import "./styles.scss";
 import {FadeIn} from "../../shared/fadein-transition";
 import {Card} from "react-bootstrap";
@@ -14,8 +14,21 @@ const Result = () => {
     <div>No devices found...</div>
   )
 
-  const rootDevice = globalState.state.devices[0];
-  const otherDevices: DeviceInfo[] = globalState.state.devices ?? []; //TODO filter it
+  let devices = globalState.state.devices;
+
+  // find root device
+  const rootDeviceIndex = devices.findIndex(x => x.Device === "0000");
+  const rootDevice = devices[rootDeviceIndex];
+  devices = devices.filter(x => x != rootDevice);
+
+  const lightDevices: DeviceInfo[] = devices.filter(x => x.templateInfo?.group === "light");
+  const sensorDevices: DeviceInfo[] = devices.filter(x => x.templateInfo?.group === "sensor");
+  const switchDevices: DeviceInfo[] = devices.filter(x => x.templateInfo?.group === "switch");
+  const otherDevices: DeviceInfo[] = devices.filter(x =>
+    !lightDevices.includes(x) &&
+    !sensorDevices.includes(x) &&
+    !switchDevices.includes(x)
+  );
 
   return (
     <FadeIn>
@@ -23,45 +36,32 @@ const Result = () => {
         <Card>
           <Card.Body>
             <div className="group">
-              <div className="title h5 pb-3">ZESP Root device</div>
+              <div className="title h5 pb-3">Hub devices</div>
               <div className="items d-flex flex-wrap">
                 <Item device={rootDevice}/>
               </div>
             </div>
 
-            {otherDevices.length > 0 && (
-              <div className="group border-top pt-4">
-                <div className="title h5 pb-3">Other devices <span className="badge bg-secondary">{otherDevices.length}</span></div>
-                <div className="items d-flex flex-wrap">
-                  {otherDevices.map((device, i) => (<Item device={device} key={i}/>))}
-                </div>
-              </div>
-            )}
+            <DevicesGroup title="Light devices" devices={lightDevices}/>
+            <DevicesGroup title="Sensors or monitoring systems" devices={sensorDevices}/>
+            <DevicesGroup title="Switches" devices={switchDevices}/>
+            <DevicesGroup title="Other or unknown devices" devices={otherDevices}/>
           </Card.Body>
         </Card>
-        {/*<Card>*/}
-        {/*  <Card.Header>Root device</Card.Header>*/}
-        {/*  <Card.Body>*/}
-        {/*    ...*/}
-        {/*  </Card.Body>*/}
-        {/*</Card>*/}
-
-        {/*<Card>*/}
-        {/*  <Card.Header>Light devices</Card.Header>*/}
-        {/*  <Card.Body>*/}
-        {/*    ...*/}
-        {/*  </Card.Body>*/}
-        {/*</Card>*/}
-
-        {/*<Card>*/}
-        {/*  <Card.Header>Sensors</Card.Header>*/}
-        {/*  <Card.Body>*/}
-        {/*    ...*/}
-        {/*  </Card.Body>*/}
-        {/*</Card>*/}
       </div>
     </FadeIn>
   );
 }
+
+const DevicesGroup = (props: { devices: DeviceInfo[], title: string }) => props.devices.length == 0
+  ? (<Fragment/>)
+  : (
+    <div className="group border-top pt-4">
+      <div className="title h5 pb-3">{props.title} <span className="badge bg-secondary">{props.devices.length}</span></div>
+      <div className="items d-flex flex-wrap">
+        {props.devices.map((device, i) => (<Item device={device} key={i}/>))}
+      </div>
+    </div>
+  )
 
 export default Result; 

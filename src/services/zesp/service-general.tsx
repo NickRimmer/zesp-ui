@@ -2,7 +2,7 @@ import {Single} from "../single";
 import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
-import ServiceDevices from "./servoce-devices";
+import ServiceDevices from "./service-devices";
 
 const send = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => Single.ZespConnector.send(data);
 let isInitialized = false;
