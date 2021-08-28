@@ -1,6 +1,7 @@
 import React from "react";
 import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
 import ItemImage from "./item-image";
+import {NavLink} from "react-router-dom";
 
 interface IProps {
   device: DeviceInfo
@@ -18,18 +19,20 @@ export default (props: IProps) => {
     .filter((x, i) => x !== "unknown" && tags.indexOf(x) == i)
     .sort((a, b) => a > b ? 1 : -1);
 
-  return (<a href="#" className="item p-3 border rounded">
-    <div className="d-flex">
-      <div><ItemImage device={props.device}/></div>
-      <div className="ps-2">
-        <div className="title">{title}</div>
-        <div className="ieee text-muted small"><span className="badge bg-info me-1">{props.device.Device}</span>{props.device.IEEE}</div>
-        {tags.length > 0 && (
-          <div className="badges small">
-            {tags.map((x, i) => (<span key={i} className="badge bg-secondary">{x}</span>))}
-          </div>
-        )}
+  return (
+    <NavLink className="item p-3 border rounded" to={`/devices/${props.device.IEEE}-${props.device.Device}`}>
+      <div className="d-flex">
+        <div><ItemImage device={props.device}/></div>
+        <div className="ps-2">
+          <div className="title">{title}</div>
+          <div className="ieee text-muted small"><span className="badge bg-info me-1">{props.device.Device}</span>{props.device.IEEE}</div>
+          {tags.length > 0 && (
+            <div className="badges small">
+              {tags.map((x, i) => (<span key={i} className="badge bg-secondary">{x}</span>))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  </a>);
+    </NavLink>
+  );
 }
