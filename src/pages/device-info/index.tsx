@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Modal} from "react-bootstrap";
-import {useParams, NavLink, useHistory} from "react-router-dom";
+import {NavLink, useHistory, useParams} from "react-router-dom";
 
 export default () => {
   const {ieee, device} = useParams<{ ieee: string, device: string }>();
