@@ -1,5 +1,5 @@
 import React from "react";
-import {LayoutConfigOnOff} from "../../../models/DeviceControlInfo";
+import {LayoutConfigOnOff} from "../models/DeviceControlInfo";
 
 interface IProps {
   config: LayoutConfigOnOff

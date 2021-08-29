@@ -5,8 +5,8 @@ import {DeviceDialog} from "./DeviceDialog";
 import NotFoundView from "./NotFoundView";
 import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
 import {DeviceControlInfo, LayoutConfigOnOff} from "../../models/DeviceControlInfo";
-import {OnOffDeviceControl} from "./controls/OnOffDeviceControl";
-import {UnknownDeviceControl} from "./controls/UnknownDeviceControl";
+import {OnOffDeviceControl} from "../../device-controls/OnOffDeviceControl";
+import {UnknownDeviceControl} from "../../device-controls/UnknownDeviceControl";
 
 export default () => {
   const {ieee, device} = useParams<{ ieee: string, device: string }>();

@@ -1,5 +1,5 @@
 import React from "react";
-import {DeviceControlInfo} from "../../../models/DeviceControlInfo";
+import {DeviceControlInfo} from "../models/DeviceControlInfo";
 
 interface IProps {
   data: DeviceControlInfo
