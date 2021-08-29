@@ -6,7 +6,8 @@
     "groups": [
       "root"
     ],
-    "image": "zesp.jpg"
+    "image": "zesp.jpg",
+    "layout": "root.json"
   },
   {
     "modelIds": [

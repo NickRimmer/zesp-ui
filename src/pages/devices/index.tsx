@@ -6,7 +6,7 @@ import Item from "./item";
 import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
 import {useTranslation} from "react-i18next";
-import {TemplateGroupName} from "../../services/zesp/models/TemplateInfo";
+import {TemplateGroupName} from "../../models/TemplateInfo"
 
 const Result = () => {
   const globalState = useGlobalState();

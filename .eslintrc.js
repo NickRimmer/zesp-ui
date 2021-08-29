@@ -15,5 +15,6 @@ module.exports = {
         "@typescript-eslint/explicit-module-boundary-types": OFF, // it is more comfortable to control it by developers itself
         "@typescript-eslint/no-unused-vars": [WARN, {"args": "none"}], // disable warnings for unused function args
         "@typescript-eslint/no-non-null-assertion": OFF, // developers are responsible for null possible vars
+        "no-constant-condition": WARN, // this is quite useful to set constant condition for development purposes
     }
 };

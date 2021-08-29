@@ -4,5 +4,5 @@ export type TemplateInfo = {
   modelIds: string[],
   image: string,
   groups?: TemplateGroupName[],
-  template?: string | null
+  layout?: string | null
 }

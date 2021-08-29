@@ -1,4 +1,4 @@
-import {TemplateInfo} from "./TemplateInfo";
+import {TemplateInfo} from "../../../models/TemplateInfo";
 
 export type DeviceInfo = {
   Device: string,

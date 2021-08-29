@@ -1,0 +1,23 @@
+[
+  {
+    "id": "on_off",
+    "config": {
+      "commandOn": "...",
+      "commandOff": "..."
+    }
+  },
+  {
+    "id": "level",
+    "config": {
+      "command": "...",
+      "min": 0,
+      "max": 255
+    }
+  },
+  {
+    "id": "rgb",
+    "config": {
+      "command": "..."
+    }
+  }
+]

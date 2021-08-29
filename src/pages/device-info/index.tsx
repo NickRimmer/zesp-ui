@@ -1,32 +1,40 @@
-import React, {useState} from "react";
-import {Modal} from "react-bootstrap";
-import {NavLink, useHistory, useParams} from "react-router-dom";
+import React from "react";
+import {useParams} from "react-router-dom";
+import {useGlobalState} from "../../shared/global-state-provider";
+import {DeviceDialog} from "./DeviceDialog";
+import NotFoundView from "./NotFoundView";
+import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
+import {DeviceControlInfo, LayoutConfigOnOff} from "../../models/DeviceControlInfo";
+import {OnOffDeviceControl} from "./controls/OnOffDeviceControl";
+import {UnknownDeviceControl} from "./controls/UnknownDeviceControl";
 
 export default () => {
   const {ieee, device} = useParams<{ ieee: string, device: string }>();
-  const [show, setShow] = useState(true);
-  const history = useHistory();
+  const {state} = useGlobalState();
+  const data = state.devices?.find(x => x.IEEE === ieee && x.Device === device);
 
-  const handleClose = () => setShow(false);
-  const handleExit = () => setTimeout(() => history.push("/devices"), 100);
-  const handleCloseLink = (event: React.MouseEvent) => {
-    event.preventDefault();
-    handleClose();
-  }
-
-  return (
-    <Modal show={show} onHide={handleClose} onExited={handleExit}>
-      <Modal.Header closeButton>Not implemented yet</Modal.Header>
-      <Modal.Body>
-        <p>Device: <span className="badge bg-info">{ieee} ({device})</span></p>
-        <p>
-          Hello, my dear friend! Just imagine how awesome this feature can be and share it with developers ~_~ <br/>
-          Or you can even implement it yourself, everything you need is just to jump to source codes, made some magic, test it and that's it!
-        </p>
-        <p>
-          <NavLink to="/devices" onClick={handleCloseLink}>Go back for now</NavLink>
-        </p>
-      </Modal.Body>
-    </Modal>
+  if (!data) return (
+    <DeviceDialog title="Oops... Device information not found"><NotFoundView device={device} ieee={ieee}/></DeviceDialog>
   );
+
+  const controlsData: DeviceControlInfo[] = data.templateInfo?.layout
+    ? require(`../../data/layouts/${data.templateInfo.layout}`)
+    : buildLayout(data);
+
+  const controls = controlsData.map((control, i) => (<div key={i}>{getControl(control)}</div>));
+  const content = (<div>{controls}</div>);
+  return (<DeviceDialog title={data!.Name || data!.ModelId}>{content}</DeviceDialog>);
+}
+
+const buildLayout = (device: DeviceInfo): DeviceControlInfo[] => {
+  return []; //TODO build layout based on data from ZESP
+}
+
+const getControl = (control: DeviceControlInfo) => {
+  switch (control.id) {
+    case "on_off" :
+      return (<OnOffDeviceControl config={control.config as LayoutConfigOnOff}/>);
+    default:
+      return (<UnknownDeviceControl data={control}/>)
+  }
 }

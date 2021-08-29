@@ -5,7 +5,7 @@ import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import templates from "../../data/devices.json";
-import {TemplateInfo} from "./models/TemplateInfo";
+import {TemplateInfo} from "../../models/TemplateInfo";
 
 const ServiceDevices = {
   requestData: (zesp: IZespConnector) => {
