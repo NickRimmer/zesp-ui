@@ -45,7 +45,6 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   globalState.setState(x => ({...x, ...{devices: devices}}));
 }
 
-// TODO refactoring required to reduce complexity
 const getReportName = (clusterId: string): string => {
   const reportType = (DataHaClusterIds as ClusterInfo[]).find(x => x.id == clusterId);
   return reportType?.name ?? clusterId;

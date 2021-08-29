@@ -1,4 +1,4 @@
-import {DeviceInfo, ReportInfo} from "../services/zesp/models/DeviceInfo";
+import {DeviceInfo} from "../services/zesp/models/DeviceInfo";
 import {DeviceControlSettings, LayoutConfigOnOff} from "./settings";
 import {OnOffDeviceControl} from "./OnOffDeviceControl";
 import {UnknownDeviceControl} from "./UnknownDeviceControl";
