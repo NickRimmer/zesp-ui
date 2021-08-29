@@ -7,7 +7,7 @@ interface IProps {
 
 export default (props: IProps) => {
   const deviceImage = getDeviceImageSrc(props.device);
-  const src = `/device-images/${deviceImage}`;
+  const src = `${process.env.PUBLIC_URL}/device-images/${deviceImage}`;
   return (<div className="item-image" style={{backgroundImage: `url(${src})`}}/>);
 }
 

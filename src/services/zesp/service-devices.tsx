@@ -4,7 +4,7 @@ import DataHaClusterIds from "../../data/zigbee/ha-cluster-ids.json";
 import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
-import templates from "../../data/templates.json";
+import templates from "../../data/devices.json";
 import {TemplateInfo} from "./models/TemplateInfo";
 
 const ServiceDevices = {

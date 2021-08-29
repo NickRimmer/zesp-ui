@@ -6,6 +6,7 @@ import Item from "./item";
 import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
 import {useTranslation} from "react-i18next";
+import {TemplateGroupName} from "../../services/zesp/models/TemplateInfo";
 
 const Result = () => {
   const globalState = useGlobalState();
@@ -16,17 +17,19 @@ const Result = () => {
     <div>No devices found...</div>
   )
 
-  let devices = globalState.state.devices;
+  const devices = globalState.state.devices.sort();
 
-  // find root device
-  const rootDeviceIndex = devices.findIndex(x => x.Device === "0000");
-  const rootDevice = devices[rootDeviceIndex];
-  devices = devices.filter(x => x != rootDevice);
+  //TODO filter can be different, according to settings in future 
+  const filterByGroup = showWithoutGroups;
+  // const filterByGroup = showDeviceInFirstGroups;
+  // const filterByGroup = showDeviceInAllGroups;
 
-  const lightDevices: DeviceInfo[] = devices.filter(x => x.templateInfo?.group === "light");
-  const sensorDevices: DeviceInfo[] = devices.filter(x => x.templateInfo?.group === "sensor");
-  const switchDevices: DeviceInfo[] = devices.filter(x => x.templateInfo?.group === "switch");
+  const rootDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "root"));
+  const lightDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "light"));
+  const sensorDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "sensor"));
+  const switchDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "switch"));
   const otherDevices: DeviceInfo[] = devices.filter(x =>
+    !rootDevices.includes(x) &&
     !lightDevices.includes(x) &&
     !sensorDevices.includes(x) &&
     !switchDevices.includes(x)
@@ -37,17 +40,11 @@ const Result = () => {
       <div className="devices">
         <Card>
           <Card.Body>
-            <div className="group">
-              <div className="title h5 pb-3">{t("groups.hub")}</div>
-              <div className="items d-flex flex-wrap">
-                <Item device={rootDevice}/>
-              </div>
-            </div>
-
+            <DevicesGroup title={t("groups.hub")} devices={rootDevices}/>
             <DevicesGroup title={t("groups.lights")} devices={lightDevices}/>
             <DevicesGroup title={t("groups.sensors")} devices={sensorDevices}/>
             <DevicesGroup title={t("groups.switches")} devices={switchDevices}/>
-            <DevicesGroup title={t("groups.other")} devices={otherDevices}/>
+            <DevicesGroup title={otherDevices.length === devices.length ? t("groups.all") : t("groups.other")} devices={otherDevices}/>
           </Card.Body>
         </Card>
       </div>
@@ -55,15 +52,33 @@ const Result = () => {
   );
 }
 
-const DevicesGroup = (props: { devices: DeviceInfo[], title: string }) => props.devices.length == 0
+const DevicesGroup = (props: { devices: DeviceInfo[], title?: string | null }) => props.devices.length == 0
   ? (<Fragment/>)
   : (
     <div className="group border-top pt-4">
-      <div className="title h5 pb-3">{props.title} <span className="badge bg-secondary">{props.devices.length}</span></div>
+      {props.title && (
+        <div className="title h5 pb-3">
+          <span>{props.title}</span>
+          {props.devices.length > 1 && (<span className="badge bg-secondary ms-2">{props.devices.length}</span>)}
+        </div>
+      )}
       <div className="items d-flex flex-wrap">
         {props.devices.map((device, i) => (<Item device={device} key={i}/>))}
       </div>
     </div>
   )
+
+const showWithoutGroups = (device: DeviceInfo, groupName: TemplateGroupName) => !groupName;
+
+// const showDeviceInAllGroups = (device: DeviceInfo, groupName: TemplateGroupName) =>
+//   device.templateInfo &&
+//   device.templateInfo.groups &&
+//   device.templateInfo.groups.indexOf(groupName) >= 0;
+
+// const showDeviceInFirstGroups = (device: DeviceInfo, groupName: TemplateGroupName) =>
+//   device.templateInfo &&
+//   device.templateInfo.groups &&
+//   device.templateInfo.groups.length > 0 &&
+//   device.templateInfo.groups[0] === groupName;
 
 export default Result; 
