@@ -1,16 +1,15 @@
-import {TemplateInfo} from "../../../models/TemplateInfo";
+import {DeviceDetails} from "../../../models/DeviceDetails";
 
 export type DeviceInfo = {
   Device: string,
   Name: string | null,
   IEEE: string,
   ModelId: string,
-  Report: ReportInfoCollection,
+  Report: { [reportId: string]: ReportInfo },
   // EP: object,
-  templateInfo: TemplateInfo | null,
-}
 
-type ReportInfoCollection = { [reportId: string]: ReportInfo };
+  details: DeviceDetails | null,
+}
 
 export type ReportInfo = {
   label: string,
@@ -19,10 +18,11 @@ export type ReportInfo = {
   role: string,
   parsed: string,
   time: string,
-  reportIdInfo: DeviceReportIdInfo,
+
+  details: ReportDetails,
 }
 
-export type DeviceReportIdInfo = {
+export type ReportDetails = {
   name: string,
   endpoint: string,
   clusterId: string,

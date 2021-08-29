@@ -6,7 +6,7 @@ import Item from "./item";
 import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
 import {useTranslation} from "react-i18next";
-import {TemplateGroupName} from "../../models/TemplateInfo"
+import {GroupName} from "../../models/DeviceDetails"
 
 const Result = () => {
   const globalState = useGlobalState();
@@ -68,7 +68,7 @@ const DevicesGroup = (props: { devices: DeviceInfo[], title?: string | null }) =
     </div>
   )
 
-const showWithoutGroups = (device: DeviceInfo, groupName: TemplateGroupName) => !groupName;
+const showWithoutGroups = (device: DeviceInfo, groupName: GroupName) => !groupName;
 
 // const showDeviceInAllGroups = (device: DeviceInfo, groupName: TemplateGroupName) =>
 //   device.templateInfo &&

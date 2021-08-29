@@ -5,7 +5,7 @@ import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import templates from "../../data/devices.json";
-import {TemplateInfo} from "../../models/TemplateInfo";
+import {DeviceDetails} from "../../models/DeviceDetails";
 import {ClusterInfo} from "../../models/ClusterInfo";
 
 const ServiceDevices = {
@@ -27,13 +27,13 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   // additional device data extraction
   for (const device of devices) {
     // read template information
-    device.templateInfo = templates.find(x => x.modelIds.findIndex(y => y === device.ModelId) >= 0) as TemplateInfo | null;
+    device.details = templates.find(x => x.modelIds.findIndex(y => y === device.ModelId) >= 0) as DeviceDetails | null;
 
     // read report information
     for (const key of Object.keys(device.Report)) {
       const report = device.Report[key];
       const clusterId = key.substr(2, 4);
-      report.reportIdInfo = {
+      report.details = {
         endpoint: key.substr(0, 2),
         clusterId: clusterId,
         attributeId: key.substr(6),
