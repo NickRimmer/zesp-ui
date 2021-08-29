@@ -3,7 +3,8 @@
     "hub": "Hub devices",
     "sensors": "Sensors or monitoring systems",
     "switches": "Switches",
-    "lights": "Lights, bulbs",
-    "other": "Other or unknown devices"
+    "lights": "Lights and bulbs",
+    "other": "Other or unknown devices",
+    "all": "All registered devices"
   }
 }

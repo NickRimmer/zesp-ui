@@ -16,16 +16,26 @@ interface IFormData {
 export default () => {
   const [messages, _setMessages] = useState<string[]>([]);
   const [messageSendValue, setMessageSendValue] = useState<string>("");
+  const [paused, _setPaused] = useState<boolean>(false);
 
   const messagesRef = useRef(messages);
+  const pausedRef = useRef(paused);
 
   const addMessages = (message: string) => {
+    if (pausedRef.current) return;
+
     const data: string[] = [message.substr(0, 250), ...messagesRef.current];
     const cutCount = data.length - maxMessagesCount;
     if (cutCount > 0) data.splice(data.length - cutCount, cutCount)
 
     messagesRef.current = data;
     _setMessages(data);
+  }
+
+  const togglePause = () => {
+    const data = !pausedRef.current;
+    pausedRef.current = data;
+    _setPaused(data);
   }
 
   const onSend = (data: IFormData) => {
@@ -117,6 +127,7 @@ export default () => {
         <Card.Header>
           <span>Communication log <span className="badge bg-secondary small">{messages.length}</span></span>
           <button className="btn btn-outline-secondary ms-3 btn-sm" onClick={onClearLog}>Clear log</button>
+          <button className="btn btn-outline-secondary ms-3 btn-sm" onClick={() => togglePause()}>{paused ? "Start logs" : "Pause logs"}</button>
         </Card.Header>
         <Card.Body>
           {messages.map((message, i) => message.startsWith(">")

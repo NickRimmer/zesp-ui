@@ -1,0 +1,24 @@
+{
+  "0104": {
+    "name": "HOME_AUTOMATION",
+    "data": "ha-cluster-ids.json"
+  },
+  "0105": {
+    "name": "BUILDING_AUTOMATION"
+  },
+  "0107": {
+    "name": "TELECOM_APPLICATIONS"
+  },
+  "0108": {
+    "name": "HEALTH_CARE"
+  },
+  "0109": {
+    "name": "SMART_ENERGY"
+  },
+  "010A": {
+    "name": "RETAIL_SERVICES"
+  },
+  "C05E": {
+    "name": "LIGHT_LINK"
+  }
+}

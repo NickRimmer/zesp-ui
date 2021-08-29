@@ -14,6 +14,11 @@
       font-size: .8rem;
     }
 
+    &:first-child {
+      border-top: none !important;
+      padding-top: 0 !important;
+    }
+
     &:last-child {
       margin-bottom: 0;
     }

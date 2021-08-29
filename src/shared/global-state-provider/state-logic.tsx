@@ -1,6 +1,6 @@
 // https://jamiehaywood.medium.com/typesafe-global-state-with-typescript-react-react-context-c2df743f3ce
 
-import React, {createContext, useState, useContext, Dispatch, SetStateAction} from "react";
+import React, {createContext, Dispatch, SetStateAction, useContext, useState} from "react";
 import {GetDefaultGlobalStateValues, GlobalStateInterface} from "../../global-state";
 
 const GlobalStateContext = createContext({
