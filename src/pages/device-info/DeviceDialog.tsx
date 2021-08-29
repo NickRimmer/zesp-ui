@@ -1,4 +1,5 @@
 import React, {ReactNode, useState} from "react";
+import "./styles.scss";
 import {useHistory} from "react-router-dom";
 import {Modal} from "react-bootstrap";
 
@@ -17,7 +18,7 @@ export const DeviceDialog = (props: IProps) => {
   return (
     <Modal show={show} onHide={handleClose} onExited={handleExit} size="lg">
       <Modal.Header closeButton>{props.title}</Modal.Header>
-      <Modal.Body className="text-start">
+      <Modal.Body className="text-start device-dialog">
         {props.children}
       </Modal.Body>
     </Modal>

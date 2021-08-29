@@ -7,9 +7,9 @@
     }
   },
   {
-    "id": "level_control",
+    "id": "level_root",
     "arguments": {
-      "command": "...",
+      "command": "MoveToLevel|0000|1|1|1|{value}|0009",
       "min": 0,
       "max": 255
     }
@@ -17,7 +17,7 @@
   {
     "id": "rgb_control",
     "arguments": {
-      "command": "..."
+      "command": "MoveToColor|0000|1|1|{x}|{y}|0001"
     }
   },
   {

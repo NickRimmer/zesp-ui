@@ -22,7 +22,7 @@ export default () => {
     ? require(`../../data/layouts/${deviceInfo.details.layout}`)
     : buildLayoutFromReports(deviceInfo);
 
-  const controls = controlsData.map((control, i) => (<div key={i}>{getControlForDevice(control, deviceInfo)}</div>));
+  const controls = controlsData.map((control, i) => (<div key={i} className="device-control-group">{getControlForDevice(control, deviceInfo)}</div>));
   const content = (<div>{controls}</div>);
   return (<DeviceDialog title={deviceInfo!.Name || deviceInfo!.ModelId}>{content}</DeviceDialog>);
 }
