@@ -1,23 +1,26 @@
 [
   {
-    "id": "on_off",
-    "config": {
-      "commandOn": "...",
-      "commandOff": "..."
+    "id": "on_off_control",
+    "arguments": {
+      "commandOn": "on:2...",
+      "commandOff": "off|2..."
     }
   },
   {
-    "id": "level",
-    "config": {
+    "id": "level_control",
+    "arguments": {
       "command": "...",
       "min": 0,
       "max": 255
     }
   },
   {
-    "id": "rgb",
-    "config": {
+    "id": "rgb_control",
+    "arguments": {
       "command": "..."
     }
+  },
+  {
+    "id": "illuminance_sensor"
   }
 ]

@@ -1,12 +1,18 @@
 import React from "react";
-import {DeviceControlInfo} from "../models/DeviceControlInfo";
+import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
+import {DeviceControlSettings} from "./settings";
 
-interface IProps {
-  data: DeviceControlInfo
-}
+export const UnknownDeviceControl = (props: IDeviceControlProps<DeviceControlSettings>) => {
+  const configData = JSON.stringify(Object.assign({...props.config}, {report: null})); // remove report to eject it to another var
+  const reportData = JSON.stringify(props.config.report);
 
-export const UnknownDeviceControl = (props: IProps) => {
   return (
-    <div>Unknown control: {props.data.id}</div>
+    <>
+      <div>Unknown control: {props.config.id}</div>
+      <div className="alert alert-info">
+        <div>{configData}</div>
+        {reportData && (<div className="mt-2">{reportData}</div>)}
+      </div>
+    </>
   )
 }

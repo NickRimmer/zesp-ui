@@ -5,14 +5,14 @@ export type DeviceInfo = {
   Name: string | null,
   IEEE: string,
   ModelId: string,
-  Report: ReportDictionary,
+  Report: ReportInfoCollection,
   // EP: object,
   templateInfo: TemplateInfo | null,
 }
 
-type ReportDictionary = { [reportId: string]: DeviceReportInfo };
+type ReportInfoCollection = { [reportId: string]: ReportInfo };
 
-type DeviceReportInfo = {
+export type ReportInfo = {
   label: string,
   val: string,
   mat: string,
@@ -23,8 +23,8 @@ type DeviceReportInfo = {
 }
 
 export type DeviceReportIdInfo = {
-  p1: string,
-  deviceId: string,
   name: string,
-  command: string,
+  endpoint: string,
+  clusterId: string,
+  attributeId: string,
 }

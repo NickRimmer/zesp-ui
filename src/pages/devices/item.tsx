@@ -17,7 +17,7 @@ export default (props: IProps) => {
 
   // remove duplicates and unknown 
   tags = tags
-    .filter((x, i) => x !== "unknown" && tags.indexOf(x) == i)
+    .filter((x, i) => tags.indexOf(x) == i)
     .sort((a, b) => a > b ? 1 : -1);
 
   return (

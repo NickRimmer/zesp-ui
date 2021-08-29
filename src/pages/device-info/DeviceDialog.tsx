@@ -15,7 +15,7 @@ export const DeviceDialog = (props: IProps) => {
   const handleExit = () => setTimeout(() => history.push("/devices"), 100);
 
   return (
-    <Modal show={show} onHide={handleClose} onExited={handleExit}>
+    <Modal show={show} onHide={handleClose} onExited={handleExit} size="lg">
       <Modal.Header closeButton>{props.title}</Modal.Header>
       <Modal.Body className="text-start">
         {props.children}

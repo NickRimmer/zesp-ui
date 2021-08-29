@@ -6,6 +6,7 @@ import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import templates from "../../data/devices.json";
 import {TemplateInfo} from "../../models/TemplateInfo";
+import {ClusterInfo} from "../../models/ClusterInfo";
 
 const ServiceDevices = {
   requestData: (zesp: IZespConnector) => {
@@ -17,6 +18,7 @@ const ServiceDevices = {
   }
 }
 
+// TODO refactoring required to reduce complexity
 const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState): void => {
   const jsonString: string = event.dataParts[0];
   const devices: DeviceInfo[] = [];
@@ -30,11 +32,12 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
     // read report information
     for (const key of Object.keys(device.Report)) {
       const report = device.Report[key];
+      const clusterId = key.substr(2, 4);
       report.reportIdInfo = {
-        p1: key.substr(0, 2),
-        deviceId: key.substr(2, 4),
-        command: key.substr(6),
-        name: getReportName(key.substr(2, 4))
+        endpoint: key.substr(0, 2),
+        clusterId: clusterId,
+        attributeId: key.substr(6),
+        name: getReportName(clusterId)
       };
     }
   }
@@ -42,9 +45,10 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   globalState.setState(x => ({...x, ...{devices: devices}}));
 }
 
-const getReportName = (deviceId: string): string => {
-  const reportType = (DataHaClusterIds as { [deviceId: string]: string })[deviceId];
-  return reportType ?? "unknown";
+// TODO refactoring required to reduce complexity
+const getReportName = (clusterId: string): string => {
+  const reportType = (DataHaClusterIds as ClusterInfo[]).find(x => x.id == clusterId);
+  return reportType?.name ?? clusterId;
 }
 
 export default ServiceDevices;
