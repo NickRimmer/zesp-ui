@@ -1,9 +1,9 @@
 [
   {
-    "id": "on_off_control",
+    "id": "on_off_root",
     "arguments": {
-      "commandOn": "on:2...",
-      "commandOff": "off|2..."
+      "commandOn": "01 0000 01  0100",
+      "commandOff": "01 0000 01  0000"
     }
   },
   {

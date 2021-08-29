@@ -1,18 +1,18 @@
 import {ReportInfo} from "../services/zesp/models/DeviceInfo";
 
-export type DeviceControlSettings = {
+export type LayoutSettings = {
   id: string,
   report?: ReportInfo | null
 }
 
-export type LayoutConfigOnOff = DeviceControlSettings & {
+export type LayoutSettingsOnOff = LayoutSettings & {
   arguments: {
     commandOn: string,
     commandOff: string,
   }
 }
 
-export type LayoutConfigLevel = DeviceControlSettings & {
+export type LayoutSettingsLevel = LayoutSettings & {
   arguments: {
     command: string,
     min: number,
@@ -20,7 +20,7 @@ export type LayoutConfigLevel = DeviceControlSettings & {
   }
 }
 
-export type LayoutConfigRgb = DeviceControlSettings & {
+export type LayoutSettingsRgb = LayoutSettings & {
   arguments: {
     command: string,
   }

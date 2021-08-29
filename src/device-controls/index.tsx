@@ -1,20 +1,25 @@
 import {DeviceInfo} from "../services/zesp/models/DeviceInfo";
-import {DeviceControlSettings, LayoutConfigOnOff} from "./settings";
-import {OnOffDeviceControl} from "./OnOffDeviceControl";
-import {UnknownDeviceControl} from "./UnknownDeviceControl";
+import {LayoutSettings, LayoutSettingsOnOff} from "./settings";
+import {OnOffControl} from "./OnOffControl";
+import {UnknownControl} from "./UnknownControl";
 import React from "react";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
+import {OnOffRoot} from "./OnOffRoot";
 
-export const getControlForDevice = (config: DeviceControlSettings, deviceInfo: DeviceInfo) => {
-  const controlProps: IDeviceControlProps<DeviceControlSettings> = {
+export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceInfo) => {
+  const controlProps: IDeviceControlProps<LayoutSettings> = {
     config,
     deviceInfo,
   }
 
   switch (config.id) {
+    case "on_off_root" :
+      return (<OnOffRoot {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
+
     case "on_off_control" :
-      return (<OnOffDeviceControl {...controlProps} config={controlProps.config as LayoutConfigOnOff}/>);
+      return (<OnOffControl {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
+
     default:
-      return (<UnknownDeviceControl {...controlProps}/>)
+      return (<UnknownControl {...controlProps}/>)
   }
 }

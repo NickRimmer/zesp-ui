@@ -4,7 +4,7 @@ import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
 import ServiceDevices from "./service-devices";
 
-const send = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => Single.ZespConnector.send(data);
+const send = (data: string) => Single.ZespConnector.send({data: data});
 let isInitialized = false;
 // let _globalState: IGlobalState;
 

@@ -3,8 +3,12 @@ import {IZespResponseValidator} from "./IZespResponseValidator";
 import {ZespDataEvent} from "../common/ZespDataEvent";
 import {IServerInfo} from "../../../pages/welcome/interfaces";
 
-interface IRequestAsyncArgs {
-  data: string | ArrayBufferLike | Blob | ArrayBufferView,
+interface ISendArgs {
+  data: string,
+  isBinary?: boolean | null
+}
+
+interface IRequestAsyncArgs extends ISendArgs {
   responseValidator: IZespResponseValidator,
   timeoutSeconds?: number,
 }
@@ -23,7 +27,7 @@ export interface IZespConnector {
   connectAsync: (globalState: IGlobalState, server: IServerInfo) => Promise<IZespConnector>;
   disconnect: () => void,
   reconnectAsync: (force: boolean) => Promise<void>;
-  send: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void;
+  send: (args: ISendArgs) => void;
   requestAsync: (args: IRequestAsyncArgs) => Promise<ZespDataEvent>;
   request: (args: IRequestArgs) => Promise<IZespConnector>;
   subscribe: (validator: IZespResponseValidator, handler: ZespConnectorHandler) => ZespConnectorListener
