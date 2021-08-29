@@ -13,7 +13,7 @@ export default (props: IProps) => {
 
   let tags: string[] = [];
   for (const key of Object.keys(props.device.Report))
-    tags.push(props.device.Report[key].reportIdInfo.name);
+    tags.push(props.device.Report[key].details.name);
 
   // remove duplicates and unknown 
   tags = tags

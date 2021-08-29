@@ -18,8 +18,8 @@ export default () => {
     <DeviceDialog title="Oops... Device information not found"><NotFoundView device={device} ieee={ieee}/></DeviceDialog>
   );
 
-  const controlsData: DeviceControlSettings[] = deviceInfo.templateInfo?.layout
-    ? require(`../../data/layouts/${deviceInfo.templateInfo.layout}`)
+  const controlsData: DeviceControlSettings[] = deviceInfo.details?.layout
+    ? require(`../../data/layouts/${deviceInfo.details.layout}`)
     : buildLayoutFromReports(deviceInfo);
 
   const controls = controlsData.map((control, i) => (<div key={i}>{getControlForDevice(control, deviceInfo)}</div>));
@@ -30,10 +30,10 @@ export default () => {
 //TODO refactoring required to reduce method cyclomatic complexity
 const buildLayoutFromReports = (device: DeviceInfo): DeviceControlSettings[] => {
   const getControlId = (report: ReportInfo): DeviceControlSettings => {
-    const reportIdParsed = report.reportIdInfo;
+    const reportDetails = report.details;
 
-    const clusterInfo = (DataHaClusterIds as ClusterInfo[]).find(x => x.id == reportIdParsed.clusterId);
-    if (!clusterInfo) return {id: reportIdParsed.clusterId};
+    const clusterInfo = (DataHaClusterIds as ClusterInfo[]).find(x => x.id == reportDetails.clusterId);
+    if (!clusterInfo) return {id: reportDetails.clusterId};
 
     // build layout based on role
     const roleInfo = report.role?.split("&");
@@ -53,8 +53,8 @@ const buildLayoutFromReports = (device: DeviceInfo): DeviceControlSettings[] => 
     }
 
     // try to read attribute info from layout
-    const attributeInfo = clusterInfo.attributes && clusterInfo.attributes[reportIdParsed.attributeId];
-    if (!attributeInfo) return {id: `${reportIdParsed.clusterId}:${reportIdParsed.attributeId}`};
+    const attributeInfo = clusterInfo.attributes && clusterInfo.attributes[reportDetails.attributeId];
+    if (!attributeInfo) return {id: `${reportDetails.clusterId}:${reportDetails.attributeId}`};
 
     return attributeInfo;
   }

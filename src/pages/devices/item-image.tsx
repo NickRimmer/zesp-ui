@@ -12,6 +12,6 @@ export default (props: IProps) => {
 }
 
 function getDeviceImageSrc(device: DeviceInfo): string {
-  if (!device.templateInfo) return "zigbee.png";
-  return device.templateInfo.image;
+  if (!device.details) return "zigbee.png";
+  return device.details.image;
 }

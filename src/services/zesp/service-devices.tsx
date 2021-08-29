@@ -1,11 +1,11 @@
 import {ZespDataEvent} from "./common/ZespDataEvent";
-import {DeviceInfo} from "./models/DeviceInfo";
+import {DeviceInfo, ReportDetails} from "./models/DeviceInfo";
 import DataHaClusterIds from "../../data/zigbee/ha-cluster-ids.json";
 import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
-import templates from "../../data/devices.json";
-import {TemplateInfo} from "../../models/TemplateInfo";
+import predefinedDevices from "../../data/devices.json";
+import {DeviceDetails} from "../../models/DeviceDetails";
 import {ClusterInfo} from "../../models/ClusterInfo";
 
 const ServiceDevices = {
@@ -18,7 +18,7 @@ const ServiceDevices = {
   }
 }
 
-// TODO refactoring required to reduce complexity
+// when list of devices received from ZESP
 const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState): void => {
   const jsonString: string = event.dataParts[0];
   const devices: DeviceInfo[] = [];
@@ -26,26 +26,31 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
 
   // additional device data extraction
   for (const device of devices) {
-    // read template information
-    device.templateInfo = templates.find(x => x.modelIds.findIndex(y => y === device.ModelId) >= 0) as TemplateInfo | null;
+    device.details = getDeviceDetails(device.ModelId);
 
-    // read report information
-    for (const key of Object.keys(device.Report)) {
-      const report = device.Report[key];
-      const clusterId = key.substr(2, 4);
-      report.reportIdInfo = {
-        endpoint: key.substr(0, 2),
-        clusterId: clusterId,
-        attributeId: key.substr(6),
-        name: getReportName(clusterId)
-      };
-    }
+    for (const key of Object.keys(device.Report))
+      device.Report[key].details = getReportDetails(key);
   }
 
   globalState.setState(x => ({...x, ...{devices: devices}}));
 }
 
-// TODO refactoring required to reduce complexity
+// read predefined details
+const getDeviceDetails = (modelId: string): DeviceDetails | null =>
+  predefinedDevices.find(x => x.modelIds.findIndex(y => y === modelId) >= 0) as DeviceDetails | null;
+
+// parse report key
+const getReportDetails = (reportKey: string): ReportDetails => {
+  const clusterId = reportKey.substr(2, 4);
+  return {
+    endpoint: reportKey.substr(0, 2),
+    clusterId: clusterId,
+    attributeId: reportKey.substr(6),
+    name: getReportName(clusterId)
+  };
+}
+
+// read report name from cluster info
 const getReportName = (clusterId: string): string => {
   const reportType = (DataHaClusterIds as ClusterInfo[]).find(x => x.id == clusterId);
   return reportType?.name ?? clusterId;
