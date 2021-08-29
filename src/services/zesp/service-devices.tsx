@@ -1,5 +1,5 @@
 import {ZespDataEvent} from "./common/ZespDataEvent";
-import {DeviceInfo, ReportDetails, ReportInfo} from "./models/DeviceInfo";
+import {DeviceInfo, ReportDetails} from "./models/DeviceInfo";
 import DataHaClusterIds from "../../data/zigbee/ha-cluster-ids.json";
 import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
