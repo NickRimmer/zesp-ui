@@ -2,7 +2,7 @@
   "name": "zesp-ui-app",
   "version": "0.1.0",
   "private": false,
-  "homepage": "http://zesp.dipteam.com",
+  "homepage": "./",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@testing-library/jest-dom": "^5.11.4",
@@ -32,12 +32,10 @@
     "websocket-ts": "^1.1.1"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
