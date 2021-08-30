@@ -1,8 +1,17 @@
 import {ReportInfo} from "../services/zesp/models/DeviceInfo";
+import {ReportKey} from "../models/ReportKey";
 
 export type LayoutSettings = {
   id: string,
-  report?: ReportInfo | null
+  report?: ReportInfo | null,
+  value?: ReportKey,
+}
+
+export type LayoutSettingsSensor = LayoutSettings & {
+  arguments: {
+    clusterId: string,
+    attributeId: string,
+  }
 }
 
 export type LayoutSettingsOnOff = LayoutSettings & {

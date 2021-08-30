@@ -21,6 +21,10 @@
     }
   },
   {
-    "id": "illuminance_sensor"
+    "id": "illuminance_sensor",
+    "value": {
+      "clusterId": "0106",
+      "attributeId": "0000"
+    }
   }
 ]

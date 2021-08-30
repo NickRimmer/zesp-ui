@@ -18,17 +18,30 @@ export default () => {
     <DeviceDialog title="Oops... Device information not found"><NotFoundView device={device} ieee={ieee}/></DeviceDialog>
   );
 
-  const controlsData: LayoutSettings[] = deviceInfo.details?.layout
-    ? require(`../../data/layouts/${deviceInfo.details.layout}`)
-    : buildLayoutFromReports(deviceInfo);
+  const layoutSettings: LayoutSettings[] = deviceInfo.details?.layout
+    ? buildLayoutSettingsFromFile(deviceInfo)
+    : buildLayoutSettingsFromZesp(deviceInfo);
 
-  const controls = controlsData.map((control, i) => (<div key={i} className="device-control-group">{getControlForDevice(control, deviceInfo)}</div>));
+  const controls = layoutSettings.map((settings, i) => (<div key={i} className="device-control-group">{getControlForDevice(settings, deviceInfo)}</div>));
   const content = (<div>{controls}</div>);
   return (<DeviceDialog title={deviceInfo!.Name || deviceInfo!.ModelId}>{content}</DeviceDialog>);
 }
 
+const buildLayoutSettingsFromFile = (device: DeviceInfo): LayoutSettings[] => {
+  const settings: LayoutSettings[] = require(`../../data/layouts/${device.details?.layout}`);
+  for (const s of settings) {
+    if (s.value) {
+      const ep = "01"; // TODO read from ZESP 
+      const reportKey = ep + s.value.clusterId + s.value.attributeId;
+      s.report = device.Report[reportKey];
+    }
+  }
+
+  return settings;
+}
+
 //TODO refactoring required to reduce method cyclomatic complexity
-const buildLayoutFromReports = (device: DeviceInfo): LayoutSettings[] => {
+const buildLayoutSettingsFromZesp = (device: DeviceInfo): LayoutSettings[] => {
   const getControlId = (report: ReportInfo): LayoutSettings => {
     const reportDetails = report.details;
 

@@ -6,7 +6,7 @@ export type DeviceInfo = {
   IEEE: string,
   ModelId: string,
   Report: { [reportId: string]: ReportInfo },
-  // EP: object,
+  // EP: { [epKey: string]: object },
 
   details: DeviceDetails | null,
 }
