@@ -3,7 +3,7 @@ import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {LayoutSettings} from "./settings";
 
 export const UnknownControl = (props: IDeviceControlProps<LayoutSettings>) => {
-  const configData = JSON.stringify(Object.assign({...props.config}, {report: null})); // remove report to eject it to another var
+  const configData = JSON.stringify(Object.assign({...props.config}, {report: props.config.report ? "<hidden>" : null})); // remove report to eject it to another var
   const reportData = JSON.stringify(props.config.report);
 
   return (
