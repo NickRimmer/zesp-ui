@@ -1,0 +1,21 @@
+.device-dialog {
+  .device-control-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .row {
+    & > div {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

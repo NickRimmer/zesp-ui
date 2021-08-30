@@ -41,7 +41,7 @@ export default () => {
   const onSend = (data: IFormData) => {
     if (!data.messageToSend) return;
     addMessages(`>${data.messageToSend}`);
-    Single.ZespConnector.send(data.messageToSend);
+    Single.ZespConnector.send({data: data.messageToSend});
   }
 
   const onSendPredefined = (event: React.MouseEvent): void => {
@@ -51,24 +51,14 @@ export default () => {
   }
 
   const onSendBinary = (message?: string | null): void => {
-    // const p1 = "01";
-    // const deviceId = "0000";
-    // const epn = "01"; // ???
-    // const cmd = "0000";
-    // const data = p1 + deviceId + epn + cmd;
+    const data = message || messageSendValue;
+    Single.ZespConnector.send({data: data, isBinary: true});
 
-    const data = (message || messageSendValue).replaceAll(" ", "");
-    const dataHex = data.match(/[\da-f]{2}/gi)?.map(group => parseInt(group, 16)) as ArrayLike<number>;
-    const dataToSend = new Uint8Array(dataHex);
-
-    addMessages(`>bin: ${data} (${dataToSend})`);
-    Single.ZespConnector.send(dataToSend);
-
-    // 010000010000
-    // 01 0000 01 0000
-    // 00000000: 0100 0001 0000
-    // OFF \"01"+ Device +epn+"0000\"
-    // ON \"01"+ Device +epn+"0100\"
+    // const dataHex = data.match(/[\da-f]{2}/gi)?.map(group => parseInt(group, 16)) as ArrayLike<number>;
+    // const dataToSend = new Uint8Array(dataHex);
+    //
+    // addMessages(`>bin: ${data} (${dataToSend})`);
+    // Single.ZespConnector.send(dataToSend);
   }
 
   const onClearLog = () => {

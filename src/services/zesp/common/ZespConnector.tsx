@@ -119,16 +119,21 @@ const ZespConnector: IZespConnector = {
       .build();
   }),
 
-  send: (data) => {
+  send: (args) => {
     if (!_globalState) throw new Error("ZespConnector is not initialized yet");
+    const data = args.isBinary === true
+      ? getBinaryData(args.data)
+      : args.data;
+
     _ws.send(data);
   },
 
-  requestAsync: ({data, responseValidator, timeoutSeconds}) => new Promise<ZespDataEvent>(((resolve, reject) => {
-    if (!timeoutSeconds || timeoutSeconds <= 0) timeoutSeconds = Constants.DefaultRequestTimeoutSeconds;
-    let responseReceived = false;
+  requestAsync: (args) => new Promise<ZespDataEvent>(((resolve, reject) => {
+    if (!args.timeoutSeconds || args.timeoutSeconds <= 0) args.timeoutSeconds = Constants.DefaultRequestTimeoutSeconds;
+    if (args.isBinary !== true) args.isBinary = false;
 
-    const validator = responseValidator;
+    let responseReceived = false;
+    const validator = args.responseValidator;
 
     // on response received from zesp
     const listener = (event: Event) => {
@@ -145,15 +150,15 @@ const ZespConnector: IZespConnector = {
       if (responseReceived) return;
 
       onMessageEvent.removeEventListener(ZespDataEventType, listener);
-      console.warn(`zesp response did not received (timeout: ${timeoutSeconds} seconds)`);
+      console.warn(`zesp response did not received (timeout: ${args.timeoutSeconds} seconds)`);
       reject("timeout");
     };
 
     // send request
     try {
       onMessageEvent.addEventListener(ZespDataEventType, listener);
-      ZespConnector.send(data)
-      setTimeout(onTimeout, timeoutSeconds * 1000);
+      ZespConnector.send({data: args.data, isBinary: args.isBinary})
+      setTimeout(onTimeout, args.timeoutSeconds * 1000);
     } catch (error) {
       reject(`exception: ${error}`);
     }
@@ -229,6 +234,12 @@ const onMessageReceived = (ws: Websocket, e: MessageEvent) => {
   const resultEvent = new ZespDataEvent(messageType, messageParts, e.data);
   // console.debug(resultEvent);
   onMessageEvent.dispatchEvent(resultEvent);
+}
+
+const getBinaryData = (message: string): Uint8Array => {
+  const data = message.replaceAll(" ", "");
+  const dataHex = data.match(/[\da-f]{2}/gi)?.map(group => parseInt(group, 16)) as ArrayLike<number>;
+  return new Uint8Array(dataHex);
 }
 
 export default ZespConnector;
