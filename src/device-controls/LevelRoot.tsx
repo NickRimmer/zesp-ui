@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {LayoutSettingsLevel, LayoutSettingsOnOff} from "./settings";
+import {LayoutSettingsLevel} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
-import {Button, ButtonGroup, Col, FormControl, Row} from "react-bootstrap";
+import {Col, FormControl, Row} from "react-bootstrap";
 import {Single} from "../services/single";
 import FormRange from "react-bootstrap/FormRange";
 

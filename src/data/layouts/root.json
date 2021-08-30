@@ -15,7 +15,7 @@
     }
   },
   {
-    "id": "rgb_control",
+    "id": "rgb_root",
     "arguments": {
       "command": "MoveToColor|0000|1|1|{x}|{y}|0001"
     }
