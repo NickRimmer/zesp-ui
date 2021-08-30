@@ -3,13 +3,14 @@ import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/Ze
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
 import ServiceDevices from "./service-devices";
+import ServiceReportUpdates from "./service-report-updates";
 
 const send = (data: string) => Single.ZespConnector.send({data: data});
 let isInitialized = false;
 // let _globalState: IGlobalState;
 
 export default {
-  initAsync: (globalState: IGlobalState): Promise<void> => new Promise<void>((resolve, reject) => {
+  initAsync: (getGlobalState: () => IGlobalState): Promise<void> => new Promise<void>((resolve, reject) => {
     if (isInitialized) {
       console.warn("zesp service already initialized");
       resolve();
@@ -26,7 +27,7 @@ export default {
       .then(zesp => zesp.request({data: "LoadJson|/location.json", responseValidator: JsonZespResponseValidator("location"), onSuccess: onLocationsReceived}))
       .then(zesp => zesp.request({data: "get_Mi_lamp", responseValidator: TypedZespResponseValidator("Mi_lamp"), onSuccess: onMiLampDataReceived}))
       .then(ServiceDevices.requestData)
-      .then(zesp => zesp.subscribe(TypedZespResponseValidator("rep"), onDevicesUpdate))
+      .then(zesp => ServiceReportUpdates.subscribeToEvents(zesp, getGlobalState))
       .then(() => resolve())
       .catch(error => {
         console.error(`Cannot complete zesp service initialization: ${error}`);
@@ -48,8 +49,4 @@ function onLocationsReceived(event: ZespDataEvent) {
 
 function onMiLampDataReceived(event: ZespDataEvent) {
   console.log("MI Lamp data received");
-}
-
-function onDevicesUpdate(event: ZespDataEvent) {
-  console.log(`Device update received: ${event.dataParts[1]}`);
 }

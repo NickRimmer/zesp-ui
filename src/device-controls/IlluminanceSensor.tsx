@@ -5,7 +5,6 @@ import {Col, Row} from "react-bootstrap";
 
 //TODO localization
 export const IlluminanceSensor = (props: IDeviceControlProps<LayoutSettingsSensor>) => {
-  console.log(props);
   return (
     <Row>
       <Col md="3" lg="2">Illuminance:</Col>

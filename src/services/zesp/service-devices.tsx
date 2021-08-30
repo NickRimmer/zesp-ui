@@ -28,6 +28,7 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   for (const device of devices) {
     device.details = getDeviceDetails(device.ModelId);
 
+    // additional reports data extraction
     for (const key of Object.keys(device.Report))
       device.Report[key].details = getReportDetails(key);
   }
