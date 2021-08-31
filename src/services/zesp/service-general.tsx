@@ -4,6 +4,7 @@ import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
 import ServiceDevices from "./service-devices";
 import ServiceReportUpdates from "./service-report-updates";
+import ServiceRoot from "./service-root";
 
 const send = (data: string) => Single.ZespConnector.send({data: data});
 let isInitialized = false;
@@ -25,8 +26,8 @@ export default {
     Single.ZespConnectorPromise
       .then(zesp => zesp.request({data: "LoadJson|/groups.json", responseValidator: JsonZespResponseValidator("groups"), onSuccess: onGroupsReceived}))
       .then(zesp => zesp.request({data: "LoadJson|/location.json", responseValidator: JsonZespResponseValidator("location"), onSuccess: onLocationsReceived}))
-      .then(zesp => zesp.request({data: "get_Mi_lamp", responseValidator: TypedZespResponseValidator("Mi_lamp"), onSuccess: onMiLampDataReceived}))
-      .then(ServiceDevices.requestData)
+      .then(ServiceDevices.getDevicesList)
+      .then(ServiceRoot.getRootData)
       .then(zesp => ServiceReportUpdates.subscribeToEvents(zesp, getGlobalState))
       .then(() => resolve())
       .catch(error => {
@@ -45,8 +46,4 @@ function onGroupsReceived(event: ZespDataEvent) {
 
 function onLocationsReceived(event: ZespDataEvent) {
   console.log("locations received");
-}
-
-function onMiLampDataReceived(event: ZespDataEvent) {
-  console.log("MI Lamp data received");
 }

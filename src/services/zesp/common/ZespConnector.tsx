@@ -11,27 +11,27 @@ import {IServerInfo} from "../../../pages/welcome/interfaces";
 // const zespHost = "192.168.3.30"; //TODO read host from config
 
 let _ws: Websocket;
-let _globalState: IGlobalState;
+let _getGlobalState: () => IGlobalState;
 let _server: IServerInfo | null;
 const onMessageEvent = new EventTarget();
 let _reconnecter: NodeJS.Timeout | null | undefined;
 
 const ZespConnector: IZespConnector = {
-  connectAsync: (globalState, server) => new Promise<IZespConnector>((resolve, reject) => {
-    if (_globalState && _server) {
+  connectAsync: (getGlobalState: () => IGlobalState, server) => new Promise<IZespConnector>((resolve, reject) => {
+    if (_server) {
       console.warn("ZespConnector already initialized");
       resolve(Single.ZespConnector);
       return;
     }
 
-    _globalState = globalState;
+    _getGlobalState = getGlobalState;
     _server = server;
 
     // start with delay
     setTimeout(() => ZespConnector.reconnectAsync(true)
         .then(() => resolve(Single.ZespConnector))
         .catch(error => {
-          _globalState.setState(prev => ({...prev, ...{zespConnected: false}}));
+          getGlobalState().setState(prev => ({...prev, ...{zespConnected: false}}));
           reject(error);
         }),
       Constants.ConnectionStartTimeout);
@@ -41,7 +41,7 @@ const ZespConnector: IZespConnector = {
         .then(() => resolve(Single.ZespConnector))
         .catch(error => {
           console.warn(`Reconnection is failed: ${error}`);
-          _globalState.setState(prev => ({...prev, ...{zespConnected: false}}));
+          getGlobalState().setState(prev => ({...prev, ...{zespConnected: false}}));
           reject(error);
         }),
       Constants.VerifyConnectionTimeout);
@@ -55,7 +55,7 @@ const ZespConnector: IZespConnector = {
       _reconnecter = null;
     }
     _server = null;
-    _globalState.setState(prev => ({...prev, ...{zespConnected: false}}));
+    _getGlobalState().setState(prev => ({...prev, ...{zespConnected: false}}));
 
     try {
       if (_ws?.underlyingWebsocket?.readyState === 3 || _ws?.underlyingWebsocket?.readyState == null) {
@@ -74,7 +74,7 @@ const ZespConnector: IZespConnector = {
   },
 
   reconnectAsync: (force) => new Promise<void>((resolve, reject) => {
-    if (!_globalState) {
+    if (!_getGlobalState) {
       reject("ZespConnector is not initialized yet");
       // throw new Error("ZespConnector is not initialized yet")
     }
@@ -103,7 +103,7 @@ const ZespConnector: IZespConnector = {
       // it's ok :P
     }
 
-    _globalState.setState(prevState => ({...prevState, ...{zespConnected: false}}))
+    _getGlobalState().setState(prevState => ({...prevState, ...{zespConnected: false}}))
     const protocol = document.location.protocol === "https:" ? "wss" : "ws";
     _ws = new WebsocketBuilder(`${protocol}://${_server!.address}:81`)
       .onOpen(() => {
@@ -120,7 +120,7 @@ const ZespConnector: IZespConnector = {
   }),
 
   send: (args) => {
-    if (!_globalState) throw new Error("ZespConnector is not initialized yet");
+    if (!_getGlobalState) throw new Error("ZespConnector is not initialized yet");
     const data = args.isBinary === true
       ? getBinaryData(args.data)
       : args.data;
@@ -196,17 +196,17 @@ const ZespConnector: IZespConnector = {
 
   unsubscribe: (listener: ZespConnectorListener) => onMessageEvent.removeEventListener(ZespDataEventType, listener),
 
-  getGlobalState: () => _globalState
+  getGlobalState: () => _getGlobalState()
 };
 
 const onConnectionOpen = () => {
   console.debug("Zesp connection opened");
-  _globalState.setState(prevState => ({...prevState, ...{zespConnected: true}}));
+  _getGlobalState().setState(prevState => ({...prevState, ...{zespConnected: true}}));
 }
 
 const onConnectionClosed = () => {
   console.debug("Zesp connection closed");
-  _globalState.setState(prevState => ({...prevState, ...{zespConnected: false}}));
+  _getGlobalState().setState(prevState => ({...prevState, ...{zespConnected: false}}));
 }
 
 const onConnectionError = () => {

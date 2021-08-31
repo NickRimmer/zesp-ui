@@ -39,7 +39,7 @@ const App = (props: { server: IServerInfo }) => {
     Single.Spinner.show();
 
     Single.ZespConnectorPromise
-      .then(zesp => zesp.connectAsync(globalState, props.server))
+      .then(zesp => zesp.connectAsync(() => globalStateRef.current, props.server))
       .then(() => ZespService.general.initAsync(() => globalStateRef.current))
       .then(() => {
         globalState.setState(prev => ({...prev, ...{appInitialized: true}}))

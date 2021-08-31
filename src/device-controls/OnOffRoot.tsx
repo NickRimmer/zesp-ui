@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {LayoutSettingsOnOff} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {Button, ButtonGroup, Col, Row} from "react-bootstrap";
@@ -19,8 +19,8 @@ export const OnOffRoot = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
       <Col md="3" lg="2">Light power:</Col>
       <Col>
         <ButtonGroup>
-          <Button variant="primary" onClick={onHandler}>ON</Button>
-          <Button variant="secondary" onClick={offHandler}>OFF</Button>
+          <Button variant={props.config.report?.val.toString() === "1" ? "primary" : "secondary"} onClick={onHandler}>ON</Button>
+          <Button variant={props.config.report?.val.toString() === "1" ? "secondary" : "primary"} onClick={offHandler}>OFF</Button>
         </ButtonGroup>
       </Col>
     </Row>

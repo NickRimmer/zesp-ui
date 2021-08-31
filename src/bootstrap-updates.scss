@@ -28,3 +28,21 @@ $space_between_spacer: 1rem;
   padding: 0 5px;
   font-size: .75em;
 }
+
+.modal-header .btn {
+  padding: 0.5rem 0.5rem;
+  margin: -1rem 0.2rem -0.5rem auto;
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  color: #7f7f7f;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    color: #000;
+  }
+}

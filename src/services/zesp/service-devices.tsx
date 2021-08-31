@@ -10,7 +10,7 @@ import {ClusterInfo} from "../../models/ClusterInfo";
 import {LayoutSettings} from "../../device-controls/settings";
 
 const ServiceDevices = {
-  requestData: (zesp: IZespConnector) => {
+  getDevicesList: (zesp: IZespConnector) => {
     return zesp.request({
       data: "getDeviceList",
       responseValidator: TypedZespResponseValidator("alldev"),
