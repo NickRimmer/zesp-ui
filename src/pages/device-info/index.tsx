@@ -31,8 +31,7 @@ const buildLayoutSettingsFromFile = (device: DeviceInfo): LayoutSettings[] => {
   const settings: LayoutSettings[] = require(`../../data/layouts/${device.details?.layout}`);
   for (const s of settings) {
     if (s.value) {
-      const ep = "01"; // TODO read from ZESP 
-      const reportKey = ep + s.value.clusterId + s.value.attributeId;
+      const reportKey = s.value.endpoint + s.value.clusterId + s.value.attributeId;
       s.report = device.Report[reportKey];
     }
   }

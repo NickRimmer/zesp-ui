@@ -18,4 +18,23 @@
       align-items: center;
     }
   }
+
+  .highlight-value {
+    //transition: color 2000ms, text-shadow 2000ms;
+    $duration: 3000ms;
+    border-radius: 3px;
+    margin: 0 -10px;
+    padding: 0 10px;
+    background-color: transparent;
+    transition: background-color $duration;
+
+    &.just-added {
+      transition: none;
+
+      //text-shadow: 0 0 6px #0d6efd, 0 0 8px #1273de, 0 0 12px #004dcf;
+      //color: #004dff;
+
+      background-color: #fccb00;
+    }
+  }
 }

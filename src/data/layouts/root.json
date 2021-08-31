@@ -4,6 +4,11 @@
     "arguments": {
       "commandOn": "01 0000 01  0100",
       "commandOff": "01 0000 01  0000"
+    },
+    "value": {
+      "endpoint": "01",
+      "clusterId": "0006",
+      "attributeId": "0000"
     }
   },
   {
@@ -23,6 +28,7 @@
   {
     "id": "illuminance_sensor",
     "value": {
+      "endpoint": "01",
       "clusterId": "0106",
       "attributeId": "0000"
     }
