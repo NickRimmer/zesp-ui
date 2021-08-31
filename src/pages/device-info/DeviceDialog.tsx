@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from "react";
+import React, {Fragment, ReactNode, useState} from "react";
 import "./styles.scss";
 import {useHistory} from "react-router-dom";
 import {Modal} from "react-bootstrap";
@@ -64,7 +64,7 @@ export const DeviceDialog = (props: IProps) => {
         {props.children}
         {props.groupsContent && props.groupsContent.map(group => group.groupName === activeGroup
           ? (<div key={group.groupName}>{group.elements}</div>)
-          : (<></>)
+          : (<Fragment key={group.groupName}/>)
         )}
       </Modal.Body>
     </Modal>

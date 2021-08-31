@@ -65,7 +65,8 @@ $space_between_spacer: 1rem;
 }
 
 .nav-link:focus,
-.btn.nav-link:focus {
+.btn.nav-link:focus,
+.btn-group .btn:focus {
   box-shadow: none;
 }
 
