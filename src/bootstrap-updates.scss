@@ -63,3 +63,14 @@ $space_between_spacer: 1rem;
     margin-bottom: 0;
   }
 }
+
+.nav-link:focus,
+.btn.nav-link:focus {
+  box-shadow: none;
+}
+
+.btn.nav-link:hover {
+  border-color: transparent;
+  border-bottom-color: #f1f1f1;
+  background: #f1f1f1;
+}

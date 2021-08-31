@@ -1,12 +1,12 @@
 import {Single} from "../single";
-import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
+import {JsonZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
 import ServiceDevices from "./service-devices";
 import ServiceReportUpdates from "./service-report-updates";
 import ServiceRoot from "./service-root";
 import {ReportKey} from "../../models/ReportKey";
-import {ReportDetails, ReportInfo} from "./models/DeviceInfo";
+import {ReportDetails} from "./models/DeviceInfo";
 
 const send = (data: string) => Single.ZespConnector.send({data: data});
 let isInitialized = false;

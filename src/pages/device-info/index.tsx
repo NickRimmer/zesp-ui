@@ -16,21 +16,36 @@ export default () => {
   const deviceInfo = state.devices?.find(x => x.IEEE === ieee && x.Device === device);
 
   if (!deviceInfo) return (
-    <DeviceDialog title="Oops... Device information not found"><NotFoundView device={device} ieee={ieee}/></DeviceDialog>
+    <DeviceDialog groups={["main"]} title="Oops... Device information not found"><NotFoundView device={device} ieee={ieee}/></DeviceDialog>
   );
 
+  // build device layout
   const layoutSettings: LayoutSettings[] = deviceInfo.details?.layout
     ? buildLayoutSettingsFromFile(deviceInfo)
     : buildLayoutSettingsFromZesp(deviceInfo);
 
-  const groups: string[] = layoutSettings.filter(x => x.group).map(x => x.group!);
-  const controls = layoutSettings.map((settings, i) => (<div key={i} className="device-control-group">{getControlForDevice(settings, deviceInfo)}</div>));
-  const content = (<div>{controls}</div>);
+  // group by group name (undefined groups will be saved as 'main')
+  const groups = layoutSettings.reduce((r, x) => {
+    const groupName = x.group || "main";
+    r[groupName] = [...r[groupName] || [], x];
 
-  return (<DeviceDialog groups={groups} title={deviceInfo!.Name || deviceInfo!.ModelId} onDetailsClicked={() => {
+    return r;
+  }, {} as { [k: string]: LayoutSettings[] })
+
+  // build groups content
+  const content: groupContentElements[] = Object.keys(groups).map(groupName => {
+    const elements = groups[groupName].map((settings, i) =>
+      (<div key={i} className="device-control-group">{getControlForDevice(settings, deviceInfo)}</div>));
+
+    return {groupName: groupName, elements: elements}
+  });
+
+  const onDetailsClicked = () => {
     toast.success("Check console log");
     console.log(deviceInfo);
-  }}>{content}</DeviceDialog>);
+  };
+
+  return (<DeviceDialog groups={Object.keys(groups)} groupsContent={content} title={deviceInfo!.Name || deviceInfo!.ModelId} onDetailsClicked={onDetailsClicked}/>);
 }
 
 const buildLayoutSettingsFromFile = (device: DeviceInfo): LayoutSettings[] => {
@@ -81,3 +96,7 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): LayoutSettings[] => {
   return reports.map(key => getControlId(device.Report[key]));
 }
 
+export type groupContentElements = {
+  groupName: string,
+  elements: JSX.Element[]
+};

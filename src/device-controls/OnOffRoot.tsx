@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {LayoutSettingsOnOff} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {Button, ButtonGroup, Col, Row} from "react-bootstrap";
