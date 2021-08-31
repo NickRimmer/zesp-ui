@@ -17,12 +17,22 @@
       "command": "MoveToLevel|0000|1|1|1|{value}|0009",
       "min": 0,
       "max": 255
+    },
+    "value": {
+      "endpoint": "01",
+      "clusterId": "0008",
+      "attributeId": "0000"
     }
   },
   {
     "id": "rgb_root",
     "arguments": {
       "command": "MoveToColor|0000|1|1|{x}|{y}|0001"
+    },
+    "value": {
+      "endpoint": "01",
+      "clusterId": "0300",
+      "attributeId": "0000"
     }
   },
   {

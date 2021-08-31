@@ -5,10 +5,12 @@ import {IGlobalState} from "../../global-state";
 import ServiceDevices from "./service-devices";
 import ServiceReportUpdates from "./service-report-updates";
 import ServiceRoot from "./service-root";
+import {ReportKey} from "../../models/ReportKey";
+import {ReportDetails, ReportInfo} from "./models/DeviceInfo";
 
 const send = (data: string) => Single.ZespConnector.send({data: data});
 let isInitialized = false;
-// let _globalState: IGlobalState;
+let _getGlobalState: () => IGlobalState;
 
 export default {
   initAsync: (getGlobalState: () => IGlobalState): Promise<void> => new Promise<void>((resolve, reject) => {
@@ -19,7 +21,7 @@ export default {
     }
 
     isInitialized = true;
-    // _globalState = globalState
+    _getGlobalState = getGlobalState;
     console.debug("Load initial data from zesp...");
 
     //TODO move each promise to fn
@@ -37,6 +39,27 @@ export default {
   }),
 
   ping: () => send("ping"),
+
+  setReportValue: (ieee: string, reportKey: ReportKey | ReportDetails, value: string) => {
+    const devices = _getGlobalState().state.devices;
+    const device = devices?.find(x => x.IEEE === ieee);
+
+    if (!device) {
+      console.error(`Cannot update report for unknown device with ieee ${ieee}`);
+      return;
+    }
+
+    const reportId = reportKey.endpoint + reportKey.clusterId + reportKey.attributeId;
+    const report = device.Report[reportId];
+    if (!report) {
+      console.warn(`Cannot set value for unknown report with key ${reportId}`);
+      return;
+    }
+
+    report.val = value;
+    _getGlobalState().setState(x => ({...x, ...{devices: devices}}));
+  }
+
   // loadConfigAsync: () => Single.ZespConnector.requestAsync({data: "loadConfig", responseValidator: TypedZespResponseValidator("jsconfig")})
 }
 
