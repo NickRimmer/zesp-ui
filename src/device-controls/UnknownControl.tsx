@@ -1,6 +1,6 @@
 import React from "react";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
-import {LayoutSettings} from "./settings";
+import {LayoutSettings} from "../models/LayoutSettings";
 
 export const UnknownControl = (props: IDeviceControlProps<LayoutSettings>) => {
   const configData = JSON.stringify(Object.assign({...props.config}, {report: props.config.report ? "<hidden>" : null})); // remove report to eject it to another var

@@ -5,10 +5,10 @@ import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceDialog} from "./DeviceDialog";
 import NotFoundView from "./NotFoundView";
 import {DeviceInfo, ReportInfo} from "../../services/zesp/models/DeviceInfo";
-import {LayoutSettings} from "../../device-controls/settings";
 import {ClusterInfo} from "../../models/ClusterInfo";
 import {getControlForDevice} from "../../device-controls";
 import toast from "react-hot-toast";
+import {LayoutSettings} from "../../models/LayoutSettings";
 
 export default () => {
   const {ieee, device} = useParams<{ ieee: string, device: string }>();
@@ -23,9 +23,11 @@ export default () => {
     ? buildLayoutSettingsFromFile(deviceInfo)
     : buildLayoutSettingsFromZesp(deviceInfo);
 
+  const groups: string[] = layoutSettings.filter(x => x.group).map(x => x.group!);
   const controls = layoutSettings.map((settings, i) => (<div key={i} className="device-control-group">{getControlForDevice(settings, deviceInfo)}</div>));
   const content = (<div>{controls}</div>);
-  return (<DeviceDialog title={deviceInfo!.Name || deviceInfo!.ModelId} onDetailsClicked={() => {
+
+  return (<DeviceDialog groups={groups} title={deviceInfo!.Name || deviceInfo!.ModelId} onDetailsClicked={() => {
     toast.success("Check console log");
     console.log(deviceInfo);
   }}>{content}</DeviceDialog>);

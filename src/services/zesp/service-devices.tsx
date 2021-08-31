@@ -7,7 +7,7 @@ import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import predefinedDevices from "../../data/devices.json";
 import {DeviceDetails} from "../../models/DeviceDetails";
 import {ClusterInfo} from "../../models/ClusterInfo";
-import {LayoutSettings} from "../../device-controls/settings";
+import {LayoutSettings} from "../../models/LayoutSettings";
 
 const ServiceDevices = {
   getDevicesList: (zesp: IZespConnector) => {

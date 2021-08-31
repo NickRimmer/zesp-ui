@@ -1,5 +1,5 @@
 import {DeviceInfo} from "../services/zesp/models/DeviceInfo";
-import {LayoutSettings, LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsRgb, LayoutSettingsSensor} from "./settings";
+import {LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsRgb, LayoutSettingsSensor} from "./settings";
 import {OnOffControl} from "./OnOffControl";
 import {UnknownControl} from "./UnknownControl";
 import React from "react";
@@ -8,6 +8,8 @@ import {OnOffRoot} from "./OnOffRoot";
 import {LevelRoot} from "./LevelRoot";
 import {RgbRoot} from "./RgbRoot";
 import {IlluminanceSensor} from "./IlluminanceSensor";
+import {SpacerDecorative} from "./DecorativeElements";
+import {LayoutSettings} from "../models/LayoutSettings";
 
 export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceInfo) => {
   const controlProps: IDeviceControlProps<LayoutSettings> = {
@@ -16,6 +18,9 @@ export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceIn
   }
 
   switch (config.id) {
+    case "spacer" :
+      return (<SpacerDecorative/>);
+
     case "on_off_root" :
       return (<OnOffRoot {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
     case "level_root" :

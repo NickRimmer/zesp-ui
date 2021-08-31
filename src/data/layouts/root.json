@@ -42,5 +42,9 @@
       "clusterId": "0106",
       "attributeId": "0000"
     }
+  },
+  {
+    "id": "volume_root",
+    "group": "playback"
   }
 ]

@@ -1,4 +1,4 @@
-import {LayoutSettings} from "../device-controls/settings";
+import {LayoutSettings} from "./LayoutSettings";
 
 export type ClusterInfo = {
   id: string,

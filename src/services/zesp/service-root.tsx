@@ -2,7 +2,7 @@ import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
-import {LayoutSettings} from "../../device-controls/settings";
+import {LayoutSettings} from "../../models/LayoutSettings";
 
 export default {
   getRootData: (zesp: IZespConnector) => {
