@@ -5,11 +5,23 @@ import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
 import {Col, Row} from "react-bootstrap";
 import {Single} from "../services/single";
 import {useLocalStorage} from "../services/localStorage";
+import {ZespService} from "../services/zesp";
 
 //TODO localize
 export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
-  const [color, setColor] = useState<RGBColor>({r: 255, g: 255, b: 255});
+  let currentValue: number[] = props.config.report?.val ? props.config.report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
+  if (currentValue.length !== 3) {
+    console.warn(`Incorrect RGB value stored to reportd: ${props.config.report?.val}`);
+    currentValue = [255, 255, 255];
+  }
+
+  const [color, setColor] = useState<RGBColor>({r: currentValue[0], g: currentValue[1], b: currentValue[2]});
   const [colorPicker, setColorPicker] = useLocalStorage("colorPicker", 1);
+
+  const setCurrentValue = (rgb: RGBColor) => {
+    if (props.config.report)
+      ZespService.general.setReportValue(props.deviceInfo.IEEE, props.config.report?.details, `${rgb.r}:${rgb.g}:${rgb.b}`);
+  }
 
   const colorChangeHandler = (rgb: RGBColor) => {
     setColor(rgb);
@@ -18,6 +30,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
     let command = props.config.arguments.command.replace("{x}", x.toString(16));
     command = command.replace("{y}", y.toString(16));
     Single.ZespConnector.send({data: command});
+    setCurrentValue(rgb);
   }
 
   const sendColorHandler = () => {
@@ -27,6 +40,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
     command = command.replace("{y}", y.toString(16));
 
     Single.ZespConnector.send({data: command});
+    setCurrentValue(color);
   }
 
   const colorPickerButton = (id: number) =>

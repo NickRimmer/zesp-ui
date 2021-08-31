@@ -8,6 +8,7 @@ import {DeviceInfo, ReportInfo} from "../../services/zesp/models/DeviceInfo";
 import {LayoutSettings} from "../../device-controls/settings";
 import {ClusterInfo} from "../../models/ClusterInfo";
 import {getControlForDevice} from "../../device-controls";
+import toast from "react-hot-toast";
 
 export default () => {
   const {ieee, device} = useParams<{ ieee: string, device: string }>();
@@ -24,15 +25,17 @@ export default () => {
 
   const controls = layoutSettings.map((settings, i) => (<div key={i} className="device-control-group">{getControlForDevice(settings, deviceInfo)}</div>));
   const content = (<div>{controls}</div>);
-  return (<DeviceDialog title={deviceInfo!.Name || deviceInfo!.ModelId}>{content}</DeviceDialog>);
+  return (<DeviceDialog title={deviceInfo!.Name || deviceInfo!.ModelId} onDetailsClicked={() => {
+    toast.success("Check console log");
+    console.log(deviceInfo);
+  }}>{content}</DeviceDialog>);
 }
 
 const buildLayoutSettingsFromFile = (device: DeviceInfo): LayoutSettings[] => {
   const settings: LayoutSettings[] = require(`../../data/layouts/${device.details?.layout}`);
   for (const s of settings) {
     if (s.value) {
-      const ep = "01"; // TODO read from ZESP 
-      const reportKey = ep + s.value.clusterId + s.value.attributeId;
+      const reportKey = s.value.endpoint + s.value.clusterId + s.value.attributeId;
       s.report = device.Report[reportKey];
     }
   }

@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useRef} from 'react';
 import {BrowserRouter as Router, Switch} from "react-router-dom";
 import './bootstrap-updates.scss';
 import './App.scss';
@@ -28,14 +28,19 @@ const Content = () => {
 
 const App = (props: { server: IServerInfo }) => {
   const globalState = useGlobalState();
+  const globalStateRef = useRef(globalState);
+
+  useEffect(() => {
+    globalStateRef.current = globalState;
+  }, [globalState]);
 
   useEffect(() => {
     Single.Spinner.init(globalState);
     Single.Spinner.show();
 
     Single.ZespConnectorPromise
-      .then(zesp => zesp.connectAsync(globalState, props.server))
-      .then(() => ZespService.general.initAsync(globalState))
+      .then(zesp => zesp.connectAsync(() => globalStateRef.current, props.server))
+      .then(() => ZespService.general.initAsync(() => globalStateRef.current))
       .then(() => {
         globalState.setState(prev => ({...prev, ...{appInitialized: true}}))
         Single.Spinner.hide();

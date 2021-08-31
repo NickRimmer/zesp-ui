@@ -1,5 +1,5 @@
 import {ZespDataEvent} from "./common/ZespDataEvent";
-import {DeviceInfo, ReportDetails} from "./models/DeviceInfo";
+import {DeviceInfo, ReportDetails, ReportInfo} from "./models/DeviceInfo";
 import DataHaClusterIds from "../../data/zigbee/ha-cluster-ids.json";
 import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
@@ -7,9 +7,10 @@ import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import predefinedDevices from "../../data/devices.json";
 import {DeviceDetails} from "../../models/DeviceDetails";
 import {ClusterInfo} from "../../models/ClusterInfo";
+import {LayoutSettings} from "../../device-controls/settings";
 
 const ServiceDevices = {
-  requestData: (zesp: IZespConnector) => {
+  getDevicesList: (zesp: IZespConnector) => {
     return zesp.request({
       data: "getDeviceList",
       responseValidator: TypedZespResponseValidator("alldev"),
@@ -28,6 +29,18 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   for (const device of devices) {
     device.details = getDeviceDetails(device.ModelId);
 
+    // add reports from predefined layouts
+    if (device.details?.layout) {
+      const settings: LayoutSettings[] = require(`../../data/layouts/${device.details?.layout}`);
+      for (const s of settings) {
+        if (s.value) {
+          const reportKey = s.value.endpoint + s.value.clusterId + s.value.attributeId;
+          device.Report[reportKey] = {} as ReportInfo;
+        }
+      }
+    }
+
+    // additional reports data extraction
     for (const key of Object.keys(device.Report))
       device.Report[key].details = getReportDetails(key);
   }
