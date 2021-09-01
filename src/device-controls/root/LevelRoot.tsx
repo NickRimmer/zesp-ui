@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import {LayoutSettingsLevel} from "./settings";
-import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {Col, FormControl, Row} from "react-bootstrap";
-import {Single} from "../services/single";
 import FormRange from "react-bootstrap/FormRange";
-import {ZespService} from "../services/zesp";
+import {LayoutSettingsLevel} from "../settings";
+import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
+import {Single} from "../../services/single";
+import {ZespService} from "../../services/zesp";
 
 // TODO add localization
 export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {

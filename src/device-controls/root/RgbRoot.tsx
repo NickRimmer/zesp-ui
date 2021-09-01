@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
-import {LayoutSettingsRgb} from "./settings";
+import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
+import {LayoutSettingsRgb} from "../settings";
 import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
 import {Col, Row} from "react-bootstrap";
-import {Single} from "../services/single";
-import {useLocalStorage} from "../services/localStorage";
-import {ZespService} from "../services/zesp";
+import {Single} from "../../services/single";
+import {useLocalStorage} from "../../services/localStorage";
+import {ZespService} from "../../services/zesp";
 
 //TODO localize
 export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {

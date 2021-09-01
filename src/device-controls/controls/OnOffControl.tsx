@@ -1,6 +1,6 @@
 import React from "react";
-import {LayoutSettingsOnOff} from "./settings";
-import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
+import {LayoutSettingsOnOff} from "../settings";
+import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 
 export const OnOffControl = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
   return (

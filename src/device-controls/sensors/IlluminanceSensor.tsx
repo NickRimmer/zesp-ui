@@ -1,8 +1,8 @@
 import React from "react";
-import {LayoutSettingsSensor} from "./settings";
-import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {Col, Row} from "react-bootstrap";
-import {Transition} from "../shared/transition";
+import {LayoutSettingsSensor} from "../settings";
+import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
+import {Transition} from "../../shared/transition";
 
 //TODO localization
 export const IlluminanceSensor = (props: IDeviceControlProps<LayoutSettingsSensor>) => {

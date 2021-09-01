@@ -1,8 +1,8 @@
 import React from "react";
-import {LayoutSettingsOnOff} from "./settings";
-import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {Button, ButtonGroup, Col, Row} from "react-bootstrap";
-import {Single} from "../services/single";
+import {LayoutSettingsOnOff} from "../settings";
+import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
+import {Single} from "../../services/single";
 
 // TODO add localization
 export const OnOffRoot = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
