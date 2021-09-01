@@ -1,12 +1,12 @@
-import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
-import {LayoutSettingsGroup} from "../../models/LayoutSettings";
+import {DataLayoutItemsGroup} from "../../models/DataLayoutItem";
 import {Modal} from "react-bootstrap";
 import {getControlForDevice} from "../../device-controls";
 import React from "react";
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 export default (props: {
   device: DeviceInfo,
-  groups: LayoutSettingsGroup[],
+  groups: DataLayoutItemsGroup[],
   activeGroupName: string
 }) => {
   const group = props.groups.find(x => x.name === props.activeGroupName);

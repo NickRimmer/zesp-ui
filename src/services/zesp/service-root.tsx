@@ -2,7 +2,7 @@ import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
-import {LayoutSettings} from "../../models/LayoutSettings";
+import {ZespRootData} from "./models/ZespRootData";
 
 export default {
   getRootData: (zesp: IZespConnector) => {
@@ -14,50 +14,43 @@ export default {
   }
 }
 
-type rootData = {
-  on: 0 | 1,
-  R: number,
-  G: number,
-  B: number,
-  // X: number,
-  // Y: number,
-  level: number,
-  // rgb_bgr: number,
-  sound: {
-    volume: number,
-    current_path: string,
-    play: "OFF" | "ON"
-  },
-  radio: string[],
-}
-
 const onDataReceived = (event: ZespDataEvent, globalState: IGlobalState): void => {
-  const data = JSON.parse(event.dataParts[0]) as rootData;
-
   const devices = globalState.state.devices;
-  const device = globalState.state.devices?.find(x => x.ModelId === "ZESP_Root");
-  const layout = device?.details?.layout;
-
-  if (!layout) {
-    console.warn("Root device not updated, cause not layout file found");
-    console.debug(globalState.state.devices);
+  if (!devices) {
+    console.debug("Update received, but no any devices found")
     return;
   }
 
-  const layoutSettings: LayoutSettings[] = require(`../../data/layouts/${layout}`);
+  const data = JSON.parse(event.dataParts[0]) as ZespRootData;
+  const device = devices.find(x => x.zespInfo.ModelId === "ZESP_Root");
+  if (!device) {
+    console.debug("Update received, but no root devices found")
+    return;
+  }
 
-  const reportOnOff = layoutSettings.find(x => x.id === "on_off_root")?.value;
-  if (reportOnOff) device!.Report[reportOnOff.endpoint + reportOnOff.clusterId + reportOnOff.attributeId].val = data.on.toString();
+  const layoutSettings = device.customLayout;
+  if (!layoutSettings) {
+    console.warn("Update received, but no root layout found");
+    // console.debug(globalState.state.devices);
+    return;
+  }
+
+  const reportOnOff = layoutSettings.find(x => x.id === "on_off_root")?.reportKey;
+  if (reportOnOff) device.zespInfo.Report[reportOnOff.endpoint + reportOnOff.clusterId + reportOnOff.attributeId].val = data.on.toString();
   else console.warn("Root device report 'on_off_root' not found");
 
-  const reportLevel = layoutSettings.find(x => x.id === "level_root")?.value;
-  if (reportLevel) device!.Report[reportLevel.endpoint + reportLevel.clusterId + reportLevel.attributeId].val = data.level.toString();
+  const reportLevel = layoutSettings.find(x => x.id === "level_root")?.reportKey;
+  if (reportLevel) device.zespInfo.Report[reportLevel.endpoint + reportLevel.clusterId + reportLevel.attributeId].val = data.level.toString();
   else console.warn("Root device report 'level_root' not found");
 
-  const reportRgb = layoutSettings.find(x => x.id === "rgb_root")?.value;
   // ZESP returns wrong colors red and blue swapped
-  if (reportRgb) device!.Report[reportRgb.endpoint + reportRgb.clusterId + reportRgb.attributeId].val = `${data.B}:${data.G}:${data.R}`;
+  const reportRgb = layoutSettings.find(x => x.id === "rgb_root")?.reportKey;
+  if (reportRgb) device.zespInfo.Report[reportRgb.endpoint + reportRgb.clusterId + reportRgb.attributeId].val = `${data.B}:${data.G}:${data.R}`;
   else console.warn("Root device report 'rgb_root' not found");
+
+  const volumeLevel = layoutSettings.find(x => x.id === "level_control")?.reportKey;
+  if (volumeLevel) device.zespInfo.Report[volumeLevel.endpoint + volumeLevel.clusterId + volumeLevel.attributeId].val = data.sound.volume.toString();
+  else console.warn("Root device report 'level_control' not found");
 
   globalState.setState(x => ({...x, ...{devices: devices}}));
 }

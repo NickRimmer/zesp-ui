@@ -6,12 +6,12 @@ import TopMenu from "./shared/top-menu";
 import LoadingSpinner from "./shared/loading-spinner";
 import {GlobalStateProvider, useGlobalState} from "./shared/global-state-provider";
 import {Single} from "./services/single";
-import {ZespService} from "./services/zesp";
 import toast, {Toaster} from "react-hot-toast";
 import {Routes} from "./Routes";
 import {WelcomePage} from "./pages/welcome";
 import {useLocalStorage} from "./services/localStorage";
 import {IServerInfo} from "./pages/welcome/interfaces";
+import ZespGeneralService from "./services/zesp/service-general";
 
 const Content = () => {
   const globalState = useGlobalState();
@@ -23,7 +23,6 @@ const Content = () => {
   );
 
   return selectedServer ? (<App server={selectedServer}/>) : (<WelcomePage/>);
-  // return <WelcomePage/>;
 }
 
 const App = (props: { server: IServerInfo }) => {
@@ -40,7 +39,7 @@ const App = (props: { server: IServerInfo }) => {
 
     Single.ZespConnectorPromise
       .then(zesp => zesp.connectAsync(() => globalStateRef.current, props.server))
-      .then(() => ZespService.general.initAsync(() => globalStateRef.current))
+      .then(() => ZespGeneralService.initAsync(() => globalStateRef.current))
       .then(() => {
         globalState.setState(prev => ({...prev, ...{appInitialized: true}}))
         Single.Spinner.hide();

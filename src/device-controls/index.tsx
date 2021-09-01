@@ -1,6 +1,5 @@
 import React from "react";
 import {LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsRgb, LayoutSettingsSensor} from "./settings";
-import {DeviceInfo} from "../services/zesp/models/DeviceInfo";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {OnOffRoot} from "./root/OnOffRoot";
 import {LevelRoot} from "./root/LevelRoot";
@@ -9,11 +8,12 @@ import {OnOffControl} from "./controls/OnOffControl";
 import {UnknownControl} from "./controls/UnknownControl";
 import {IlluminanceSensor} from "./sensors/IlluminanceSensor";
 
-import {LayoutSettings} from "../models/LayoutSettings";
+import {DataLayoutItem} from "../models/DataLayoutItem";
 import {LevelControl} from "./controls/LevelControl";
+import {DeviceInfo} from "../models/DeviceInfo";
 
-export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceInfo) => {
-  const controlProps: IDeviceControlProps<LayoutSettings> = {
+export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceInfo) => {
+  const controlProps: IDeviceControlProps<DataLayoutItem> = {
     config,
     deviceInfo,
   }

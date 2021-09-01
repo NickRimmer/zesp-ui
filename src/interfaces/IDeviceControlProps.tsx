@@ -1,7 +1,7 @@
-import {DeviceInfo} from "../services/zesp/models/DeviceInfo";
-import {LayoutSettings} from "../models/LayoutSettings";
+import {DataLayoutItem} from "../models/DataLayoutItem";
+import {DeviceInfo} from "../models/DeviceInfo";
 
-export interface IDeviceControlProps<TConfig extends LayoutSettings> {
+export interface IDeviceControlProps<TConfig extends DataLayoutItem> {
   config: TConfig,
   deviceInfo: DeviceInfo
 }

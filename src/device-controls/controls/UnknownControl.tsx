@@ -1,10 +1,11 @@
 import React from "react";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {LayoutSettings} from "../../models/LayoutSettings";
+import {DataLayoutItem} from "../../models/DataLayoutItem";
+import {DeviceControls} from "../../services/deviceControls";
 
-export const UnknownControl = (props: IDeviceControlProps<LayoutSettings>) => {
-  const configData = JSON.stringify(Object.assign({...props.config}, {report: props.config.report ? "<hidden>" : null})); // remove report to eject it to another var
-  const reportData = JSON.stringify(props.config.report);
+export const UnknownControl = (props: IDeviceControlProps<DataLayoutItem>) => {
+  const configData = JSON.stringify(props.config)
+  const reportData = JSON.stringify(DeviceControls.extractReport(props));
 
   return (
     <>

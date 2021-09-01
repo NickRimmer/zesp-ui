@@ -4,30 +4,29 @@ import FormRange from "react-bootstrap/FormRange";
 import {LayoutSettingsLevel} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {Single} from "../../services/single";
-import {ZespService} from "../../services/zesp";
+import {useGlobalState} from "../../shared/global-state-provider";
+import {DeviceControls} from "../../services/deviceControls";
 
 // TODO add localization
 export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
+  const globalState = useGlobalState();
   const minMaxAttributes = {
     min: props.config.arguments.min,
     max: props.config.arguments.max
   };
 
-  const currentValue = props.config.report?.val ? Number(props.config.report.val) : ((minMaxAttributes.max - minMaxAttributes.min) / 2);
+  const report = DeviceControls.extractReport(props);
+  const currentValue = report?.val ? Number(report.val) : ((minMaxAttributes.max - minMaxAttributes.min) / 2);
   const [value, setValue] = useState(currentValue);
 
   const inRange = (value: number) => Math.max(Math.min(props.config.arguments.max, value), props.config.arguments.min);
-
-  const setCurrentValue = (value: number) => {
-    if (props.config.report)
-      ZespService.general.setReportValue(props.deviceInfo.IEEE, props.config.report?.details, value.toString());
-  }
+  const setReportValue = (value: number) => DeviceControls.trySetReportValue(globalState, props, value.toString())
 
   const sliderChangeHandler = () => {
     const result = inRange(value);
     const data = formatCommand(props.config.arguments.command, result);
     Single.ZespConnector.send({data: data});
-    setCurrentValue(result);
+    setReportValue(result);
   }
 
   const inputChangeHandler = (value: number) => {
@@ -36,7 +35,7 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
 
     const data = formatCommand(props.config.arguments.command, result);
     Single.ZespConnector.send({data: data});
-    setCurrentValue(result);
+    setReportValue(result);
   }
 
   return (

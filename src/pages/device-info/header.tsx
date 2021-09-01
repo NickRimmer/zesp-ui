@@ -1,16 +1,15 @@
-// dialog header, will show one simple title or multiple tabs in case of few groups
-import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
-import {LayoutSettingsGroup} from "../../models/LayoutSettings";
+import {DataLayoutItemsGroup} from "../../models/DataLayoutItem";
 import {Modal} from "react-bootstrap";
 import React from "react";
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 export default (props: {
   device: DeviceInfo,
-  groups: LayoutSettingsGroup[],
+  groups: DataLayoutItemsGroup[],
   activeGroupName: string,
   setActiveGroupName: (group: string) => void
 }) => {
-  const title = props.device.Name || props.device.ModelId;
+  const title = props.device.zespInfo.Name || props.device.zespInfo.ModelId;
 
   const buildMultiply = () => (
     <ul className="nav nav-tabs">

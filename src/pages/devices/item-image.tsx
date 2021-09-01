@@ -1,5 +1,5 @@
 import React from "react";
-import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 interface IProps {
   device: DeviceInfo
@@ -12,6 +12,6 @@ export default (props: IProps) => {
 }
 
 function getDeviceImageSrc(device: DeviceInfo): string {
-  if (!device.details) return "zigbee.png";
-  return device.details.image;
+  if (!device.settings) return "zigbee.png";
+  return device.settings.image;
 }
