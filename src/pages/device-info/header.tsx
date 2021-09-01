@@ -7,7 +7,9 @@ export default (props: {
   device: DeviceInfo,
   groups: DataLayoutItemsGroup[],
   activeGroupName: string,
-  setActiveGroupName: (group: string) => void
+  setActiveGroupName: (group: string) => void,
+  onCloseClicked: () => void,
+  onDetailsClicked?: () => void,
 }) => {
   const title = props.device.zespInfo.Name || props.device.zespInfo.ModelId;
 
@@ -33,5 +35,14 @@ export default (props: {
   const headerClassName = props.groups.length > 1 ? "with-tabs" : "";
   const headerContent = props.groups.length > 1 ? buildMultiply() : buildSingle();
 
-  return (<Modal.Header className={headerClassName}>{headerContent}</Modal.Header>)
+  return (
+    <Modal.Header className={headerClassName}>
+      <div>{headerContent}</div>
+      <div className="text-end modal-right-buttons">
+        {props.onDetailsClicked && (<button type="button" className="btn" onClick={props.onDetailsClicked}><i className="bi bi-archive"/></button>)}
+        <span className="border-end mx-3"/>
+        <button type="button" className="btn-close" aria-label="Close" onClick={props.onCloseClicked}/>
+      </div>
+    </Modal.Header>
+  )
 }
