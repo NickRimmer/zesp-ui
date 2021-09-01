@@ -7,3 +7,8 @@ export type LayoutSettings = {
   value?: ReportKey,
   group?: string,
 }
+
+export type LayoutSettingsGroup = {
+  name: string,
+  settings: LayoutSettings[]
+}
