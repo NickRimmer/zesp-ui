@@ -25,6 +25,10 @@
     "name": "Level_Control"
   },
   {
+    "clusterId": "0106",
+    "name": "Illuminance"
+  },
+  {
     "clusterId": "0300",
     "name": "Color_Control"
   },

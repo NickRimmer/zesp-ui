@@ -29,22 +29,22 @@ export const Devices = {
       return r;
     }, [] as DataLayoutItemsGroup[]);
   },
-}
 
-const getZespReportKeyInfo = (reportKey: string): ReportKeyInfo => {
-  if (reportKey?.length != 10)
-    throw Error(`Unknown format of report key: ${reportKey}`);
+  getReportKeyDetails: (reportKey: string): ReportKeyInfo => {
+    if (reportKey?.length != 10)
+      throw Error(`Unknown format of report key: ${reportKey}`);
 
-  return {
-    endpoint: reportKey.substr(0, 2),
-    clusterId: reportKey.substr(2, 4),
-    attributeId: reportKey.substr(6, 4),
-  }
+    return {
+      endpoint: reportKey.substr(0, 2),
+      clusterId: reportKey.substr(2, 4),
+      attributeId: reportKey.substr(6, 4),
+    }
+  },
 }
 
 const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataLayoutItem[] => {
   const getLayoutItem = (reportKey: string): DataLayoutItem => {
-    const reportKeyInfo = getZespReportKeyInfo(reportKey);
+    const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
     const registeredCluster = (DataHaClusterIds as DataClusterInfo[]).find(x => x.clusterId == reportKeyInfo.clusterId);
 
     const result = {

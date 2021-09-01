@@ -2,6 +2,9 @@ import React from "react";
 import ItemImage from "./item-image";
 import {NavLink} from "react-router-dom";
 import {DeviceInfo} from "../../models/DeviceInfo";
+import HomeAutoClusters from "../../data/zigbee/ha-cluster-ids.json";
+import {DataClusterInfo} from "../../models/DataClusterInfo";
+import {Devices} from "../../services/devices";
 
 interface IProps {
   device: DeviceInfo
@@ -13,11 +16,13 @@ export default (props: IProps) => {
   const detailsLink = `/devices/${zespInfo.IEEE}-${zespInfo.Device}`;
 
   let tags: string[] = [];
-  for (const key of Object.keys(zespInfo.Report))
-    tags.push(key);
-  // tags.push(zespInfo.Report[key].details.name);
+  for (const key of Object.keys(zespInfo.Report)) {
+    const reportKeyDetails = Devices.getReportKeyDetails(key);
+    const clusterInfo = HomeAutoClusters.find(x => x.clusterId === reportKeyDetails.clusterId) as DataClusterInfo | undefined
+    tags.push(clusterInfo?.name || reportKeyDetails.clusterId);
+  }
 
-  // remove duplicates and unknown 
+  // remove duplicates
   tags = tags
     .filter((x, i) => tags.indexOf(x) == i)
     .sort((a, b) => a > b ? 1 : -1);
