@@ -29,20 +29,49 @@ $space_between_spacer: 1rem;
   font-size: .75em;
 }
 
-.modal-header .btn {
-  padding: 0.5rem 0.5rem;
-  margin: -1rem 0.2rem -0.5rem auto;
-  box-sizing: content-box;
-  width: 1em;
-  height: 1em;
-  line-height: 1em;
-  color: #7f7f7f;
+.modal-header .modal-right-buttons {
+  margin-bottom: -5px;
 
-  &:last-child {
-    margin-right: 0;
+  .btn {
+    padding: 0.5rem 0.5rem;
+    margin: -1rem 0.2rem -0.5rem auto;
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    color: #7f7f7f;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover {
+      color: #000;
+    }
+  }
+}
+
+.modal-header.with-tabs {
+  padding-bottom: 0;
+
+  .nav-tabs {
+    margin-bottom: -1px;
   }
 
-  &:hover {
-    color: #000;
+  .modal-right-buttons {
+    margin-top: -10px;
+    margin-bottom: 0;
   }
+}
+
+.nav-link:focus,
+.btn.nav-link:focus,
+.btn-group .btn:focus {
+  box-shadow: none;
+}
+
+.btn.nav-link:hover {
+  border-color: transparent;
+  border-bottom-color: #f1f1f1;
+  background: #f1f1f1;
 }

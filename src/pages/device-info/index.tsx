@@ -1,81 +1,50 @@
-import React from "react";
-import DataHaClusterIds from "../../data/zigbee/ha-cluster-ids.json";
-import {useParams} from "react-router-dom";
+import React, {useState} from "react";
+import "./styles.scss";
+import {useHistory, useParams} from "react-router-dom";
+import {Modal} from "react-bootstrap";
+import {Devices} from "../../services/devices";
 import {useGlobalState} from "../../shared/global-state-provider";
-import {DeviceDialog} from "./DeviceDialog";
-import NotFoundView from "./NotFoundView";
-import {DeviceInfo, ReportInfo} from "../../services/zesp/models/DeviceInfo";
-import {LayoutSettings} from "../../device-controls/settings";
-import {ClusterInfo} from "../../models/ClusterInfo";
-import {getControlForDevice} from "../../device-controls";
+import CustomHeader from "./header";
+import CustomBody from "./body";
+import CustomDeviceNotFound from "./not-found";
 import toast from "react-hot-toast";
 
+//TODO localize
 export default () => {
   const {ieee, device} = useParams<{ ieee: string, device: string }>();
-  const {state} = useGlobalState();
-  const deviceInfo = state.devices?.find(x => x.IEEE === ieee && x.Device === device);
+  const [show, setShow] = useState(true);
+  const history = useHistory();
+  const globalState = useGlobalState();
 
-  if (!deviceInfo) return (
-    <DeviceDialog title="Oops... Device information not found"><NotFoundView device={device} ieee={ieee}/></DeviceDialog>
-  );
+  const deviceInfo = Devices.getDevice(globalState, ieee, device);
+  if (!deviceInfo) return (<CustomDeviceNotFound/>);
 
-  const layoutSettings: LayoutSettings[] = deviceInfo.details?.layout
-    ? buildLayoutSettingsFromFile(deviceInfo)
-    : buildLayoutSettingsFromZesp(deviceInfo);
 
-  const controls = layoutSettings.map((settings, i) => (<div key={i} className="device-control-group">{getControlForDevice(settings, deviceInfo)}</div>));
-  const content = (<div>{controls}</div>);
-  return (<DeviceDialog title={deviceInfo!.Name || deviceInfo!.ModelId} onDetailsClicked={() => {
-    toast.success("Check console log");
+  const groups = Devices.getControlGroups(deviceInfo);
+  const [activeGroupName, setActiveGroupName] = useState(groups[0].name);
+
+  const handleClose = () => setShow(false);
+  const handleExit = () => setTimeout(() => history.push("/devices"), 100);
+  const handleDetails = () => {
     console.log(deviceInfo);
-  }}>{content}</DeviceDialog>);
-}
-
-const buildLayoutSettingsFromFile = (device: DeviceInfo): LayoutSettings[] => {
-  const settings: LayoutSettings[] = require(`../../data/layouts/${device.details?.layout}`);
-  for (const s of settings) {
-    if (s.value) {
-      const reportKey = s.value.endpoint + s.value.clusterId + s.value.attributeId;
-      s.report = device.Report[reportKey];
-    }
+    toast.success("Check console for logs", {icon: "👽"});
   }
 
-  return settings;
+  return (
+    <Modal show={show} onHide={handleClose} onExited={handleExit} size="lg">
+      <CustomHeader
+        groups={groups}
+        device={deviceInfo}
+        activeGroupName={activeGroupName}
+        setActiveGroupName={setActiveGroupName}
+        onCloseClicked={handleClose}
+        onDetailsClicked={handleDetails}
+      />
+
+      <CustomBody
+        groups={groups}
+        device={deviceInfo}
+        activeGroupName={activeGroupName}/>
+    </Modal>
+  )
 }
-
-//TODO refactoring required to reduce method cyclomatic complexity
-const buildLayoutSettingsFromZesp = (device: DeviceInfo): LayoutSettings[] => {
-  const getControlId = (report: ReportInfo): LayoutSettings => {
-    const reportDetails = report.details;
-
-    const clusterInfo = (DataHaClusterIds as ClusterInfo[]).find(x => x.id == reportDetails.clusterId);
-    if (!clusterInfo) return {id: reportDetails.clusterId};
-
-    // build layout based on role
-    const roleInfo = report.role?.split("&");
-    if (roleInfo && roleInfo.length > 0) {
-      let attributeInfo = (clusterInfo.attributes && clusterInfo.attributes[roleInfo[0]]) || {id: roleInfo[0]} as LayoutSettings;
-
-      // add role configured settings
-      if (roleInfo.length > 1) {
-        const roleControlSettings = JSON.parse(roleInfo[1]);
-        attributeInfo = {...attributeInfo, ...roleControlSettings};
-      }
-
-      // add report settings
-      attributeInfo = {...attributeInfo, ...{report: report}}
-
-      return attributeInfo;
-    }
-
-    // try to read attribute info from layout
-    const attributeInfo = clusterInfo.attributes && clusterInfo.attributes[reportDetails.attributeId];
-    if (!attributeInfo) return {id: `${reportDetails.clusterId}:${reportDetails.attributeId}`};
-
-    return attributeInfo;
-  }
-
-  const reports = Object.keys(device.Report);
-  return reports.map(key => getControlId(device.Report[key]));
-}
-

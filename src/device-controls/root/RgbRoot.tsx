@@ -1,28 +1,27 @@
 import React, {useState} from "react";
-import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
-import {LayoutSettingsRgb} from "./settings";
+import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
+import {LayoutSettingsRgb} from "../settings";
 import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
 import {Col, Row} from "react-bootstrap";
-import {Single} from "../services/single";
-import {useLocalStorage} from "../services/localStorage";
-import {ZespService} from "../services/zesp";
+import {Single} from "../../services/single";
+import {useLocalStorage} from "../../services/localStorage";
+import {DeviceControls} from "../../services/deviceControls";
+import {useGlobalState} from "../../shared/global-state-provider";
 
 //TODO localize
 export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
-  let currentValue: number[] = props.config.report?.val ? props.config.report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
+  const globalState = useGlobalState();
+  const report = DeviceControls.extractReport(props);
+  let currentValue: number[] = report?.val ? report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
   if (currentValue.length !== 3) {
-    console.warn(`Incorrect RGB value stored to reportd: ${props.config.report?.val}`);
+    console.warn(`Incorrect RGB value stored to reportd: ${report?.val}`);
     currentValue = [255, 255, 255];
   }
 
   const [color, setColor] = useState<RGBColor>({r: currentValue[0], g: currentValue[1], b: currentValue[2]});
   const [colorPicker, setColorPicker] = useLocalStorage("colorPicker", 1);
 
-  const setCurrentValue = (rgb: RGBColor) => {
-    if (props.config.report)
-      ZespService.general.setReportValue(props.deviceInfo.IEEE, props.config.report?.details, `${rgb.r}:${rgb.g}:${rgb.b}`);
-  }
-
+  const setCurrentValue = (rgb: RGBColor) => DeviceControls.trySetReportValue(globalState, props, `${rgb.r}:${rgb.g}:${rgb.b}`);
   const colorChangeHandler = (rgb: RGBColor) => {
     setColor(rgb);
 

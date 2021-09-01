@@ -1,16 +1,19 @@
-import {DeviceInfo} from "../services/zesp/models/DeviceInfo";
-import {LayoutSettings, LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsRgb, LayoutSettingsSensor} from "./settings";
-import {OnOffControl} from "./OnOffControl";
-import {UnknownControl} from "./UnknownControl";
 import React from "react";
+import {LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsRgb, LayoutSettingsSensor} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
-import {OnOffRoot} from "./OnOffRoot";
-import {LevelRoot} from "./LevelRoot";
-import {RgbRoot} from "./RgbRoot";
-import {IlluminanceSensor} from "./IlluminanceSensor";
+import {OnOffRoot} from "./root/OnOffRoot";
+import {LevelRoot} from "./root/LevelRoot";
+import {RgbRoot} from "./root/RgbRoot";
+import {OnOffControl} from "./controls/OnOffControl";
+import {UnknownControl} from "./controls/UnknownControl";
+import {IlluminanceSensor} from "./sensors/IlluminanceSensor";
 
-export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceInfo) => {
-  const controlProps: IDeviceControlProps<LayoutSettings> = {
+import {DataLayoutItem} from "../models/DataLayoutItem";
+import {LevelControl} from "./controls/LevelControl";
+import {DeviceInfo} from "../models/DeviceInfo";
+
+export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceInfo) => {
+  const controlProps: IDeviceControlProps<DataLayoutItem> = {
     config,
     deviceInfo,
   }
@@ -25,6 +28,8 @@ export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceIn
 
     case "on_off_control" :
       return (<OnOffControl {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
+    case "level_control" :
+      return (<LevelControl {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>);
 
     case "illuminance_sensor" :
       return (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>);

@@ -4,9 +4,8 @@ import {FadeIn} from "../../shared/fadein-transition";
 import {Card} from "react-bootstrap";
 import Item from "./item";
 import {useGlobalState} from "../../shared/global-state-provider";
-import {DeviceInfo} from "../../services/zesp/models/DeviceInfo";
 import {useTranslation} from "react-i18next";
-import {GroupName} from "../../models/DeviceDetails"
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 const Result = () => {
   const globalState = useGlobalState();
@@ -18,33 +17,12 @@ const Result = () => {
   )
 
   const devices = globalState.state.devices.sort();
-
-  //TODO filter can be different, according to settings in future 
-  const filterByGroup = showWithoutGroups;
-  // const filterByGroup = showDeviceInFirstGroups;
-  // const filterByGroup = showDeviceInAllGroups;
-
-  const rootDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "root"));
-  const lightDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "light"));
-  const sensorDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "sensor"));
-  const switchDevices: DeviceInfo[] = devices.filter(x => filterByGroup(x, "switch"));
-  const otherDevices: DeviceInfo[] = devices.filter(x =>
-    !rootDevices.includes(x) &&
-    !lightDevices.includes(x) &&
-    !sensorDevices.includes(x) &&
-    !switchDevices.includes(x)
-  );
-
   return (
     <FadeIn>
       <div className="devices">
         <Card>
           <Card.Body>
-            <DevicesGroup title={t("groups.hub")} devices={rootDevices}/>
-            <DevicesGroup title={t("groups.lights")} devices={lightDevices}/>
-            <DevicesGroup title={t("groups.sensors")} devices={sensorDevices}/>
-            <DevicesGroup title={t("groups.switches")} devices={switchDevices}/>
-            <DevicesGroup title={otherDevices.length === devices.length ? t("groups.all") : t("groups.other")} devices={otherDevices}/>
+            <DevicesGroup title={t("groups.all")} devices={devices}/>
           </Card.Body>
         </Card>
       </div>
@@ -67,18 +45,5 @@ const DevicesGroup = (props: { devices: DeviceInfo[], title?: string | null }) =
       </div>
     </div>
   )
-
-const showWithoutGroups = (device: DeviceInfo, groupName: GroupName) => !groupName;
-
-// const showDeviceInAllGroups = (device: DeviceInfo, groupName: TemplateGroupName) =>
-//   device.templateInfo &&
-//   device.templateInfo.groups &&
-//   device.templateInfo.groups.indexOf(groupName) >= 0;
-
-// const showDeviceInFirstGroups = (device: DeviceInfo, groupName: TemplateGroupName) =>
-//   device.templateInfo &&
-//   device.templateInfo.groups &&
-//   device.templateInfo.groups.length > 0 &&
-//   device.templateInfo.groups[0] === groupName;
 
 export default Result; 

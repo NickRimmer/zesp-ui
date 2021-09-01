@@ -1,10 +1,10 @@
 [
   {
-    "id": "0000",
+    "clusterId": "0000",
     "name": "Basic"
   },
   {
-    "id": "0006",
+    "clusterId": "0006",
     "name": "On_Off",
     "attributes": {
       "0000": {
@@ -21,15 +21,19 @@
     }
   },
   {
-    "id": "0008",
+    "clusterId": "0008",
     "name": "Level_Control"
   },
   {
-    "id": "0300",
+    "clusterId": "0106",
+    "name": "Illuminance"
+  },
+  {
+    "clusterId": "0300",
     "name": "Color_Control"
   },
   {
-    "id": "0406",
+    "clusterId": "0406",
     "name": "Occupancy_Sensing"
   }
 ]

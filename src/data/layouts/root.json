@@ -5,7 +5,7 @@
       "commandOn": "01 0000 01  0100",
       "commandOff": "01 0000 01  0000"
     },
-    "value": {
+    "reportKey": {
       "endpoint": "01",
       "clusterId": "0006",
       "attributeId": "0000"
@@ -18,8 +18,8 @@
       "min": 0,
       "max": 255
     },
-    "value": {
-      "endpoint": "01",
+    "reportKey": {
+      "endpoint": "FF",
       "clusterId": "0008",
       "attributeId": "0000"
     }
@@ -29,18 +29,41 @@
     "arguments": {
       "command": "MoveToColor|0000|1|1|{x}|{y}|0001"
     },
-    "value": {
-      "endpoint": "01",
+    "reportKey": {
+      "endpoint": "FF",
       "clusterId": "0300",
       "attributeId": "0000"
     }
   },
   {
     "id": "illuminance_sensor",
-    "value": {
+    "reportKey": {
       "endpoint": "01",
       "clusterId": "0106",
       "attributeId": "0000"
     }
+  },
+  {
+    "id": "level_control",
+    "group": "Playback",
+    "label": "Volume",
+    "arguments": {
+      "command": "setVolume|{value:dec}",
+      "min": 0,
+      "max": 32768
+    },
+    "reportKey": {
+      "endpoint": "FE",
+      "clusterId": "0008",
+      "attributeId": "0000"
+    }
+  },
+  {
+    "id": "player_src_root",
+    "group": "Playback"
+  },
+  {
+    "id": "player_control_root",
+    "group": "Playback"
   }
 ]

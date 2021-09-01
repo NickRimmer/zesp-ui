@@ -1,4 +1,4 @@
-export type DeviceUpdate = {
+export type ZespDeviceUpdate = {
   ShortAddr: string,
   EndPoint: string,
   ClusterId: string,

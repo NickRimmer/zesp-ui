@@ -2,7 +2,7 @@ import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {IGlobalState} from "../../global-state";
-import {DeviceUpdate} from "./models/DeviceUpdate";
+import {ZespDeviceUpdate} from "./models/ZespDeviceUpdate";
 
 export default {
   subscribeToEvents: (zesp: IZespConnector, getGlobalState: () => IGlobalState) => {
@@ -11,28 +11,29 @@ export default {
 }
 
 const onUpdate = (event: ZespDataEvent, getGlobalState: () => IGlobalState): void => {
+  // we are expecting 'rep|{...}' string
   if (event.dataParts.length < 2) {
-    console.warn("Unknown format of updated received")
-    console.warn(event.response)
+    console.warn("Unknown format of updated received");
+    console.warn(event.response);
     return;
   }
 
   const globalState = getGlobalState();
-  const ieee = event.dataParts[1];
   const devices = globalState.state.devices;
-  const device = devices?.find(x => x.IEEE === ieee);
+  const ieee = event.dataParts[1];
+  const device = devices?.find(x => x.zespInfo.IEEE === ieee);
+
   if (!device) {
     console.debug(`Update received for unknown device: ${ieee}`);
-    // console.debug(devices);
     return;
   }
 
-  const data = JSON.parse(event.dataParts[0]) as DeviceUpdate;
+  const data = JSON.parse(event.dataParts[0]) as ZespDeviceUpdate;
   const reportId = data.EndPoint + data.ClusterId + data.AttribId;
-  const report = device.Report[reportId];
+  const report = device.zespInfo.Report[reportId];
 
   if (!report) {
-    console.debug(`Report '${reportId}' not found for '${device.IEEE}' device (${device.Name ?? device.ModelId})`);
+    console.debug(`Report '${reportId}' not found for '${device.zespInfo.IEEE}' device (${device.zespInfo.Name ?? device.zespInfo.ModelId})`);
     console.debug(data);
     return;
   }

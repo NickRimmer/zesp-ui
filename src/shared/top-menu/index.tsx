@@ -9,7 +9,7 @@ const Result = () => {
 
   return (
     <nav className="nav nav-masthead justify-content-center">
-      <NavLink className="nav-link" to="/" exact={true}>{t('home')}</NavLink>
+      {/*<NavLink className="nav-link" to="/" exact={true}>{t('home')}</NavLink>*/}
       <NavLink className="nav-link" to="/devices">{t('devices')}</NavLink>
       {process.env.NODE_ENV === "development" && (
         <NavLink className="nav-link" to="/socket-test" exact={true}>Test WS</NavLink>
