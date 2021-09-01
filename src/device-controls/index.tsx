@@ -10,6 +10,7 @@ import {UnknownControl} from "./controls/UnknownControl";
 import {IlluminanceSensor} from "./sensors/IlluminanceSensor";
 
 import {LayoutSettings} from "../models/LayoutSettings";
+import {LevelControl} from "./controls/LevelControl";
 
 export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceInfo) => {
   const controlProps: IDeviceControlProps<LayoutSettings> = {
@@ -27,6 +28,8 @@ export const getControlForDevice = (config: LayoutSettings, deviceInfo: DeviceIn
 
     case "on_off_control" :
       return (<OnOffControl {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
+    case "level_control" :
+      return (<LevelControl {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>);
 
     case "illuminance_sensor" :
       return (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>);

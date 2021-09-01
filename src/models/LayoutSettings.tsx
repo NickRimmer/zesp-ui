@@ -6,6 +6,7 @@ export type LayoutSettings = {
   report?: ReportInfo | null,
   value?: ReportKey,
   group?: string,
+  label?: string,
 }
 
 export type LayoutSettingsGroup = {

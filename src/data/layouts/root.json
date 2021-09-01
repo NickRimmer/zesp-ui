@@ -19,7 +19,7 @@
       "max": 255
     },
     "value": {
-      "endpoint": "01",
+      "endpoint": "FF",
       "clusterId": "0008",
       "attributeId": "0000"
     }
@@ -30,7 +30,7 @@
       "command": "MoveToColor|0000|1|1|{x}|{y}|0001"
     },
     "value": {
-      "endpoint": "01",
+      "endpoint": "FF",
       "clusterId": "0300",
       "attributeId": "0000"
     }
@@ -44,8 +44,19 @@
     }
   },
   {
-    "id": "volume_root",
-    "group": "Playback"
+    "id": "level_control",
+    "group": "Playback",
+    "label": "Volume",
+    "arguments": {
+      "command": "setVolume|{value:dec}",
+      "min": 0,
+      "max": 32768
+    },
+    "value": {
+      "endpoint": "FE",
+      "clusterId": "0008",
+      "attributeId": "0000"
+    }
   },
   {
     "id": "player_src_root",
