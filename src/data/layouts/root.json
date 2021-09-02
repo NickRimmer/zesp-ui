@@ -6,8 +6,8 @@
       "commandOff": "01 0000 01  0000"
     },
     "reportKey": {
-      "endpoint": "01",
-      "clusterId": "0006",
+      "endpoint": "FF",
+      "clusterId": "BBBB",
       "attributeId": "0000"
     }
   },
@@ -20,8 +20,8 @@
     },
     "reportKey": {
       "endpoint": "FF",
-      "clusterId": "0008",
-      "attributeId": "0000"
+      "clusterId": "BBBB",
+      "attributeId": "0001"
     }
   },
   {
@@ -31,8 +31,8 @@
     },
     "reportKey": {
       "endpoint": "FF",
-      "clusterId": "0300",
-      "attributeId": "0000"
+      "clusterId": "BBBB",
+      "attributeId": "0002"
     }
   },
   {
@@ -53,17 +53,27 @@
       "max": 32768
     },
     "reportKey": {
-      "endpoint": "FE",
-      "clusterId": "0008",
-      "attributeId": "0000"
+      "endpoint": "FF",
+      "clusterId": "BBBB",
+      "attributeId": "0003"
     }
   },
   {
     "id": "player_src_root",
-    "group": "Playback"
+    "group": "Playback",
+    "reportKey": {
+      "endpoint": "FF",
+      "clusterId": "BBBB",
+      "attributeId": "0004"
+    }
   },
   {
     "id": "player_control_root",
-    "group": "Playback"
+    "group": "Playback",
+    "reportKey": {
+      "endpoint": "FF",
+      "clusterId": "BBBB",
+      "attributeId": "0005"
+    }
   }
 ]
