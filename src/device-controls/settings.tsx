@@ -22,7 +22,7 @@ export type LayoutSettingsLevel = DataLayoutItem & {
   }
 }
 
-export type LayoutSettingsRgb = DataLayoutItem & {
+export type LayoutSettingsCommand = DataLayoutItem & {
   arguments: {
     command: string,
   }

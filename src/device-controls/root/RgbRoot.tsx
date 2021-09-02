@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {LayoutSettingsRgb} from "../settings";
+import {LayoutSettingsCommand} from "../settings";
 import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
 import {Col, Row} from "react-bootstrap";
 import {Single} from "../../services/single";
@@ -9,7 +9,7 @@ import {DeviceControls} from "../../services/deviceControls";
 import {useGlobalState} from "../../shared/global-state-provider";
 
 //TODO localize
-export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
+export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
   const globalState = useGlobalState();
   const report = DeviceControls.extractReport(props);
   let currentValue: number[] = report?.val ? report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
