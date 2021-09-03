@@ -15,12 +15,12 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
     max: props.config.arguments.max
   };
 
-  const report = DeviceControls.extractReport(props);
-  const currentValue = report?.val ? Number(report.val) : ((minMaxAttributes.max - minMaxAttributes.min) / 2);
+  const report = DeviceControls.getControlReport(props);
+  const currentValue = report?.val ? Number(report.val) : ((minMaxAttributes.max - minMaxAttributes.min) / 2 + minMaxAttributes.min);
   const [value, setValue] = useState(currentValue);
 
   const inRange = (value: number) => Math.max(Math.min(props.config.arguments.max, value), props.config.arguments.min);
-  const setReportValue = (value: number) => DeviceControls.trySetReportValue(globalState, props, value.toString())
+  const setReportValue = (value: number) => DeviceControls.setControlReport(globalState, props, value.toString())
 
   const sliderChangeHandler = () => {
     const result = inRange(value);

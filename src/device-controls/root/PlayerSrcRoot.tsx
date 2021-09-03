@@ -10,12 +10,12 @@ import {Single} from "../../services/single";
 
 // TODO add localization
 export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
-  const srcReport = DeviceControls.extractReport(props);
-  const [playSettings, playReport] = DeviceControls.extractSettings<LayoutSettingsOnOff>(props, "player_control_root");
+  const srcReport = DeviceControls.getControlReport(props);
+  const [playSettings, playReport] = DeviceControls.getControlSettings<LayoutSettingsOnOff>(props, "player_control_root");
 
   if (!srcReport) {
     useEffect(() => {
-      toast.error("'player_src_root' layout settings not found");
+      toast.error(`'${props.config.id}' layout settings not found`);
     }, []);
     return (<></>);
   }
@@ -45,16 +45,16 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
     const value = (event.target as HTMLInputElement).value
     setSrc(value);
 
-    DeviceControls.trySetReportValue(globalState, props, value);
+    DeviceControls.setControlReport(globalState, props, value);
   }
 
   const handleStop = () => {
     console.log("stop");
     setPlay("OFF");
-    DeviceControls.trySetReportValue(globalState, props, "OFF", playSettings!.reportKey);
+    DeviceControls.setControlReport(globalState, props, "OFF", playSettings!.reportKey);
 
     setSrc("");
-    DeviceControls.trySetReportValue(globalState, props, "");
+    DeviceControls.setControlReport(globalState, props, "");
 
     if (playSettings) Single.ZespConnector.send({data: playSettings.arguments.commandOff});
     else console.warn("No configured OFF command for 'player_control_root' operation found in layout");
@@ -67,7 +67,7 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
     }
 
     setPlay("ON");
-    DeviceControls.trySetReportValue(globalState, props, "ON", playSettings!.reportKey);
+    DeviceControls.setControlReport(globalState, props, "ON", playSettings!.reportKey);
     if (playSettings) Single.ZespConnector.send({data: playSettings.arguments.commandOn.replace("{value}", src)});
     else console.warn("No configured ON command for 'player_control_root' operation found in layout");
   }

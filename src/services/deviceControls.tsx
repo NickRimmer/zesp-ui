@@ -5,7 +5,7 @@ import {IGlobalState} from "../global-state";
 import {ReportKeyInfo} from "../models/ReportKeyInfo";
 
 export const DeviceControls = {
-  extractReport: (props: IDeviceControlProps<DataLayoutItem>): ZespReportInfo | null => {
+  getControlReport: (props: IDeviceControlProps<DataLayoutItem>): ZespReportInfo | null => {
     if (!props.config.reportKey) {
       console.debug(`No report key in config found for ${props.deviceInfo.zespInfo.IEEE} device and ${props.config.id} control`);
       return null;
@@ -14,7 +14,7 @@ export const DeviceControls = {
     return props.deviceInfo.zespInfo.Report[reportKey];
   },
 
-  extractSettings: function <T extends DataLayoutItem>(props: IDeviceControlProps<DataLayoutItem>, layoutId: string): [T | undefined, ZespReportInfo | undefined] {
+  getControlSettings: function <T extends DataLayoutItem>(props: IDeviceControlProps<DataLayoutItem>, layoutId: string): [T | undefined, ZespReportInfo | undefined] {
     const settings = props.deviceInfo.customLayout?.find(x => x.id === layoutId) as T;
     const report = settings && settings.reportKey
       ? props.deviceInfo.zespInfo.Report[settings.reportKey.endpoint + settings.reportKey.clusterId + settings.reportKey.attributeId]
@@ -23,7 +23,7 @@ export const DeviceControls = {
     return [settings, report];
   },
 
-  trySetReportValue: (globalState: IGlobalState, props: IDeviceControlProps<DataLayoutItem>, value: string, reportKeyInfo?: ReportKeyInfo | null): boolean => {
+  setControlReport: (globalState: IGlobalState, props: IDeviceControlProps<DataLayoutItem>, value: string, reportKeyInfo?: ReportKeyInfo | null): boolean => {
     const saveReportKeyInfo = reportKeyInfo || props.config.reportKey;
     if (!saveReportKeyInfo) return false;
 

@@ -10,8 +10,8 @@ import {DeviceControls} from "../../services/deviceControls";
 // TODO add localization
 export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
   const globalState = useGlobalState();
-  const report = DeviceControls.extractReport(props);
-  const currentValue = report?.val ? Number(report.val) : 50;
+  const report = DeviceControls.getControlReport(props);
+  const currentValue = report?.val ? Number(report.val) : ((props.config.arguments.max - props.config.arguments.min) / 2 + props.config.arguments.min);
   const [value, setValue] = useState(currentValue);
 
   const minMaxAttributes = {
@@ -21,7 +21,7 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
 
   const inRange = (value: number) => Math.max(Math.min(props.config.arguments.max, value), props.config.arguments.min);
 
-  const setCurrentValue = (value: number) => DeviceControls.trySetReportValue(globalState, props, value.toString());
+  const setCurrentValue = (value: number) => DeviceControls.setControlReport(globalState, props, value.toString());
 
   const sliderChangeHandler = () => {
     const result = inRange(value);
