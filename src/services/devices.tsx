@@ -1,8 +1,7 @@
 import {IGlobalState} from "../global-state";
 import {DataLayoutItem, DataLayoutItemsGroup} from "../models/DataLayoutItem";
-import {DataClusterInfo} from "../models/DataClusterInfo";
-import DataHaClusterIds from "../data/zigbee/ha-cluster-ids.json";
-// import {ReportKey} from "../models/ReportKey";
+import {DataReportInfo} from "../models/DataReportInfo";
+import DataHaClusterIds from "../data/reports.json";
 import {DeviceInfo} from "../models/DeviceInfo";
 import {ReportKeyInfo} from "../models/ReportKeyInfo";
 
@@ -45,7 +44,7 @@ export const Devices = {
 const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataLayoutItem[] => {
   const getLayoutItem = (reportKey: string): DataLayoutItem => {
     const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
-    const registeredCluster = (DataHaClusterIds as DataClusterInfo[]).find(x => x.clusterId == reportKeyInfo.clusterId);
+    const registeredCluster = (DataHaClusterIds as DataReportInfo[]).find(x => x.clusterId == reportKeyInfo.clusterId);
 
     const result = {
       id: reportKeyInfo.clusterId,
@@ -62,7 +61,7 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataLayoutItem[] => {
     const report = device.zespInfo.Report[reportKey];
     const roleParts = report.role?.split("&");
     if (roleParts && roleParts.length > 0)
-      return {...result, ...buildLayoutItemForRole(roleParts, registeredCluster)};
+      return {...result, ...buildLayoutItemForRole(roleParts, registeredCluster, reportKey)};
 
     // otherwise build layout based on cluster
     const attributeInfo = registeredCluster.attributes && registeredCluster.attributes[reportKeyInfo.attributeId];
@@ -75,10 +74,16 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataLayoutItem[] => {
   return reportKeys.map(key => getLayoutItem(key));
 }
 
-const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataClusterInfo): DataLayoutItem => {
+const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataReportInfo, reportKey: string): DataLayoutItem => {
+  const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
+
   const attributeId = roleParts[0];
   const roleSettings = roleParts.length > 1 ? roleParts[1] : null;
-  const layoutItem = (dataCluster.attributes && dataCluster.attributes[attributeId]) || {id: attributeId} as DataLayoutItem;
+  const layoutItem = !dataCluster.attributes
+    ? {id: attributeId} as DataLayoutItem // if no attributes at all
+    : dataCluster.attributes[`${reportKeyInfo.attributeId}:${attributeId}`]
+    || dataCluster.attributes[attributeId]
+    || {id: attributeId} as DataLayoutItem; // if required attribute not found
 
   // add role configured settings
   if (roleSettings)

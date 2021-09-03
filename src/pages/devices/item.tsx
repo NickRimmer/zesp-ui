@@ -2,8 +2,8 @@ import React from "react";
 import ItemImage from "./item-image";
 import {NavLink} from "react-router-dom";
 import {DeviceInfo} from "../../models/DeviceInfo";
-import HomeAutoClusters from "../../data/zigbee/ha-cluster-ids.json";
-import {DataClusterInfo} from "../../models/DataClusterInfo";
+import HomeAutoClusters from "../../data/reports.json";
+import {DataReportInfo} from "../../models/DataReportInfo";
 import {Devices} from "../../services/devices";
 
 interface IProps {
@@ -18,7 +18,7 @@ export default (props: IProps) => {
   let tags: string[] = [];
   for (const key of Object.keys(zespInfo.Report)) {
     const reportKeyDetails = Devices.getReportKeyDetails(key);
-    const clusterInfo = HomeAutoClusters.find(x => x.clusterId === reportKeyDetails.clusterId) as DataClusterInfo | undefined
+    const clusterInfo = HomeAutoClusters.find(x => x.clusterId === reportKeyDetails.clusterId) as DataReportInfo | undefined
     tags.push(clusterInfo?.name || reportKeyDetails.clusterId);
   }
 

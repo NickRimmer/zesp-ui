@@ -12,6 +12,7 @@ import {DataLayoutItem} from "../models/DataLayoutItem";
 import {LevelControl} from "./controls/LevelControl";
 import {DeviceInfo} from "../models/DeviceInfo";
 import {PlayerSrcRoot} from "./root/PlayerSrcRoot";
+import {OnOffBinarySensor} from "./sensors/OnOffBinarySensor";
 
 export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceInfo) => {
   const controlProps: IDeviceControlProps<DataLayoutItem> = {
@@ -38,6 +39,8 @@ export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceIn
 
     case "illuminance_sensor" :
       return (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>);
+    case "binary_sensor" :
+      return (<OnOffBinarySensor {...controlProps} config={controlProps.config as DataLayoutItem}/>);
 
     default:
       return (<UnknownControl {...controlProps}/>)

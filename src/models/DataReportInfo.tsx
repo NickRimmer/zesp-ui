@@ -1,6 +1,6 @@
 import {DataLayoutItem} from "./DataLayoutItem";
 
-export type DataClusterInfo = {
+export type DataReportInfo = {
   clusterId: string,
   name: string,
   attributes?: { [attributeId: string]: DataLayoutItem }

@@ -34,7 +34,7 @@ const onUpdate = (event: ZespDataEvent, getGlobalState: () => IGlobalState): voi
 
   if (!report) {
     console.debug(`Report '${reportId}' not found for '${device.zespInfo.IEEE}' device (${device.zespInfo.Name ?? device.zespInfo.ModelId})`);
-    console.debug(data);
+    // console.debug(data);
     return;
   }
 
