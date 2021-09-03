@@ -70,6 +70,10 @@
   {
     "id": "player_control_root",
     "group": "Playback",
+    "arguments": {
+      "commandOn": "playSound|{value}",
+      "commandOff": "killSound|0"
+    },
     "reportKey": {
       "endpoint": "FF",
       "clusterId": "BBBB",

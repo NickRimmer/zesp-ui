@@ -28,6 +28,8 @@ export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceIn
       return (<RgbRoot {...controlProps} config={controlProps.config as LayoutSettingsCommand}/>);
     case "player_src_root" :
       return (<PlayerSrcRoot {...controlProps} config={controlProps.config as DataLayoutItem}/>);
+    case "player_control_root":
+      return (<></>);
 
     case "on_off_control" :
       return (<OnOffControl {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);

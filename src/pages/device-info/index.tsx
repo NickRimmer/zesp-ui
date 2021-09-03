@@ -19,7 +19,6 @@ export default () => {
   const deviceInfo = Devices.getDevice(globalState, ieee, device);
   if (!deviceInfo) return (<CustomDeviceNotFound/>);
 
-
   const groups = Devices.getControlGroups(deviceInfo);
   const [activeGroupName, setActiveGroupName] = useState(groups[0].name);
 

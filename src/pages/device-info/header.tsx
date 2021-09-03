@@ -41,7 +41,7 @@ export default (props: {
       <div className="text-end modal-right-buttons">
         {props.onDetailsClicked && (<button type="button" className="btn" onClick={props.onDetailsClicked}><i className="bi bi-archive"/></button>)}
         <span className="border-end mx-3"/>
-        <button type="button" className="btn-close" aria-label="Close" onClick={props.onCloseClicked}/>
+        <button type="button" className="btn-close me-1" aria-label="Close" onClick={props.onCloseClicked}/>
       </div>
     </Modal.Header>
   )
