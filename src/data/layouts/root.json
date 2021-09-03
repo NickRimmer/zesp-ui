@@ -6,8 +6,8 @@
       "commandOff": "01 0000 01  0000"
     },
     "reportKey": {
-      "endpoint": "FF",
-      "clusterId": "BBBB",
+      "endpoint": "01",
+      "clusterId": "0006",
       "attributeId": "0000"
     }
   },
