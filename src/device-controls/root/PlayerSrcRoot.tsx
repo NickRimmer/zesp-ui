@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {Col, Row} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {DataLayoutItem} from "../../models/DataLayoutItem";
 import {DeviceControls} from "../../services/deviceControls";
@@ -7,6 +7,7 @@ import {useGlobalState} from "../../shared/global-state-provider";
 import toast from "react-hot-toast";
 import {LayoutSettingsOnOff} from "../settings";
 import {Single} from "../../services/single";
+import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 // TODO add localization
 export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
@@ -74,8 +75,8 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
 
   return (
     <Row>
-      <Col md="3" lg="2">Radio stream:</Col>
-      <Col>
+      <DeviceControlCol1>Radio stream:</DeviceControlCol1>
+      <DeviceControlCol2>
         <div className="input-group">
           <input className="form-control" list="datalistOptions" placeholder="Click to see dropdown suggestions" value={src} onChange={handleChange}/>
           <button className={`btn btn-outline-secondary ${play !== "ON" ? "active" : ""}`} type="button" onClick={handleStop}><i className="bi-stop"/></button>
@@ -84,7 +85,7 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
             {srcs.map((src, i) => (<option key={i} value={src}/>))}
           </datalist>
         </div>
-      </Col>
+      </DeviceControlCol2>
     </Row>
   )
 }

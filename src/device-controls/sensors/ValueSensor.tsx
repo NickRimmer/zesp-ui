@@ -6,17 +6,18 @@ import {HighlightOnUpdate} from "../../shared/transition/HighlightOnUpdate";
 import {DataLayoutItem} from "../../models/DataLayoutItem";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
-export const OnOffBinarySensor = (props: IDeviceControlProps<DataLayoutItem>) => {
+export const ValueSensor = (props: IDeviceControlProps<DataLayoutItem>) => {
   const report = DeviceControls.getControlReport(props);
   if (!report) return (<div className="alert alert-warning">Report missed</div>);
-  const payloadOn = Number(props.config.zespRoleSettings["payload_on"]?.toString() || "0");
-  const value = Number(report.parsed?.toString() || report.val?.toString() || "1") === payloadOn;
+
+  const value = report.parsed || report.val;
+  const unit = props.config.zespRoleSettings["unit_of_measurement"] || "";
 
   return (
     <Row>
-      <DeviceControlCol1>{report.label || "State"}:</DeviceControlCol1>
+      <DeviceControlCol1>{report.label || "Value"}:</DeviceControlCol1>
       <DeviceControlCol2>
-        <HighlightOnUpdate>{value ? "ON" : "OFF"}</HighlightOnUpdate>
+        <HighlightOnUpdate>{value ? `${value} ${unit}` : "No data"}</HighlightOnUpdate>
       </DeviceControlCol2>
     </Row>
   )

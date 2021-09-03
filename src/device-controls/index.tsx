@@ -1,10 +1,9 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 import {LayoutSettingsCommand, LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsSensor} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {OnOffRoot} from "./root/OnOffRoot";
 import {LevelRoot} from "./root/LevelRoot";
 import {RgbRoot} from "./root/RgbRoot";
-import {OnOffControl} from "./controls/OnOffControl";
 import {UnknownControl} from "./controls/UnknownControl";
 import {IlluminanceSensor} from "./sensors/IlluminanceSensor";
 
@@ -13,6 +12,8 @@ import {LevelControl} from "./controls/LevelControl";
 import {DeviceInfo} from "../models/DeviceInfo";
 import {PlayerSrcRoot} from "./root/PlayerSrcRoot";
 import {OnOffBinarySensor} from "./sensors/OnOffBinarySensor";
+import {ValueSensor} from "./sensors/ValueSensor";
+import {Col} from "react-bootstrap";
 
 export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceInfo) => {
   const controlProps: IDeviceControlProps<DataLayoutItem> = {
@@ -32,8 +33,6 @@ export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceIn
     case "player_control_root":
       return (<></>);
 
-    case "on_off_control" :
-      return (<OnOffControl {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
     case "level_control" :
       return (<LevelControl {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>);
 
@@ -41,8 +40,18 @@ export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceIn
       return (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>);
     case "binary_sensor" :
       return (<OnOffBinarySensor {...controlProps} config={controlProps.config as DataLayoutItem}/>);
+    case "sensor" :
+      return (<ValueSensor {...controlProps} config={controlProps.config as DataLayoutItem}/>);
 
     default:
       return (<UnknownControl {...controlProps}/>)
   }
 }
+
+export const DeviceControlCol1: FunctionComponent<React.HTMLProps<HTMLButtonElement>> = (props) => {
+  return (<Col md="4">{props.children}</Col>)
+}
+
+export const DeviceControlCol2: FunctionComponent<React.HTMLProps<HTMLButtonElement>> = (props) => {
+  return (<Col>{props.children}</Col>)
+} 

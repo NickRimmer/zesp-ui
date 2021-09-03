@@ -30,7 +30,7 @@ export default () => {
   }
 
   return (
-    <Modal show={show} onHide={handleClose} onExited={handleExit} size="lg">
+    <Modal show={show} onHide={handleClose} onExited={handleExit}>
       <CustomHeader
         groups={groups}
         device={deviceInfo}
