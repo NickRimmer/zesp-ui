@@ -52,5 +52,13 @@ const onDataReceived = (event: ZespDataEvent, globalState: IGlobalState): void =
   if (volumeLevel) device.zespInfo.Report[volumeLevel.endpoint + volumeLevel.clusterId + volumeLevel.attributeId].val = data.sound.volume.toString();
   else console.warn("Root device report 'level_control' not found");
 
+  const srcRadio = layoutSettings.find(x => x.id === "player_src_root")?.reportKey;
+  if (srcRadio) device.zespInfo.Report[srcRadio.endpoint + srcRadio.clusterId + srcRadio.attributeId].val = data.sound.current_path?.toString();
+  else console.warn("Root device report 'player_src_root' not found");
+
+  const playControl = layoutSettings.find(x => x.id === "player_control_root")?.reportKey;
+  if (playControl) device.zespInfo.Report[playControl.endpoint + playControl.clusterId + playControl.attributeId].val = data.sound.play.toString();
+  else console.warn("Root device report 'player_control_root' not found");
+
   globalState.setState(x => ({...x, ...{devices: devices}}));
 }

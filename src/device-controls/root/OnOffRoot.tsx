@@ -5,9 +5,8 @@ import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
 
-// TODO add localization
 export const OnOffRoot = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
-  const report = DeviceControls.extractReport(props);
+  const report = DeviceControls.getControlReport(props);
 
   const onHandler = () => {
     Single.ZespConnector.send({data: props.config.arguments.commandOn, isBinary: true});

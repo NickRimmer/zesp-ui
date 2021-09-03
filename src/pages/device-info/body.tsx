@@ -13,7 +13,7 @@ export default (props: {
   if (!group) return (<div>Group '{props.activeGroupName}' not found.</div>)
 
   return (
-    <Modal.Body className="text-start device-dialog">
+    <Modal.Body className="text-start device-dialog p-4">
       {group.settings.map((control, i) =>
         (<div key={i} className="device-control-group">{getControlForDevice(control, props.device)}</div>))}
     </Modal.Body>

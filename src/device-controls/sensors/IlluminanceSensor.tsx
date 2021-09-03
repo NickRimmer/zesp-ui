@@ -7,7 +7,7 @@ import {HighlightOnUpdate} from "../../shared/transition/HighlightOnUpdate";
 
 //TODO localization
 export const IlluminanceSensor = (props: IDeviceControlProps<LayoutSettingsSensor>) => {
-  const report = DeviceControls.extractReport(props);
+  const report = DeviceControls.getControlReport(props);
   const value = report?.val ? parseInt(report.val, 16).toString() : null;
 
   return (

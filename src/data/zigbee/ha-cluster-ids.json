@@ -35,5 +35,9 @@
   {
     "clusterId": "0406",
     "name": "Occupancy_Sensing"
+  },
+  {
+    "clusterId": "BBBB",
+    "name": "Custom"
   }
 ]

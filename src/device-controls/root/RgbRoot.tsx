@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {LayoutSettingsRgb} from "../settings";
+import {LayoutSettingsCommand} from "../settings";
 import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
 import {Col, Row} from "react-bootstrap";
 import {Single} from "../../services/single";
@@ -9,9 +9,9 @@ import {DeviceControls} from "../../services/deviceControls";
 import {useGlobalState} from "../../shared/global-state-provider";
 
 //TODO localize
-export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
+export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
   const globalState = useGlobalState();
-  const report = DeviceControls.extractReport(props);
+  const report = DeviceControls.getControlReport(props);
   let currentValue: number[] = report?.val ? report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
   if (currentValue.length !== 3) {
     console.warn(`Incorrect RGB value stored to reportd: ${report?.val}`);
@@ -21,7 +21,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsRgb>) => {
   const [color, setColor] = useState<RGBColor>({r: currentValue[0], g: currentValue[1], b: currentValue[2]});
   const [colorPicker, setColorPicker] = useLocalStorage("colorPicker", 1);
 
-  const setCurrentValue = (rgb: RGBColor) => DeviceControls.trySetReportValue(globalState, props, `${rgb.r}:${rgb.g}:${rgb.b}`);
+  const setCurrentValue = (rgb: RGBColor) => DeviceControls.setControlReport(globalState, props, `${rgb.r}:${rgb.g}:${rgb.b}`);
   const colorChangeHandler = (rgb: RGBColor) => {
     setColor(rgb);
 

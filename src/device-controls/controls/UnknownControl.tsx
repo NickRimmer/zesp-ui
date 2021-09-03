@@ -5,7 +5,7 @@ import {DeviceControls} from "../../services/deviceControls";
 
 export const UnknownControl = (props: IDeviceControlProps<DataLayoutItem>) => {
   const configData = JSON.stringify(props.config)
-  const reportData = JSON.stringify(DeviceControls.extractReport(props));
+  const reportData = JSON.stringify(DeviceControls.getControlReport(props));
 
   return (
     <>
