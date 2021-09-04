@@ -10,13 +10,14 @@ export const OnOffBinarySensor = (props: IDeviceControlProps<DataLayoutItem>) =>
   const report = DeviceControls.getControlReport(props);
   if (!report) return (<div className="alert alert-warning">Report missed</div>);
   const payloadOn = Number(props.config.zespRoleSettings["payload_on"]?.toString() || "0");
-  const value = Number(report.parsed?.toString() || report.val?.toString() || "1") === payloadOn;
+  const value = Number(report.parsed?.toString() || report.val?.toString() || "1");
+  const result = value === payloadOn;
 
   return (
     <Row>
       <DeviceControlCol1>{report.label || "State"}:</DeviceControlCol1>
       <DeviceControlCol2>
-        <HighlightOnUpdate>{value ? "ON" : "OFF"}</HighlightOnUpdate>
+        <HighlightOnUpdate>{result ? "ON" : "OFF"}</HighlightOnUpdate>
       </DeviceControlCol2>
     </Row>
   )

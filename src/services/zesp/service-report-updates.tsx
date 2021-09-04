@@ -38,7 +38,11 @@ const onUpdate = (event: ZespDataEvent, getGlobalState: () => IGlobalState): voi
     return;
   }
 
-  report.val = data.Data;
-  globalState.setState(x => ({...x, ...{devices: devices}}));
+  if (report.val !== data.Data && report.parsed !== data.parsed) {
+    report.parsed = data.parsed;
+    report.val = data.Data;
+    globalState.setState(x => ({...x, ...{devices: devices}}));
+  }
+
   // console.debug(`Device '${device.IEEE}' (${device.Name ?? device.ModelId}) report '${reportId}' updated with value '${data.Data}'`);
 }
