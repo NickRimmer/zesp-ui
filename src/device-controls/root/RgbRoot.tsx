@@ -2,11 +2,12 @@ import React, {useState} from "react";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {LayoutSettingsCommand} from "../settings";
 import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
-import {Col, Row} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import {Single} from "../../services/single";
 import {useLocalStorage} from "../../services/localStorage";
 import {DeviceControls} from "../../services/deviceControls";
 import {useGlobalState} from "../../shared/global-state-provider";
+import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 //TODO localize
 export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
@@ -47,7 +48,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
 
   return (
     <Row>
-      <Col md="3" lg="2" className="user-select-none">
+      <DeviceControlCol1 className="user-select-none">
         <div>
           <div>Light color:</div>
           <div>
@@ -56,14 +57,14 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
             {colorPickerButton(3)}
           </div>
         </div>
-      </Col>
-      <Col>
+      </DeviceControlCol1>
+      <DeviceControlCol2>
         <div className="flex-grow-1">
           {colorPicker === 1 && (<HuePicker color={color} onChange={event => setColor(event.rgb)} onChangeComplete={sendColorHandler}/>)}
           {colorPicker === 2 && (<GithubPicker color={color} onChange={event => colorChangeHandler(event.rgb)} triangle="hide" width="214px"/>)}
           {colorPicker === 3 && (<CompactPicker color={color} onChange={event => colorChangeHandler(event.rgb)}/>)}
         </div>
-      </Col>
+      </DeviceControlCol2>
     </Row>
   );
 }

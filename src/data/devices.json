@@ -3,9 +3,6 @@
     "modelIds": [
       "ZESP_Root"
     ],
-    "groups": [
-      "root"
-    ],
     "image": "zesp.jpg",
     "layout": "root.json"
   },
@@ -13,26 +10,17 @@
     "modelIds": [
       "lumi.sensor_switch"
     ],
-    "groups": [
-      "switch"
-    ],
     "image": "default-sensor-switch.jpg"
   },
   {
     "modelIds": [
       "lumi.sensor_motion"
     ],
-    "groups": [
-      "sensor"
-    ],
     "image": "default-sensor-motion.jpg"
   },
   {
     "modelIds": [
       "lumi.sensor_magnet"
-    ],
-    "groups": [
-      "sensor"
     ],
     "image": "default-sensor-magnet.jpg"
   }

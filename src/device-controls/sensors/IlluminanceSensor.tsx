@@ -1,9 +1,10 @@
 import React from "react";
-import {Col, Row} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import {LayoutSettingsSensor} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {DeviceControls} from "../../services/deviceControls";
 import {HighlightOnUpdate} from "../../shared/transition/HighlightOnUpdate";
+import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 //TODO localization
 export const IlluminanceSensor = (props: IDeviceControlProps<LayoutSettingsSensor>) => {
@@ -12,11 +13,11 @@ export const IlluminanceSensor = (props: IDeviceControlProps<LayoutSettingsSenso
 
   return (
     <Row>
-      <Col md="3" lg="2">Illuminance:</Col>
-      <Col>
+      <DeviceControlCol1>Illuminance:</DeviceControlCol1>
+      <DeviceControlCol2>
         {value && (<HighlightOnUpdate>{value}</HighlightOnUpdate>)}
         {!value && (<span className="alert alert-warning small py-2 m-0">No data</span>)}
-      </Col>
+      </DeviceControlCol2>
     </Row>
   )
 }

@@ -11,12 +11,6 @@
         "id": "on_off_control",
         "commandOn": "cmd_on|...",
         "commandOff": "cmd_off|..."
-      },
-      "8000": {
-        "id": "on_off_sensor"
-      },
-      "binary_sensor": {
-        "id": "on_off_sensor"
       }
     }
   },

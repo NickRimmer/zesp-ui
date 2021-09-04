@@ -1,9 +1,10 @@
 import React from "react";
-import {Button, ButtonGroup, Col, Row} from "react-bootstrap";
+import {Button, ButtonGroup, Row} from "react-bootstrap";
 import {LayoutSettingsOnOff} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
+import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 export const OnOffRoot = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
   const report = DeviceControls.getControlReport(props);
@@ -18,13 +19,13 @@ export const OnOffRoot = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
 
   return (
     <Row>
-      <Col md="3" lg="2">Light power:</Col>
-      <Col>
+      <DeviceControlCol1>Light power:</DeviceControlCol1>
+      <DeviceControlCol2>
         <ButtonGroup>
           <Button variant={report?.val.toString() === "1" ? "primary" : "secondary"} onClick={onHandler}>ON</Button>
           <Button variant={report?.val.toString() === "1" ? "secondary" : "primary"} onClick={offHandler}>OFF</Button>
         </ButtonGroup>
-      </Col>
+      </DeviceControlCol2>
     </Row>
   )
 }

@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import {Col, FormControl, Row} from "react-bootstrap";
+import {FormControl, Row} from "react-bootstrap";
 import FormRange from "react-bootstrap/FormRange";
 import {LayoutSettingsLevel} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {Single} from "../../services/single";
 import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceControls} from "../../services/deviceControls";
+import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 // TODO add localization
 export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
@@ -40,8 +41,8 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
 
   return (
     <Row>
-      <Col md="3" lg="2">Level:</Col>
-      <Col>
+      <DeviceControlCol1>Level:</DeviceControlCol1>
+      <DeviceControlCol2>
         <FormControl
           style={{width: "80px"}}
           className="me-2"
@@ -57,7 +58,7 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
           onMouseUp={sliderChangeHandler}
           {...minMaxAttributes}
         />
-      </Col>
+      </DeviceControlCol2>
     </Row>
   )
 }
