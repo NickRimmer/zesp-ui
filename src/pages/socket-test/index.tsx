@@ -6,7 +6,7 @@ import {Single} from "../../services/single";
 import {AllMessagesZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
 
 const maxMessagesCount = 15;
-const predefinedMessages = ["getDeviceList", "get_Mi_lamp", "LoadJson|/location.json", "LoadJson|/groups.json"];
+const predefinedMessages = ["getDeviceList", "get_Mi_lamp", "LoadJson|/location.json", "LoadJson|/groups.json", "LoadJson|/zesp_ui.json"];
 const predefinedBinary = ["01 0000 01 0100", "01 0000 01 0000"];
 
 interface IFormData {
