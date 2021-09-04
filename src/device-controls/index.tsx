@@ -7,7 +7,7 @@ import {RgbRoot} from "./root/RgbRoot";
 import {UnknownControl} from "./controls/UnknownControl";
 import {IlluminanceSensor} from "./sensors/IlluminanceSensor";
 
-import {DataLayoutItem} from "../models/DataLayoutItem";
+import {DataControlSettings} from "../models/DataControlSettings";
 import {LevelControl} from "./controls/LevelControl";
 import {DeviceInfo} from "../models/DeviceInfo";
 import {PlayerSrcRoot} from "./root/PlayerSrcRoot";
@@ -15,8 +15,8 @@ import {OnOffBinarySensor} from "./sensors/OnOffBinarySensor";
 import {ValueSensor} from "./sensors/ValueSensor";
 import {Col} from "react-bootstrap";
 
-export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceInfo) => {
-  const controlProps: IDeviceControlProps<DataLayoutItem> = {
+export const getControlForDevice = (config: DataControlSettings, deviceInfo: DeviceInfo) => {
+  const controlProps: IDeviceControlProps<DataControlSettings> = {
     config,
     deviceInfo,
   }
@@ -29,7 +29,7 @@ export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceIn
     case "rgb_root" :
       return (<RgbRoot {...controlProps} config={controlProps.config as LayoutSettingsCommand}/>);
     case "player_src_root" :
-      return (<PlayerSrcRoot {...controlProps} config={controlProps.config as DataLayoutItem}/>);
+      return (<PlayerSrcRoot {...controlProps} config={controlProps.config as DataControlSettings}/>);
     case "player_control_root":
       return (<></>);
 
@@ -39,9 +39,9 @@ export const getControlForDevice = (config: DataLayoutItem, deviceInfo: DeviceIn
     case "illuminance_sensor" :
       return (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>);
     case "binary_sensor" :
-      return (<OnOffBinarySensor {...controlProps} config={controlProps.config as DataLayoutItem}/>);
+      return (<OnOffBinarySensor {...controlProps} config={controlProps.config as DataControlSettings}/>);
     case "sensor" :
-      return (<ValueSensor {...controlProps} config={controlProps.config as DataLayoutItem}/>);
+      return (<ValueSensor {...controlProps} config={controlProps.config as DataControlSettings}/>);
 
     default:
       return (<UnknownControl {...controlProps}/>)

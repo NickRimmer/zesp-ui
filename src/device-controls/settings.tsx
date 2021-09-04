@@ -1,20 +1,20 @@
-import {DataLayoutItem} from "../models/DataLayoutItem";
+import {DataControlSettings} from "../models/DataControlSettings";
 
-export type LayoutSettingsSensor = DataLayoutItem & {
+export type LayoutSettingsSensor = DataControlSettings & {
   arguments: {
     clusterId: string,
     attributeId: string,
   }
 }
 
-export type LayoutSettingsOnOff = DataLayoutItem & {
+export type LayoutSettingsOnOff = DataControlSettings & {
   arguments: {
     commandOn: string,
     commandOff: string,
   }
 }
 
-export type LayoutSettingsLevel = DataLayoutItem & {
+export type LayoutSettingsLevel = DataControlSettings & {
   arguments: {
     command: string,
     min: number,
@@ -22,7 +22,7 @@ export type LayoutSettingsLevel = DataLayoutItem & {
   }
 }
 
-export type LayoutSettingsCommand = DataLayoutItem & {
+export type LayoutSettingsCommand = DataControlSettings & {
   arguments: {
     command: string,
   }

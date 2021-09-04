@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Row} from "react-bootstrap";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {DataLayoutItem} from "../../models/DataLayoutItem";
+import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceControls} from "../../services/deviceControls";
 import {useGlobalState} from "../../shared/global-state-provider";
 import toast from "react-hot-toast";
@@ -10,7 +10,7 @@ import {Single} from "../../services/single";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 // TODO add localization
-export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
+export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) => {
   const srcReport = DeviceControls.getControlReport(props);
   const [playSettings, playReport] = DeviceControls.getControlSettings<LayoutSettingsOnOff>(props, "player_control_root");
 

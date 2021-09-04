@@ -4,7 +4,7 @@ import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import predefinedDevices from "../../data/devices.json";
-import {DataLayoutItem} from "../../models/DataLayoutItem";
+import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceInfo} from "../../models/DeviceInfo";
 import {DataDeviceSettings} from "../../models/DataDeviceSettings";
 import {ZespReportInfo} from "./models/ZespReportInfo";
@@ -27,7 +27,7 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
 
   const devices: DeviceInfo[] = zespDevices.map(zespInfo => {
     const settings = predefinedDevices.find(x => x.modelIds.findIndex(y => y === zespInfo.ModelId) >= 0) as DataDeviceSettings | undefined;
-    const customLayout = settings?.layout && require(`../../data/layouts/${settings.layout}`) as DataLayoutItem[] | undefined;
+    const customLayout = settings?.controls && require(`../../data/layouts/${settings.controls}`) as DataControlSettings[] | undefined;
 
     customLayout && customLayout.forEach(layoutItem => {
       if (!layoutItem.reportKey) return;

@@ -1,6 +1,6 @@
 import {ReportKeyInfo} from "./ReportKeyInfo";
 
-export type DataLayoutItem = {
+export type DataControlSettings = {
   id: string,
   reportKey?: ReportKeyInfo,
   group?: string,
@@ -10,5 +10,5 @@ export type DataLayoutItem = {
 
 export type DataLayoutItemsGroup = {
   name: string,
-  settings: DataLayoutItem[]
+  settings: DataControlSettings[]
 }

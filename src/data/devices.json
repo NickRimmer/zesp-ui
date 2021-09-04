@@ -4,7 +4,7 @@
       "ZESP_Root"
     ],
     "image": "zesp.jpg",
-    "layout": "root.json"
+    "controls": "root.json"
   },
   {
     "modelIds": [
@@ -22,6 +22,7 @@
     "modelIds": [
       "lumi.sensor_magnet"
     ],
-    "image": "default-sensor-magnet.jpg"
+    "image": "default-sensor-magnet.jpg",
+    "layout": "binarySensorLayout"
   }
 ]

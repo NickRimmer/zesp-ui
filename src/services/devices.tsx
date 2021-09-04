@@ -1,5 +1,5 @@
 import {IGlobalState} from "../global-state";
-import {DataLayoutItem, DataLayoutItemsGroup} from "../models/DataLayoutItem";
+import {DataControlSettings, DataLayoutItemsGroup} from "../models/DataControlSettings";
 import {DataReportInfo} from "../models/DataReportInfo";
 import DataHaClusterIds from "../data/reports.json";
 import {DeviceInfo} from "../models/DeviceInfo";
@@ -41,15 +41,15 @@ export const Devices = {
   },
 }
 
-const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataLayoutItem[] => {
-  const getLayoutItem = (reportKey: string): DataLayoutItem => {
+const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] => {
+  const getLayoutItem = (reportKey: string): DataControlSettings => {
     const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
     const registeredCluster = (DataHaClusterIds as DataReportInfo[]).find(x => x.clusterId == reportKeyInfo.clusterId);
 
     const result = {
       id: reportKeyInfo.clusterId,
       reportKey: reportKeyInfo
-    } as DataLayoutItem;
+    } as DataControlSettings;
 
     // if cluster information not found
     if (!registeredCluster) {
@@ -74,16 +74,16 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataLayoutItem[] => {
   return reportKeys.map(key => getLayoutItem(key));
 }
 
-const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataReportInfo, reportKey: string): DataLayoutItem => {
+const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataReportInfo, reportKey: string): DataControlSettings => {
   const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
 
   const attributeId = roleParts[0];
   const roleSettings = roleParts.length > 1 ? roleParts[1] : null;
   const layoutItem = !dataCluster.attributes
-    ? {id: attributeId} as DataLayoutItem // if no attributes at all
+    ? {id: attributeId} as DataControlSettings // if no attributes at all
     : dataCluster.attributes[`${reportKeyInfo.attributeId}:${attributeId}`]
     || dataCluster.attributes[attributeId]
-    || {id: attributeId} as DataLayoutItem; // if required attribute not found
+    || {id: attributeId} as DataControlSettings; // if required attribute not found
 
   // add role configured settings
   if (roleSettings)
