@@ -60,7 +60,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
       </DeviceControlCol1>
       <DeviceControlCol2>
         <div className="flex-grow-1">
-          {colorPicker === 1 && (<HuePicker color={color} onChange={event => setColor(event.rgb)} onChangeComplete={sendColorHandler}/>)}
+          {colorPicker === 1 && (<HuePicker color={color} onChange={event => setColor(event.rgb)} onChangeComplete={sendColorHandler} width="270px"/>)}
           {colorPicker === 2 && (<GithubPicker color={color} onChange={event => colorChangeHandler(event.rgb)} triangle="hide" width="214px"/>)}
           {colorPicker === 3 && (<CompactPicker color={color} onChange={event => colorChangeHandler(event.rgb)}/>)}
         </div>

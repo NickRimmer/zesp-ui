@@ -4,7 +4,7 @@ import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {OnOffRoot} from "./root/OnOffRoot";
 import {LevelRoot} from "./root/LevelRoot";
 import {RgbRoot} from "./root/RgbRoot";
-import {UnknownControl} from "./controls/UnknownControl";
+import {UnknownControl} from "./unknown";
 import {IlluminanceSensor} from "./sensors/IlluminanceSensor";
 
 import {DataControlSettings} from "../models/DataControlSettings";
@@ -15,7 +15,7 @@ import {OnOffBinarySensor} from "./sensors/OnOffBinarySensor";
 import {ValueSensor} from "./sensors/ValueSensor";
 import {Col} from "react-bootstrap";
 
-export const getControlForDevice = (config: DataControlSettings, deviceInfo: DeviceInfo) => {
+export const getControlForDevice = (config: DataControlSettings, deviceInfo: DeviceInfo): JSX.Element | undefined => {
   const controlProps: IDeviceControlProps<DataControlSettings> = {
     config,
     deviceInfo,
@@ -31,7 +31,7 @@ export const getControlForDevice = (config: DataControlSettings, deviceInfo: Dev
     case "player_src_root" :
       return (<PlayerSrcRoot {...controlProps} config={controlProps.config as DataControlSettings}/>);
     case "player_control_root":
-      return (<></>);
+      return undefined;
 
     case "level_control" :
       return (<LevelControl {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>);
