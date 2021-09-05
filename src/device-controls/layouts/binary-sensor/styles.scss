@@ -3,6 +3,7 @@
   $secondaryColor: #3583fb;
   $unknownColor: #d81616;
 
+  font-size: 115%;
   margin-top: -10px;
 
   .col.left {
@@ -32,6 +33,7 @@
 
     .status {
       font-weight: bold;
+      text-transform: uppercase;
     }
 
     .progress {
@@ -45,6 +47,15 @@
           background-color: $secondaryColor !important;
         }
       }
+    }
+  }
+
+  .battery-icon {
+    margin-top: -5px;
+
+    .bi {
+      font-size: 47px;
+      line-height: 1em;
     }
   }
 
