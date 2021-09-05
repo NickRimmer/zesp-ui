@@ -1,7 +1,5 @@
-import React, {SetStateAction, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
-import {GlobalStateInterface, useGlobalState} from "../../shared/global-state-provider";
-import {useLocalStorage} from "../../services/localStorage";
 import {Single} from "../../services/single";
 
 interface IProps {
