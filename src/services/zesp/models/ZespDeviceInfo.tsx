@@ -7,5 +7,6 @@ export type ZespDeviceInfo = {
   ModelId: string,
   Report: { [reportId: string]: ZespReportInfo },
   DevType: string,
+  Img: string,
   // EP: { [epKey: string]: object },
 }
