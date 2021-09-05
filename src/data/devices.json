@@ -22,7 +22,6 @@
     "modelIds": [
       "lumi.sensor_magnet"
     ],
-    "image": "default-sensor-magnet.jpg",
-    "layout": "binarySensorLayout"
+    "image": "default-sensor-magnet.jpg"
   }
 ]

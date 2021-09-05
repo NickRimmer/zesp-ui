@@ -8,6 +8,7 @@ import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceInfo} from "../../models/DeviceInfo";
 import {DataDeviceSettings} from "../../models/DataDeviceSettings";
 import {ZespReportInfo} from "./models/ZespReportInfo";
+import {LayoutAutoDetection} from "./service-auto-layouts";
 
 const ServiceDevices = {
   getDevicesList: (zesp: IZespConnector) => {
@@ -25,25 +26,33 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
   const zespDevices: ZespDeviceInfo[] = [];
   Object.assign(zespDevices, JSON.parse(jsonString))
 
-  const devices: DeviceInfo[] = zespDevices.map(zespInfo => {
-    const settings = predefinedDevices.find(x => x.modelIds.findIndex(y => y === zespInfo.ModelId) >= 0) as DataDeviceSettings | undefined;
-    const customLayout = settings?.controls && require(`../../data/layouts/${settings.controls}`) as DataControlSettings[] | undefined;
+  const devices: DeviceInfo[] = zespDevices.map(buildDeviceInfo);
+  globalState.setState(x => ({...x, ...{devices: devices}}));
+}
 
-    customLayout && customLayout.forEach(layoutItem => {
-      if (!layoutItem.reportKey) return;
+const buildDeviceInfo = (zespInfo: ZespDeviceInfo) => {
+  const settings: DataDeviceSettings = predefinedDevices.find(x => x.modelIds.findIndex(y => y === zespInfo.ModelId) >= 0) ||
+    {
+      image: "zigbee.png"
+    } as DataDeviceSettings;
 
-      const reportKey = layoutItem.reportKey.endpoint + layoutItem.reportKey.clusterId + layoutItem.reportKey.attributeId;
-      zespInfo.Report[reportKey] = {} as ZespReportInfo;
-    });
-
-    return {
-      zespInfo: zespInfo,
-      settings: settings,
-      customLayout: customLayout
-    } as DeviceInfo;
+  // add predefined controls and reports
+  const controls = settings?.controls && require(`../../data/controls/${settings.controls}`) as DataControlSettings[] | undefined;
+  controls && controls.forEach(control => {
+    if (!control.reportKey) return;
+    const reportKey = control.reportKey.endpoint + control.reportKey.clusterId + control.reportKey.attributeId;
+    if (!zespInfo.Report[reportKey]) zespInfo.Report[reportKey] = {} as ZespReportInfo;
   });
 
-  globalState.setState(x => ({...x, ...{devices: devices}}));
+  // try to autodetect layout by reports
+  const layout = settings.layout
+    || LayoutAutoDetection.binarySensor(zespInfo);
+
+  return {
+    zespInfo: zespInfo,
+    settings: {...settings, ...{layout: layout}},
+    customLayout: controls
+  } as DeviceInfo;
 }
 
 export default ServiceDevices;
