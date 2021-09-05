@@ -29,21 +29,48 @@ export const Devices = {
     }, [] as DataLayoutItemsGroup[]);
   },
 
-  getReportKeyDetails: (reportKey: string): ReportKeyInfo => {
-    if (reportKey?.length != 10)
-      throw Error(`Unknown format of report key: ${reportKey}`);
+  getReportKeyDetails: (reportKey: string, deviceType: string): ReportKeyInfo | undefined => {
+    if (!deviceType || deviceType === "ZED" || deviceType === "ZR") {
+      if (reportKey?.length !== 10) // 01 0000 0000
+      {
+        console.warn(`Unknown format of Zigbee report key: '${reportKey}'`);
+        return undefined;
+      }
 
-    return {
-      endpoint: reportKey.substr(0, 2),
-      clusterId: reportKey.substr(2, 4),
-      attributeId: reportKey.substr(6, 4),
+      return {
+        endpoint: reportKey.substr(0, 2),
+        clusterId: reportKey.substr(2, 4),
+        attributeId: reportKey.substr(6),
+      }
     }
+
+    if (deviceType === "BED") {
+      if (reportKey?.length < 1) // a-ny-thing
+      {
+        console.warn(`Unknown format of BLE report key: '${reportKey}'`);
+        return undefined;
+      }
+
+      return {
+        endpoint: "",
+        clusterId: reportKey,
+        attributeId: "",
+      }
+    }
+
+    console.warn(`Unknown device type '${deviceType}'`);
+    return undefined;
   },
 }
 
 const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] => {
-  const getLayoutItem = (reportKey: string): DataControlSettings => {
-    const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
+  const getLayoutItem = (reportKey: string): DataControlSettings | undefined => {
+    const reportKeyInfo = Devices.getReportKeyDetails(reportKey, device.zespInfo.DevType);
+    if (!reportKeyInfo) {
+      console.warn(`Cannot get report key details for '${device.zespInfo.IEEE}' device`);
+      return undefined;
+    }
+
     const registeredCluster = (DataHaClusterIds as DataReportInfo[]).find(x => x.clusterId == reportKeyInfo.clusterId);
 
     const result = {
@@ -61,7 +88,7 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] 
     const report = device.zespInfo.Report[reportKey];
     const roleParts = report.role?.split("&");
     if (roleParts && roleParts.length > 0)
-      return {...result, ...buildLayoutItemForRole(roleParts, registeredCluster, reportKey)};
+      return {...result, ...buildLayoutItemForRole(roleParts, registeredCluster, reportKey, device.zespInfo.DevType)};
 
     // otherwise build layout based on cluster
     const attributeInfo = registeredCluster.attributes && registeredCluster.attributes[reportKeyInfo.attributeId];
@@ -71,11 +98,12 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] 
   }
 
   const reportKeys = Object.keys(device.zespInfo.Report);
-  return reportKeys.map(key => getLayoutItem(key));
+  return reportKeys.map(key => getLayoutItem(key)).filter(x => x !== undefined) as DataControlSettings[];
 }
 
-const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataReportInfo, reportKey: string): DataControlSettings => {
-  const reportKeyInfo = Devices.getReportKeyDetails(reportKey);
+const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataReportInfo, reportKey: string, deviceType: string): DataControlSettings | undefined => {
+  const reportKeyInfo = Devices.getReportKeyDetails(reportKey, deviceType);
+  if (!reportKeyInfo) return undefined;
 
   const attributeId = roleParts[0];
   const roleSettings = roleParts.length > 1 ? roleParts[1] : null;

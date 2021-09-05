@@ -17,7 +17,13 @@ export default (props: IProps) => {
 
   let tags: string[] = [];
   for (const key of Object.keys(zespInfo.Report)) {
-    const reportKeyDetails = Devices.getReportKeyDetails(key);
+    const reportKeyDetails = Devices.getReportKeyDetails(key, zespInfo.DevType);
+
+    if (!reportKeyDetails) {
+      console.warn(`Cannot read report '${key}' details for '${zespInfo.IEEE}' device`);
+      continue;
+    }
+
     const clusterInfo = HomeAutoClusters.find(x => x.clusterId === reportKeyDetails.clusterId) as DataReportInfo | undefined
     tags.push(clusterInfo?.name || reportKeyDetails.clusterId);
   }
