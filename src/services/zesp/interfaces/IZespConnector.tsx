@@ -33,5 +33,6 @@ export interface IZespConnector {
   subscribe: (validator: IZespResponseValidator, handler: ZespConnectorHandler) => ZespConnectorListener
   unsubscribe: (listener: ZespConnectorListener) => void,
 
-  getGlobalState: () => IGlobalState
+  getGlobalState: () => IGlobalState,
+  getServerAddress: () => string | undefined,
 }

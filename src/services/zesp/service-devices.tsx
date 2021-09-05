@@ -32,9 +32,7 @@ const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState):
 
 const buildDeviceInfo = (zespInfo: ZespDeviceInfo) => {
   const settings: DataDeviceSettings = predefinedDevices.find(x => x.modelIds.findIndex(y => y === zespInfo.ModelId) >= 0) ||
-    {
-      image: "zigbee.png"
-    } as DataDeviceSettings;
+    {} as DataDeviceSettings;
 
   // add predefined controls and reports
   const controls = settings?.controls && require(`../../data/controls/${settings.controls}`) as DataControlSettings[] | undefined;

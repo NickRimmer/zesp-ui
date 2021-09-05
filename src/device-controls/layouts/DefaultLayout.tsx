@@ -5,8 +5,10 @@ import {LayoutProps} from "../../models/LayoutProps";
 export const DefaultLayout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
   return (
     <>
-      {props.settings.map((control, i) =>
-        (<div key={i} className="device-control-group">{getControlForDevice(control, props.device)}</div>))}
+      {props.settings.map((control, i) => {
+        const element = getControlForDevice(control, props.device);
+        return element && (<div key={i} className="device-control-group">{element}</div>);
+      })}
     </>
   )
 }

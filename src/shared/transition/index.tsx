@@ -11,7 +11,10 @@ interface IProps {
 
 export const Transition = (props: IProps) => {
   const [className, setClassName] = useState<string>();
-  if (props.onRefresh === true) useEffect(() => setClassName(props.classNameFrom), [props.children]);
+  if (props.onRefresh === true) useEffect(
+    () => setClassName(props.classNameFrom),
+    [props.children?.toString()]);
+
   if (props.onLoad === false) useEffect(() => setClassName(props.classNameTo), []);
 
   setTimeout(() => setClassName(props.classNameTo), props.timeOutMs || 100);
