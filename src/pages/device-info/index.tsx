@@ -20,6 +20,11 @@ export default () => {
   if (!deviceInfo) return (<CustomDeviceNotFound/>);
 
   const groups = Devices.getControlGroups(deviceInfo);
+  if (!groups || groups.length === 0) {
+    console.warn(`No controls found for '${deviceInfo.zespInfo.IEEE}' device`);
+    return (<CustomDeviceNotFound/>);
+  }
+
   const [activeGroupName, setActiveGroupName] = useState(groups[0].name);
 
   const handleClose = () => setShow(false);
