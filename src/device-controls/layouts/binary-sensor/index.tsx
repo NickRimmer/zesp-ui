@@ -28,11 +28,14 @@ export const BinarySensorLayout: FunctionComponent<LayoutProps> = (props: Layout
 
         <div className="text-center mt-3 w-100">
           <div>Battery Level: <span className={`status ${battery.stateClassName}`}>{battery.valueTitle}</span></div>
-          <div className="progress mt-1">
+          <div className="progress mt-3">
             <div
               className={`progress-bar ${battery.stateClassName}`}
               role="progressbar"
               style={{width: `${battery.valuePercents}%`}}/>
+          </div>
+          <div className="battery-icon">
+            <i className={`bi bi-battery-half ${battery.stateClassName}`}/>
           </div>
         </div>
 
