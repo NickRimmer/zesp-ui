@@ -2,7 +2,7 @@ import {DataLayoutItemsGroup} from "../../models/DataControlSettings";
 import {Modal} from "react-bootstrap";
 import React, {FunctionComponent} from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
-import {BinarySensorLayout} from "../../device-controls/layouts/BinarySensorLayout";
+import {BinarySensorLayout} from "../../device-controls/layouts/binary-sensor";
 import {LayoutProps} from "../../models/LayoutProps";
 import {DefaultLayout} from "../../device-controls/layouts/DefaultLayout";
 

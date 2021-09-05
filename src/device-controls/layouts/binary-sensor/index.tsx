@@ -1,28 +1,13 @@
 import React, {FunctionComponent} from "react";
-import "./BinarySensorLayout.scss";
-import {LayoutProps} from "../../models/LayoutProps";
-import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
+import "./styles.scss";
+import {LayoutProps} from "../../../models/LayoutProps";
+import {ZespReportInfo} from "../../../services/zesp/models/ZespReportInfo";
+import {IDeviceClassSettings} from "./IDeviceClassSettings";
 
 export const reportKeysValue = ["0100060000", "0104060000"];
 export const reportKeysBattery = ["010000FF02"];
 
-type deviceClassSettings = {
-  values: { onTrue: string, onFalse: string },
-  icons?: { onTrue: string, onFalse: string },
-  styles?: { onTrue: string, onFalse: string },
-}
-
-const deviceClasses: { [deviceClass: string]: deviceClassSettings } = {
-  "default": {
-    values: {onTrue: "True", onFalse: "False"},
-    icons: {onTrue: "bi-check-circle", onFalse: "bi-slash-circle"},
-    styles: {onTrue: "status-primary", onFalse: "status-secondary"}
-  },
-
-  "door": {values: {onTrue: "Opened", onFalse: "Closed"}, icons: {onTrue: "bi-door-open", onFalse: "bi-door-closed"}},
-  "motion": {values: {onTrue: "Detected", onFalse: "No motion"}, icons: {onTrue: "bi-soundwave", onFalse: "bi-fullscreen"}},
-}
-
+const deviceClasses: { [deviceClass: string]: IDeviceClassSettings } = require("./device-classes.json");
 const batteryWarningLevelPercents = 50;
 const batteryValuesRange = [2.7, 3.1]; // battery values to calculate percents from 0 to 100%
 
@@ -63,11 +48,15 @@ const getValueSettings = (props: LayoutProps): {
   valueTitle: string
 } => {
   const onOffReport = getReport(reportKeysValue, props);
-  //TODO return default for unknown
+  if (!onOffReport) return {
+    iconClassName: deviceClasses["default"].icons!.onFalse,
+    valueClassName: "status-unknown",
+    valueTitle: "Unknown"
+  }
 
   // try to get status of binary sensor
-  const statusValue = !onOffReport ? undefined : onOffReport.parsed || onOffReport.val;
-  const roleParts = onOffReport?.role && onOffReport.role.split("&");
+  const statusValue = onOffReport.parsed || onOffReport.val;
+  const roleParts = onOffReport.role && onOffReport.role.split("&");
   const roleSettings = roleParts && roleParts.length > 1 ? JSON.parse(roleParts[1]) : undefined;
   const status: boolean = roleSettings && roleSettings["payload_on"]
     ? statusValue === roleSettings["payload_on"] // compare with role settings
@@ -75,11 +64,11 @@ const getValueSettings = (props: LayoutProps): {
 
   // views configuration
   const deviceClass: string = roleSettings && roleSettings["device_class"] || "default";
-  const valueSettings: deviceClassSettings = {...deviceClasses["default"], ...deviceClasses[deviceClass]};
+  const valueSettings: IDeviceClassSettings = {...deviceClasses["default"], ...deviceClasses[deviceClass]};
 
   const iconClassName = status ? `${valueSettings.icons!.onTrue} ${valueSettings.styles!.onTrue}` : `${valueSettings.icons!.onFalse} ${valueSettings.styles!.onFalse}`;
   const valueClassName = status ? `status ${valueSettings.styles!.onTrue}` : `status ${valueSettings.styles!.onFalse}`;
-  const valueTitle = status ? valueSettings.values.onTrue : valueSettings.values.onFalse;
+  const valueTitle = status ? valueSettings.titles.onTrue : valueSettings.titles.onFalse;
 
   return {iconClassName, valueClassName, valueTitle};
 }
@@ -113,12 +102,16 @@ const getBatterySettings = (props: LayoutProps): {
     }
   }
 
+  // views configuration
+  const deviceClass: string = roleSettings && roleSettings["device_class"] || "default";
+  const valueSettings: IDeviceClassSettings = {...deviceClasses["default"], ...deviceClasses[deviceClass]};
+
   const valueTitle = `${valueString || "??"} ${units}`;
   const stateClassName = !valuePercents
     ? "status-unknown"
     : valuePercents <= batteryWarningLevelPercents
-      ? "status-secondary"
-      : "status-primary";
+      ? valueSettings.styles!.onFalse
+      : valueSettings.styles!.onTrue;
 
   return {
     stateClassName,

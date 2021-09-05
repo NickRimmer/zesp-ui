@@ -1,6 +1,6 @@
 import {ZespReportInfo} from "./models/ZespReportInfo";
 import {ZespDeviceInfo} from "./models/ZespDeviceInfo";
-import {reportKeysBattery as binarySensorBatteryKeys, reportKeysValue as binarySensorValueKeys} from "../../device-controls/layouts/BinarySensorLayout";
+import {reportKeysBattery as binarySensorBatteryKeys, reportKeysValue as binarySensorValueKeys} from "../../device-controls/layouts/binary-sensor";
 
 export const LayoutAutoDetection = {
   binarySensor: (zespInfo: ZespDeviceInfo): string | undefined => {
