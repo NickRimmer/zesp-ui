@@ -1,9 +1,9 @@
 import React from "react";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {DataLayoutItem} from "../../models/DataLayoutItem";
+import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceControls} from "../../services/deviceControls";
 
-export const UnknownControl = (props: IDeviceControlProps<DataLayoutItem>) => {
+export const UnknownControl = (props: IDeviceControlProps<DataControlSettings>) => {
   const configData = JSON.stringify(props.config)
   const reportData = JSON.stringify(DeviceControls.getControlReport(props));
 

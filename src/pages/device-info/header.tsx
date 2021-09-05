@@ -1,4 +1,4 @@
-import {DataLayoutItemsGroup} from "../../models/DataLayoutItem";
+import {DataLayoutItemsGroup} from "../../models/DataControlSettings";
 import {Modal} from "react-bootstrap";
 import React from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
@@ -39,8 +39,8 @@ export default (props: {
     <Modal.Header className={headerClassName}>
       <div>{headerContent}</div>
       <div className="text-end modal-right-buttons">
-        {props.onDetailsClicked && (<button type="button" className="btn" onClick={props.onDetailsClicked}><i className="bi bi-archive"/></button>)}
-        <span className="border-end mx-3"/>
+        {props.onDetailsClicked && (<button type="button" className="btn" onClick={props.onDetailsClicked}><i className="bi bi-three-dots-vertical"/></button>)}
+        <span className="border-end ms-2 me-3"/>
         <button type="button" className="btn-close me-1" aria-label="Close" onClick={props.onCloseClicked}/>
       </div>
     </Modal.Header>

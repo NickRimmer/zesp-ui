@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Row} from "react-bootstrap";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {DataLayoutItem} from "../../models/DataLayoutItem";
+import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceControls} from "../../services/deviceControls";
 import {useGlobalState} from "../../shared/global-state-provider";
 import toast from "react-hot-toast";
@@ -10,7 +10,7 @@ import {Single} from "../../services/single";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 // TODO add localization
-export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
+export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) => {
   const srcReport = DeviceControls.getControlReport(props);
   const [playSettings, playReport] = DeviceControls.getControlSettings<LayoutSettingsOnOff>(props, "player_control_root");
 
@@ -39,7 +39,9 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
     "http://air.radiorecord.ru:8102/sd90_320",
     "http://stream.hitroe.com/stream",
     "http://air.radiorecord.ru:8102/tm_320",
-    "http://eu.radioboss.fm:8024/stream"
+    "http://eu.radioboss.fm:8024/stream",
+    "http://listen.181fm.com/181-thebox_128k.mp3?",
+    "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_one"
   ];
 
   const handleChange = (event: ChangeEvent) => {
@@ -50,7 +52,6 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataLayoutItem>) => {
   }
 
   const handleStop = () => {
-    console.log("stop");
     setPlay("OFF");
     DeviceControls.setControlReport(globalState, props, "OFF", playSettings!.reportKey);
 

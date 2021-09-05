@@ -3,10 +3,10 @@ import {Row} from "react-bootstrap";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {DeviceControls} from "../../services/deviceControls";
 import {HighlightOnUpdate} from "../../shared/transition/HighlightOnUpdate";
-import {DataLayoutItem} from "../../models/DataLayoutItem";
+import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
-export const OnOffBinarySensor = (props: IDeviceControlProps<DataLayoutItem>) => {
+export const OnOffBinarySensor = (props: IDeviceControlProps<DataControlSettings>) => {
   const report = DeviceControls.getControlReport(props);
   if (!report) return (<div className="alert alert-warning">Report missed</div>);
   const payloadOn = Number(props.config.zespRoleSettings["payload_on"]?.toString() || "0");

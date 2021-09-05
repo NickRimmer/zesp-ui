@@ -4,7 +4,7 @@
       "ZESP_Root"
     ],
     "image": "zesp.jpg",
-    "layout": "root.json"
+    "controls": "root.json"
   },
   {
     "modelIds": [

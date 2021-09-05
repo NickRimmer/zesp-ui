@@ -1,0 +1,36 @@
+{
+  "default": {
+    "titles": {
+      "onTrue": "True",
+      "onFalse": "False"
+    },
+    "icons": {
+      "onTrue": "bi-check-circle",
+      "onFalse": "bi-slash-circle"
+    },
+    "styles": {
+      "onTrue": "status-primary",
+      "onFalse": "status-secondary"
+    }
+  },
+  "door": {
+    "titles": {
+      "onTrue": "Opened",
+      "onFalse": "Closed"
+    },
+    "icons": {
+      "onTrue": "bi-door-open",
+      "onFalse": "bi-door-closed"
+    }
+  },
+  "motion": {
+    "titles": {
+      "onTrue": "Detected",
+      "onFalse": "No motion"
+    },
+    "icons": {
+      "onTrue": "bi-soundwave",
+      "onFalse": "bi-fullscreen"
+    }
+  }
+}
