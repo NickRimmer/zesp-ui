@@ -8,8 +8,8 @@ export const Routes = () => (
       {/*<Route exact path="/" component={MainPage}/>*/}
       <Route exact path="/"><Redirect to="/devices"/></Route>
       <Route path="/devices" component={DevicesPage}/>
-      <Route path="/devices/:ieee-:device" component={DeviceInfoPage}/>
-      <Route path="/setup" component={SetupPage}/>
+        <Route path="/devices/:ieee" component={DeviceInfoPage}/>
+        <Route path="/setup" component={SetupPage}/>
       <Route exact path="/setup" component={SetupWifiPage}/>
       <Route path="/setup/mqtt" component={SetupMqttPage}/>
       <Route path="/setup/zigbee" component={NotImplementedYetPage}/>

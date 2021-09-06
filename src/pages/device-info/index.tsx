@@ -9,14 +9,13 @@ import CustomBody from "./body";
 import CustomDeviceNotFound from "./not-found";
 import toast from "react-hot-toast";
 
-//TODO localize
 export default () => {
-  const {ieee, device} = useParams<{ ieee: string, device: string }>();
+  const {ieee} = useParams<{ ieee: string }>();
   const [show, setShow] = useState(true);
   const history = useHistory();
   const globalState = useGlobalState();
 
-  const deviceInfo = Devices.getDevice(globalState, ieee, device);
+  const deviceInfo = Devices.getDevice(globalState, ieee);
   if (!deviceInfo) return (<CustomDeviceNotFound/>);
 
   const groups = Devices.getControlGroups(deviceInfo);

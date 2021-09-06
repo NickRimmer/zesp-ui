@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useRef} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {BrowserRouter as Router, Switch} from "react-router-dom";
 import './bootstrap-updates.scss';
 import './App.scss';
@@ -6,12 +6,17 @@ import TopMenu from "./shared/top-menu";
 import LoadingSpinner from "./shared/loading-spinner";
 import {GlobalStateProvider, useGlobalState} from "./shared/global-state-provider";
 import {Single} from "./services/single";
-import toast, {Toaster} from "react-hot-toast";
+import {Toaster} from "react-hot-toast";
 import {Routes} from "./Routes";
 import {WelcomePage} from "./pages/welcome";
 import {useLocalStorage} from "./services/localStorage";
 import {IServerInfo} from "./pages/welcome/interfaces";
-import ZespGeneralService from "./services/zesp/service-general";
+import ServiceDevices from "./services/zesp/service-devices";
+import {ZespConnectedAction} from "./services/zesp/interfaces/IZespConnector";
+import ServiceRoot from "./services/zesp/service-root";
+import {UpdateDevicesAction} from "./services/zesp/interfaces/UpdateDevicesAction";
+import {GetCurrentDeviceAction, GetDeviceAction} from "./services/zesp/interfaces/GetDeviceAction";
+import ServiceReportUpdates from "./services/zesp/service-report-updates";
 
 const Content = () => {
   const globalState = useGlobalState();
@@ -27,36 +32,59 @@ const Content = () => {
 
 const App = (props: { server: IServerInfo }) => {
   const globalState = useGlobalState();
-  const globalStateRef = useRef(globalState);
+  const [step, setStep] = useState("hello");
 
-  useEffect(() => {
-    globalStateRef.current = globalState;
-  }, [globalState]);
+  const setZespConnected: ZespConnectedAction = (state) => globalState.setState(x => ({...x, ...{zespConnected: state}}));
+  const setDevices: UpdateDevicesAction = (devices) => globalState.setState(x => ({...x, ...{devices: devices}}));
+  const getRootDevice: GetCurrentDeviceAction = () => globalState.state.devices?.find(x => x.zespInfo.ModelId === "ZESP_Root")
+  const getDevice: GetDeviceAction = (ieee) => globalState.state.devices?.find(x => x.zespInfo.IEEE === ieee);
+
+  const updateDevices: UpdateDevicesAction = (devices) => {
+    globalState.setState(x => {
+      const deviceIee = devices.map(x => x.zespInfo.IEEE);
+      const current = (x.devices || []).filter(y => deviceIee.indexOf(y.zespInfo.IEEE) == -1);
+      const updated = [...current, ...devices];
+
+      return ({...x, ...{devices: updated}});
+    });
+  }
 
   useEffect(() => {
     Single.Spinner.init(globalState);
     Single.Spinner.show();
 
-    Single.ZespConnectorPromise
-      .then(zesp => zesp.connectAsync(() => globalStateRef.current, props.server))
-      .then(() => ZespGeneralService.initAsync(() => globalStateRef.current))
-      .then(() => {
-        globalState.setState(prev => ({...prev, ...{appInitialized: true}}))
-        Single.Spinner.hide();
-      })
-      .catch(error => {
-        globalState.setState(prev => ({
-          ...prev, ...{
-            appInitialized: false,
-            selectedServerIndex: null,
-          }
-        }))
-        Single.ZespConnector.disconnect();
-        Single.Spinner.hide();
-
-        toast.error(`Ooops, cannot connect to the server (${props.server.address}). ${error}`); //TODO localization
-      });
+    Single.ZespConnector
+      .connectAsync(props.server, setZespConnected)
+      .then(() => setStep("getDevices"));
   }, []);
+
+  useEffect(() => {
+    if (step !== "getDevices") return;
+    ServiceDevices
+      .getDevicesList(Single.ZespConnector, setDevices)
+      .then(() => setStep("getRoot"));
+  }, [step]);
+
+  useEffect(() => {
+    if (step !== "getRoot") return;
+    ServiceRoot
+      .getRootData(Single.ZespConnector, getRootDevice, updateDevices)
+      .then(() => setStep("getUpdates"))
+  }, [step]);
+
+  useEffect(() => {
+    if (step !== "getUpdates") return;
+    ServiceReportUpdates.subscribeToEvents(Single.ZespConnector, getDevice, updateDevices)
+    setStep("finish")
+  }, [step]);
+
+  useEffect(() => {
+    if (step !== "finish") return;
+
+    Single.Spinner.hide();
+    // setInterval(() => console.log(globalState.state), 2000);
+    globalState.setState(prev => ({...prev, ...{appInitialized: true}}));
+  }, [step]);
 
   if (!globalState.state.appInitialized) {
     return (<Fragment/>);

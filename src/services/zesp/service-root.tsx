@@ -1,32 +1,30 @@
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
-import {IGlobalState} from "../../global-state";
 import {ZespRootData} from "./models/ZespRootData";
+import {GetCurrentDeviceAction} from "./interfaces/GetDeviceAction";
+import {UpdateDevicesAction} from "./interfaces/UpdateDevicesAction";
+
 
 export default {
-  getRootData: (zesp: IZespConnector) => {
+  getRootData: (zesp: IZespConnector, getRootDeviceAction: GetCurrentDeviceAction, devicesUpdate: UpdateDevicesAction) => {
     return zesp.request({
       data: "get_Mi_lamp",
       responseValidator: TypedZespResponseValidator("Mi_lamp"),
-      onSuccess: (event) => onDataReceived(event, zesp.getGlobalState())
+      onSuccess: (event) => onDataReceived(event, getRootDeviceAction, devicesUpdate)
     })
   }
 }
 
-const onDataReceived = (event: ZespDataEvent, globalState: IGlobalState): void => {
-  const devices = globalState.state.devices;
-  if (!devices) {
-    console.debug("Update received, but no any devices found")
-    return;
-  }
+const onDataReceived = (event: ZespDataEvent, getRootDeviceAction: GetCurrentDeviceAction, devicesUpdate: UpdateDevicesAction): void => {
 
-  const data = JSON.parse(event.dataParts[0]) as ZespRootData;
-  const device = devices.find(x => x.zespInfo.ModelId === "ZESP_Root");
+  const device = getRootDeviceAction();
   if (!device) {
     console.debug("Update received, but no root devices found")
     return;
   }
+
+  const data = JSON.parse(event.dataParts[0]) as ZespRootData;
 
   const layoutSettings = device.customLayout;
   if (!layoutSettings) {
@@ -60,5 +58,5 @@ const onDataReceived = (event: ZespDataEvent, globalState: IGlobalState): void =
   if (playControl) device.zespInfo.Report[playControl.endpoint + playControl.clusterId + playControl.attributeId].val = data.sound.play.toString();
   else console.warn("Root device report 'player_control_root' not found");
 
-  globalState.setState(x => ({...x, ...{devices: devices}}));
+  devicesUpdate([device]);
 }

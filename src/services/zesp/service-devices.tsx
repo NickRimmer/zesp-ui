@@ -1,6 +1,5 @@
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {ZespDeviceInfo} from "./models/ZespDeviceInfo";
-import {IGlobalState} from "../../global-state";
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import predefinedDevices from "../../data/devices.json";
@@ -9,25 +8,26 @@ import {DeviceInfo} from "../../models/DeviceInfo";
 import {DataDeviceSettings} from "../../models/DataDeviceSettings";
 import {ZespReportInfo} from "./models/ZespReportInfo";
 import {LayoutAutoDetection} from "./service-auto-layouts";
+import {UpdateDevicesAction} from "./interfaces/UpdateDevicesAction";
 
 const ServiceDevices = {
-  getDevicesList: (zesp: IZespConnector) => {
+  getDevicesList: (zesp: IZespConnector, devicesUpdateAction: UpdateDevicesAction) => {
     return zesp.request({
       data: "getDeviceList",
       responseValidator: TypedZespResponseValidator("alldev"),
-      onSuccess: (event) => onDevicesListReceived(event, zesp.getGlobalState())
+      onSuccess: (event) => onDevicesListReceived(event, devicesUpdateAction)
     })
   }
 }
 
 // when list of devices received from ZESP
-const onDevicesListReceived = (event: ZespDataEvent, globalState: IGlobalState): void => {
+const onDevicesListReceived = (event: ZespDataEvent, devicesUpdateAction: UpdateDevicesAction): void => {
   const jsonString: string = event.dataParts[0];
   const zespDevices: ZespDeviceInfo[] = [];
   Object.assign(zespDevices, JSON.parse(jsonString))
 
   const devices: DeviceInfo[] = zespDevices.map(buildDeviceInfo);
-  globalState.setState(x => ({...x, ...{devices: devices}}));
+  devicesUpdateAction(devices);
 }
 
 const buildDeviceInfo = (zespInfo: ZespDeviceInfo) => {
