@@ -18,6 +18,7 @@ const Result = () => {
   const [devices, setDevices] = useState([] as DeviceListItem[]);
 
   useEffect(() => {
+    console.debug("Building list of devices to show...");
     const result = (globalState.state.devices || [])
       .sort(devicesSorting)
       .map(buildListItem);
@@ -29,6 +30,7 @@ const Result = () => {
     <div>No devices found...</div>
   )
 
+  console.log("devices page updated...");
   return (
     <FadeIn>
       <div className="devices">

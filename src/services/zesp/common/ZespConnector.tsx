@@ -28,7 +28,7 @@ const ZespConnector: IZespConnector = {
     _server = server;
 
     // start with delay
-    setTimeout(() => ZespConnector.reconnectAsync(true, zespConnectedAction)
+    setTimeout(() => ZespConnector.reconnectAsync(true, undefined)
         .then(() => resolve(Single.ZespConnector))
         .catch(error => {
           zespConnectedAction(false);
@@ -97,14 +97,14 @@ const ZespConnector: IZespConnector = {
       // it's ok :P
     }
 
-    zespConnectedAction(false);
+    if (zespConnectedAction) zespConnectedAction(false);
     const protocol = document.location.protocol === "https:" ? "wss" : "ws";
     _ws = new WebsocketBuilder(`${protocol}://${_server!.address}:81`)
       .onOpen(() => {
-        zespConnectedAction(true);
+        if (zespConnectedAction) zespConnectedAction(true);
         resolve();
       })
-      .onClose(() => zespConnectedAction(false))
+      .onClose(() => zespConnectedAction && zespConnectedAction(false))
       .onError(() => {
         onConnectionError();
         reject("zesp connection error")

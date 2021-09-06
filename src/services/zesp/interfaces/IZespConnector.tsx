@@ -25,7 +25,7 @@ export type OnErrorEvent = (error: string) => void;
 export interface IZespConnector {
   connectAsync: (server: IServerInfo, zespConnectedAction: ZespConnectedAction) => Promise<IZespConnector>;
   disconnect: () => void,
-  reconnectAsync: (force: boolean, zespConnectedAction: ZespConnectedAction) => Promise<void>;
+  reconnectAsync: (force: boolean, zespConnectedAction: ZespConnectedAction | undefined) => Promise<void>;
   send: (args: ISendArgs) => void;
   requestAsync: (args: IRequestAsyncArgs) => Promise<ZespDataEvent>;
   request: (args: IRequestArgs) => Promise<IZespConnector>;

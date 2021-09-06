@@ -4,10 +4,12 @@ import {IServerInfo, WelcomePageParts} from "./interfaces";
 import PartItems from "./part-items";
 import PartEdit from "./part-edit";
 import {useLocalStorage} from "../../services/localStorage";
-import {useGlobalState} from "../../shared/global-state-provider";
 
-export const WelcomePage: FunctionComponent = () => {
-  const globalState = useGlobalState();
+interface IProps {
+  setServerIndex: (index: number) => void
+}
+
+export const WelcomePage: FunctionComponent<IProps> = (props: IProps) => {
   const [currentPart, setCurrentPart] = useState<WelcomePageParts>("welcome");
   const [editServer, setEditServer] = useState<IServerInfo>();
   const [servers, setServers] = useLocalStorage<IServerInfo[]>("servers", []);
@@ -49,12 +51,7 @@ export const WelcomePage: FunctionComponent = () => {
     backToWelcomeAction();
   };
 
-  const openServerAction = (index: number) => {
-    // const selectedServer = servers[index];
-    // console.log(selectedServer);
-    // console.log(index);
-    globalState.setState(prev => ({...prev, ...{selectedServerIndex: index}}));
-  }
+  const openServerAction = (index: number) => props.setServerIndex(index);
 
   if (currentPart === "edit") return (
     <PartEdit editServer={editServer} addAction={addAction} updateAction={updateAction} closeAction={backToWelcomeAction} deleteAction={deleteAction}/>);

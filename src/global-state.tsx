@@ -5,9 +5,7 @@ import {DeviceInfo} from "./models/DeviceInfo";
 interface GlobalStateInterface {
   spinnerLoadingShow: boolean,
   zespConnected: boolean,
-  appInitialized: boolean,
   zespSettings?: ZespSettings,
-  selectedServerIndex: number | null,
   devices: DeviceInfo[],
 }
 
@@ -21,9 +19,7 @@ const GetDefaultGlobalStateValues = (useGlobalState: () => IGlobalState): Global
   return ({
     spinnerLoadingShow: false,
     zespConnected: false,
-    appInitialized: false,
     zespSettings: undefined,
-    selectedServerIndex: null,
     devices: [] as DeviceInfo[]
   });
 };
