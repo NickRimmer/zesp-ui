@@ -4,7 +4,6 @@ import './bootstrap-updates.scss';
 import './App.scss';
 import TopMenu from "./shared/top-menu";
 import LoadingSpinner from "./shared/loading-spinner";
-import {GlobalStateProvider} from "./shared/global-state-provider";
 import {Toaster} from "react-hot-toast";
 import {Routes} from "./Routes";
 import {WelcomePage} from "./pages/welcome";
@@ -24,6 +23,7 @@ const Content = () => {
 
 const App = (props: { server: IServerInfo }) => {
   console.log("App loaded...");
+
   return (
     <>
       <ZespAgent server={props.server}/>
@@ -48,11 +48,9 @@ const Result = () => {
   return (
     <Router>
       <Switch>
-        <GlobalStateProvider>
-          <Content/>
-          <LoadingSpinner/>
-          <Toaster/>
-        </GlobalStateProvider>
+        <Content/>
+        <LoadingSpinner/>
+        <Toaster/>
       </Switch>
     </Router>
   );

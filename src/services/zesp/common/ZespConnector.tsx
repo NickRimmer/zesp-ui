@@ -21,15 +21,16 @@ const ZespConnector: IZespConnector = {
   ) => new Promise<IZespConnector>((resolve, reject) => {
     if (_server) {
       console.warn("ZespConnector already initialized");
-      resolve(Single.ZespConnector);
       return;
     }
 
     _server = server;
 
     // start with delay
-    setTimeout(() => ZespConnector.reconnectAsync(true, undefined)
-        .then(() => resolve(Single.ZespConnector))
+    setTimeout(() => ZespConnector.reconnectAsync(true, zespConnectedAction)
+        .then(() => {
+          resolve(Single.ZespConnector)
+        })
         .catch(error => {
           zespConnectedAction(false);
           reject(error);
@@ -38,15 +39,13 @@ const ZespConnector: IZespConnector = {
 
     // setup watchdog
     _reconnecter = setInterval(() => ZespConnector.reconnectAsync(false, zespConnectedAction)
-        .then(() => resolve(Single.ZespConnector))
+        // .then(() => resolve(Single.ZespConnector))
         .catch(error => {
           console.warn(`Reconnection is failed: ${error}`);
           zespConnectedAction(false);
-          reject(error);
+          // reject(error);
         }),
       Constants.VerifyConnectionTimeout);
-
-    return ZespConnector;
   }),
 
   disconnect: () => {
@@ -101,19 +100,30 @@ const ZespConnector: IZespConnector = {
     const protocol = document.location.protocol === "https:" ? "wss" : "ws";
     _ws = new WebsocketBuilder(`${protocol}://${_server!.address}:81`)
       .onOpen(() => {
-        if (zespConnectedAction) zespConnectedAction(true);
+        if (zespConnectedAction) {
+          console.debug("ZESP connected");
+          zespConnectedAction(true);
+        }
         resolve();
       })
-      .onClose(() => zespConnectedAction && zespConnectedAction(false))
+      .onClose(() => {
+        console.debug("ZESP connection closed");
+        zespConnectedAction && zespConnectedAction(false)
+      })
       .onError(() => {
         onConnectionError();
-        reject("zesp connection error")
+        reject("ZESP connection error")
       })
       .onMessage(onMessageReceived)
       .build();
   }),
 
   send: (args) => {
+    if (!_ws) {
+      console.error("ZespConnector.send: WebSocket client is not initialized yet");
+      return;
+    }
+
     const data = args.isBinary === true
       ? getBinaryData(args.data)
       : args.data;

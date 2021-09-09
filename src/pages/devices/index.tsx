@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import "./styles.scss";
 import {FadeIn} from "../../shared/fadein-transition";
 import {Card} from "react-bootstrap";
 import Item from "./item";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {useTranslation} from "react-i18next";
 import {DeviceInfo} from "../../models/DeviceInfo";
 import {DeviceListItem} from "../../models/DeviceListItem";
@@ -12,31 +11,27 @@ import {DataReportInfo} from "../../models/DataReportInfo";
 import {Devices} from "../../services/devices";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {Single} from "../../services/single";
+import {getAllDevices} from "../../store/slices/devicesSlice";
+import {useSelector} from "react-redux";
 
 const Result = () => {
-  const globalState = useGlobalState();
-  const [devices, setDevices] = useState([] as DeviceListItem[]);
-
-  useEffect(() => {
-    console.debug("Building list of devices to show...");
-    const result = (globalState.state.devices || [])
-      .sort(devicesSorting)
-      .map(buildListItem);
-
-    setDevices(result);
-  }, [globalState.state.devices?.length]);
-
+  const devices = useSelector(getAllDevices, (a: DeviceInfo[], b: DeviceInfo[]) => a.length === b.length);
   if (devices.length == 0) return (
     <div>No devices found...</div>
   )
 
-  console.log("devices page updated...");
+  console.debug("Building list of devices to show...");
+  const deviceItems = [...devices]
+    .sort(devicesSorting)
+    .map(buildListItem);
+
+  console.debug("devices page updated...");
   return (
     <FadeIn>
       <div className="devices">
         <Card>
           <Card.Body>
-            <DevicesList devices={devices}/>
+            <DevicesList devices={deviceItems}/>
           </Card.Body>
         </Card>
       </div>

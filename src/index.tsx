@@ -6,10 +6,14 @@ import "bootstrap/dist/js/bootstrap.bundle";
 import './i18n/config';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from "react-redux";
+import {store} from "./store/configure";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App/>
+    <Provider store={store}>
+      <App/>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

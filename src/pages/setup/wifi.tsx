@@ -1,7 +1,6 @@
 import React, {Fragment} from "react";
 import {Button, Card} from "react-bootstrap";
 import {FadeIn} from "../../shared/fadein-transition";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {useTranslation} from "react-i18next";
 import {ReactForm} from "../../shared/form/react-form";
 import {InputGroupHorizontal} from "../../shared/form";
@@ -9,13 +8,12 @@ import {ZespWifiSettings} from "../../services/zesp/models/ZespSettings";
 import {SaveSettings} from "./index";
 
 const Result = () => {
-  const globalState = useGlobalState();
   const {t} = useTranslation(["pages.setup-wifi", "common"]);
-  const settings = globalState.state.zespSettings?.Wifi;
+  const settings = {} as ZespWifiSettings; // globalState.state.zespSettings?.Wifi;
 
-  if (!settings) return (<Fragment/>);
+  if (!settings || true) return (<Fragment/>);
 
-  const onSubmit = (data: ZespWifiSettings): Promise<void> => SaveSettings({Wifi: data}, globalState, t);
+  const onSubmit = (data: ZespWifiSettings): Promise<void> => SaveSettings({Wifi: data}, t);
 
   return (
     <Fragment>

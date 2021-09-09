@@ -3,19 +3,31 @@ import "./styles.scss";
 import {useHistory, useParams} from "react-router-dom";
 import {Modal} from "react-bootstrap";
 import {Devices} from "../../services/devices";
-import {useGlobalState} from "../../shared/global-state-provider";
 import CustomHeader from "./header";
 import CustomBody from "./body";
 import CustomDeviceNotFound from "./not-found";
 import toast from "react-hot-toast";
+import {getDeviceByIee} from "../../store/slices/devicesSlice";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/configure";
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 export default () => {
   const {ieee} = useParams<{ ieee: string }>();
   const [show, setShow] = useState(true);
   const history = useHistory();
-  const globalState = useGlobalState();
+  const deviceInfo = useSelector((state: RootState) => getDeviceByIee(state, ieee), (a: DeviceInfo | undefined, b: DeviceInfo | undefined) => {
+    if (!a || !b) return false;
+    const keysA = Object.keys(a.zespInfo.Report);
+    const keysB = Object.keys(b.zespInfo.Report);
 
-  const deviceInfo = Devices.getDevice(globalState, ieee);
+    if (keysA.length != keysB.length) return false;
+    for (const key of keysA)
+      if (a.zespInfo.Report[key] !== b.zespInfo.Report[key]) return false;
+
+    return true;
+  });
+
   if (!deviceInfo) return (<CustomDeviceNotFound/>);
 
   const groups = Devices.getControlGroups(deviceInfo);
@@ -33,6 +45,7 @@ export default () => {
     toast.success("Check console for logs", {icon: "👽"});
   }
 
+  console.debug(`Update device info dialog...`);
   return (
     <Modal show={show} onHide={handleClose} onExited={handleExit}>
       <CustomHeader

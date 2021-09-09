@@ -3,19 +3,17 @@ import {useTranslation} from "react-i18next";
 import {Button, Card, Col, Row} from "react-bootstrap";
 import {CheckGroupInline, InputGroupHorizontal} from "../../shared/form";
 import {ReactForm} from "../../shared/form/react-form";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {FadeIn} from "../../shared/fadein-transition";
 import {ZespMqttSettings} from "../../services/zesp/models/ZespSettings";
 import {SaveSettings} from "./index";
 
 const Result = () => {
-  const globalState = useGlobalState();
   const {t} = useTranslation(["pages.setup-mqtt", "common"]);
-  const settings = globalState.state.zespSettings?.MQTT;
+  const settings = {} as ZespMqttSettings;// globalState.state.zespSettings?.MQTT;
 
-  if (!settings) return (<Fragment/>);
+  if (!settings || true) return (<Fragment/>);
 
-  const onSubmit = (data: ZespMqttSettings) => SaveSettings({MQTT: data}, globalState, t);
+  const onSubmit = (data: ZespMqttSettings) => SaveSettings({MQTT: data}, t);
 
   return (
     <FadeIn>

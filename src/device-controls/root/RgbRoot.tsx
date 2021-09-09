@@ -6,12 +6,10 @@ import {Row} from "react-bootstrap";
 import {Single} from "../../services/single";
 import {useLocalStorage} from "../../services/localStorage";
 import {DeviceControls} from "../../services/deviceControls";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 //TODO localize
 export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
-  const globalState = useGlobalState();
   const report = DeviceControls.getControlReport(props);
   let currentValue: number[] = report?.val ? report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
   if (currentValue.length !== 3) {
@@ -22,7 +20,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
   const [color, setColor] = useState<RGBColor>({r: currentValue[0], g: currentValue[1], b: currentValue[2]});
   const [colorPicker, setColorPicker] = useLocalStorage("colorPicker", 1);
 
-  const setCurrentValue = (rgb: RGBColor) => DeviceControls.setControlReport(globalState, props, `${rgb.r}:${rgb.g}:${rgb.b}`);
+  // const setCurrentValue = (rgb: RGBColor) => DeviceControls.setControlReport(globalState, props, `${rgb.r}:${rgb.g}:${rgb.b}`);
   const colorChangeHandler = (rgb: RGBColor) => {
     setColor(rgb);
 
@@ -30,7 +28,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
     let command = props.config.arguments.command.replace("{x}", x.toString(16));
     command = command.replace("{y}", y.toString(16));
     Single.ZespConnector.send({data: command});
-    setCurrentValue(rgb);
+    // setCurrentValue(rgb);
   }
 
   const sendColorHandler = () => {
@@ -40,7 +38,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
     command = command.replace("{y}", y.toString(16));
 
     Single.ZespConnector.send({data: command});
-    setCurrentValue(color);
+    // setCurrentValue(color);
   }
 
   const colorPickerButton = (id: number) =>

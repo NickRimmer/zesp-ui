@@ -2,23 +2,20 @@ import React, {Fragment, useEffect} from "react";
 import {Container, Nav} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {Single} from "../../services/single";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {FadeIn} from "../../shared/fadein-transition";
 import {ZespSettings} from "../../services/zesp/models/ZespSettings";
 import toast from "react-hot-toast";
 import {TFunction} from "react-i18next";
-import {IGlobalState} from "../../global-state";
 import {BsGearFill} from "react-icons/bs";
 import ZespSettingsService from "../../services/zesp/service-settings";
 
 const Result = () => {
-  const globalState = useGlobalState();
 
   useEffect(() => {
     Single.Spinner.show();
     ZespSettingsService.getAsync()
       .then(data => {
-        globalState.setState(prev => ({...prev, ...{zespSettings: data}}))
+        // globalState.setState(prev => ({...prev, ...{zespSettings: data}}))
         Single.Spinner.hide();
       })
       .catch(error => {
@@ -27,7 +24,8 @@ const Result = () => {
       });
   }, []);
 
-  if (!globalState.state.zespSettings) return (<Fragment/>);
+  // if (!globalState.state.zespSettings) return (<Fragment/>);
+  return (<Fragment/>);
 
   return (
     <FadeIn>
@@ -46,13 +44,14 @@ const Result = () => {
   );
 }
 
-export const SaveSettings = (data: Partial<ZespSettings>, globalState: IGlobalState, t: TFunction<string[]>): Promise<void> => {
-  const updatedSettings: ZespSettings = ({...globalState.state.zespSettings!, ...data});
-  const promise = ZespSettingsService.setAsync(updatedSettings)
-    .then(() => globalState.setState(prev => ({...prev, zespSettings: updatedSettings})));
+export const SaveSettings = (data: Partial<ZespSettings>, t: TFunction<string[]>): Promise<void> => {
+  // const updatedSettings: ZespSettings = ({...globalState.state.zespSettings!, ...data});
+  // const promise = ZespSettingsService.setAsync(updatedSettings)
+  // .then(() => globalState.setState(prev => ({...prev, zespSettings: updatedSettings})));
 
-  toast.promise(promise, {loading: t("common:saving_progress"), success: t("common:saving_success"), error: t("common:saving_error")});
-  return promise;
+  // toast.promise(promise, {loading: t("common:saving_progress"), success: t("common:saving_success"), error: t("common:saving_error")});
+  // return promise;
+  return Promise.resolve();
 }
 
 export default Result;

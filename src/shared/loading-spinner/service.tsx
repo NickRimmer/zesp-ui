@@ -1,9 +1,5 @@
-import {IGlobalState} from "../../global-state";
-
-let _globalState: IGlobalState;
-
 export interface ILoadingSpinner {
-  init(globalState: IGlobalState): void;
+  init(): void;
 
   show(): void;
 
@@ -11,17 +7,20 @@ export interface ILoadingSpinner {
 }
 
 export default {
-  init: (globalState: IGlobalState) => {
-    if (_globalState) {
-      console.warn("Loader spinner already initialized");
-      return;
-    }
-
-    _globalState = globalState;
+  init: () => {
+    // if (_globalState) {
+    //   console.warn("Loader spinner already initialized");
+    //   return;
+    // }
+    //
+    // _globalState = globalState;
   },
 
   show: () => setVisible(true),
   hide: () => setVisible(false),
 } as ILoadingSpinner
 
-const setVisible = (isVisible: boolean): void => _globalState.setState(prev => ({...prev, ...{spinnerLoadingShow: isVisible}}));
+const setVisible = (isVisible: boolean): void => {
+  //_globalState.setState(prev => ({...prev, ...{spinnerLoadingShow: isVisible}}));
+  console.log("spinner disabled");
+}

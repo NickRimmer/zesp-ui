@@ -3,7 +3,6 @@ import {Row} from "react-bootstrap";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceControls} from "../../services/deviceControls";
-import {useGlobalState} from "../../shared/global-state-provider";
 import toast from "react-hot-toast";
 import {LayoutSettingsOnOff} from "../settings";
 import {Single} from "../../services/single";
@@ -30,7 +29,6 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) =
 
   const [src, setSrc] = useState(srcReport.val || "");
   const [play, setPlay] = useState(playReport!.val || "OFF");
-  const globalState = useGlobalState();
 
   const srcs: string[] = [
     "http://chanson.hostingradio.ru:8041/chanson128.mp3",
@@ -48,15 +46,15 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) =
     const value = (event.target as HTMLInputElement).value
     setSrc(value);
 
-    DeviceControls.setControlReport(globalState, props, value);
+    // DeviceControls.setControlReport(globalState, props, value);
   }
 
   const handleStop = () => {
     setPlay("OFF");
-    DeviceControls.setControlReport(globalState, props, "OFF", playSettings!.reportKey);
+    // DeviceControls.setControlReport(globalState, props, "OFF", playSettings!.reportKey);
 
     setSrc("");
-    DeviceControls.setControlReport(globalState, props, "");
+    // DeviceControls.setControlReport(globalState, props, "");
 
     if (playSettings) Single.ZespConnector.send({data: playSettings.arguments.commandOff});
     else console.warn("No configured OFF command for 'player_control_root' operation found in layout");
@@ -69,7 +67,7 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) =
     }
 
     setPlay("ON");
-    DeviceControls.setControlReport(globalState, props, "ON", playSettings!.reportKey);
+    // DeviceControls.setControlReport(globalState, props, "ON", playSettings!.reportKey);
     if (playSettings) Single.ZespConnector.send({data: playSettings.arguments.commandOn.replace("{value}", src)});
     else console.warn("No configured ON command for 'player_control_root' operation found in layout");
   }
