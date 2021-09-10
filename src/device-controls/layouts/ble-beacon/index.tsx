@@ -19,7 +19,6 @@ export const BleBeacon: FunctionComponent<LayoutProps> = (props) => {
     }, 1000);
     return () => {
       clearInterval(timer);
-      setRelative(0);
     }
   }, [lastUpdateMs]);
 
