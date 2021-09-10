@@ -7,9 +7,6 @@ import {ReportKeyInfo} from "../models/ReportKeyInfo";
 const defaultLayoutGroupName = "main";
 
 export const Devices = {
-  getDevice: (ieee: string): DeviceInfo | undefined => undefined,
-  // globalState.state.devices?.find(x => x.zespInfo.IEEE === ieee),
-
   getControlGroups: (device: DeviceInfo): DataLayoutItemsGroup[] => {
     const layout = device.customLayout && device.customLayout.length > 0
       ? device.customLayout
