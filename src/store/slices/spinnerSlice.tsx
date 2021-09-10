@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../configure";
 
-export interface DevicesState {
+interface IState {
   spinnerShow: boolean
 }
 
-const initialState: DevicesState = {
+const initialState: IState = {
   spinnerShow: false,
 }
 

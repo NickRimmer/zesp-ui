@@ -4,27 +4,32 @@ import {NavLink} from "react-router-dom";
 import {FadeIn} from "../../shared/fadein-transition";
 import {ZespSettings} from "../../services/zesp/models/ZespSettings";
 import toast from "react-hot-toast";
-import {TFunction} from "react-i18next";
 import {BsGearFill} from "react-icons/bs";
+import {useDispatch, useSelector} from "react-redux";
+import {setSpinnerShow} from "../../store/slices/spinnerSlice"
+import {setSettings, getSettings} from "../../store/slices/settingsSlice"
 import ZespSettingsService from "../../services/zesp/service-settings";
+import {Dispatch} from "@reduxjs/toolkit";
 
 const Result = () => {
+  const dispatch = useDispatch();
+  const settings = useSelector(getSettings);
 
   useEffect(() => {
-    // Single.Spinner.show();
+    dispatch(setSpinnerShow(true));
+
     ZespSettingsService.getAsync()
       .then(data => {
-        // globalState.setState(prev => ({...prev, ...{zespSettings: data}}))
-        // Single.Spinner.hide();
+        dispatch(setSettings(data));
       })
       .catch(error => {
         //TODO show error window
         alert(error);
-      });
+      })
+      .finally(() => dispatch(setSpinnerShow(false)));
   }, []);
 
-  // if (!globalState.state.zespSettings) return (<Fragment/>);
-  return (<Fragment/>);
+  if (!settings) return (<Fragment/>);
 
   return (
     <FadeIn>
@@ -43,14 +48,23 @@ const Result = () => {
   );
 }
 
-export const SaveSettings = (data: Partial<ZespSettings>, t: TFunction<string[]>): Promise<void> => {
-  // const updatedSettings: ZespSettings = ({...globalState.state.zespSettings!, ...data});
-  // const promise = ZespSettingsService.setAsync(updatedSettings)
-  // .then(() => globalState.setState(prev => ({...prev, zespSettings: updatedSettings})));
+export const SaveSettings = (data: Partial<ZespSettings>, settings: ZespSettings | undefined, dispatch: Dispatch) => new Promise<void>((resolve, reject) => {
+  // const dispatch = useDispatch();
+  // const settings = useSelector(getSettings);
+  if (!settings) reject("Settings not loaded");
 
-  // toast.promise(promise, {loading: t("common:saving_progress"), success: t("common:saving_success"), error: t("common:saving_error")});
-  // return promise;
-  return Promise.resolve();
-}
+  const updatedSettings: ZespSettings = ({...settings, ...data}) as ZespSettings;
+  ZespSettingsService
+    .setAsync(updatedSettings)
+    .then(() => {
+      dispatch(setSettings(updatedSettings));
+      resolve();
+      toast.success("Settings updated");
+    })
+    .catch(reason => {
+      toast.error(`Cannot save: ${reason}`);
+      reject(reason);
+    });
+})
 
 export default Result;

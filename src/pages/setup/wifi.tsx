@@ -6,14 +6,18 @@ import {ReactForm} from "../../shared/form/react-form";
 import {InputGroupHorizontal} from "../../shared/form";
 import {ZespWifiSettings} from "../../services/zesp/models/ZespSettings";
 import {SaveSettings} from "./index";
+import {useDispatch, useSelector} from "react-redux";
+import {getSettings} from "../../store/slices/settingsSlice";
 
 const Result = () => {
+  const dispatch = useDispatch();
+  const allSettings = useSelector(getSettings);
   const {t} = useTranslation(["pages.setup-wifi", "common"]);
-  const settings = {} as ZespWifiSettings; // globalState.state.zespSettings?.Wifi;
 
-  if (!settings || true) return (<Fragment/>);
+  if (!allSettings) return (<div>No settings found...</div>);
+  const settings = allSettings.Wifi;
 
-  const onSubmit = (data: ZespWifiSettings): Promise<void> => SaveSettings({Wifi: data}, t);
+  const onSubmit = (data: ZespWifiSettings): Promise<void> => SaveSettings({Wifi: data}, allSettings, dispatch);
 
   return (
     <Fragment>
