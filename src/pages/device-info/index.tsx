@@ -45,7 +45,6 @@ export default () => {
     toast.success("Check console for logs", {icon: "👽"});
   }
 
-  console.debug(`Update device info dialog...`);
   return (
     <Modal show={show} onHide={handleClose} onExited={handleExit}>
       <CustomHeader
