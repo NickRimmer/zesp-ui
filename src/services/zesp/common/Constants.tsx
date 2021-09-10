@@ -1,6 +1,6 @@
 const Result = {
   // delay before connection start
-  ConnectionStartTimeout: 500,
+  ConnectionStartTimeout: 100,
 
   // connection verify interval
   VerifyConnectionTimeout: 5000,

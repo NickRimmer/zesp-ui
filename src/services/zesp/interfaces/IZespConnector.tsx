@@ -1,4 +1,3 @@
-import {IGlobalState} from "../../../global-state";
 import {IZespResponseValidator} from "./IZespResponseValidator";
 import {ZespDataEvent} from "../common/ZespDataEvent";
 import {IServerInfo} from "../../../pages/welcome/interfaces";
@@ -24,15 +23,16 @@ export type OnSuccessEvent = (event: ZespDataEvent) => void;
 export type OnErrorEvent = (error: string) => void;
 
 export interface IZespConnector {
-  connectAsync: (getGlobalState: () => IGlobalState, server: IServerInfo) => Promise<IZespConnector>;
+  connectAsync: (server: IServerInfo, zespConnectedAction: ZespConnectedAction) => Promise<IZespConnector>;
   disconnect: () => void,
-  reconnectAsync: (force: boolean) => Promise<void>;
+  reconnectAsync: (force: boolean, zespConnectedAction: ZespConnectedAction | undefined) => Promise<void>;
   send: (args: ISendArgs) => void;
   requestAsync: (args: IRequestAsyncArgs) => Promise<ZespDataEvent>;
   request: (args: IRequestArgs) => Promise<IZespConnector>;
   subscribe: (validator: IZespResponseValidator, handler: ZespConnectorHandler) => ZespConnectorListener
   unsubscribe: (listener: ZespConnectorListener) => void,
 
-  getGlobalState: () => IGlobalState,
   getServerAddress: () => string | undefined,
 }
+
+export type ZespConnectedAction = (state: boolean) => void;

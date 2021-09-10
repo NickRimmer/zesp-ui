@@ -1,4 +1,3 @@
-import {IGlobalState} from "../global-state";
 import {DataControlSettings, DataLayoutItemsGroup} from "../models/DataControlSettings";
 import {DataReportInfo} from "../models/DataReportInfo";
 import DataHaClusterIds from "../data/reports.json";
@@ -8,11 +7,13 @@ import {ReportKeyInfo} from "../models/ReportKeyInfo";
 const defaultLayoutGroupName = "main";
 
 export const Devices = {
-  getDevice: (globalState: IGlobalState, ieee: string, deviceId: string): DeviceInfo | undefined =>
-    globalState.state.devices?.find(x => x.zespInfo.IEEE === ieee && x.zespInfo.Device === deviceId),
+  getDevice: (ieee: string): DeviceInfo | undefined => undefined,
+  // globalState.state.devices?.find(x => x.zespInfo.IEEE === ieee),
 
   getControlGroups: (device: DeviceInfo): DataLayoutItemsGroup[] => {
-    const layout = device.customLayout || buildLayoutSettingsFromZesp(device);
+    const layout = device.customLayout && device.customLayout.length > 0
+      ? device.customLayout
+      : buildLayoutSettingsFromZesp(device);
 
     // group by group name (undefined groups will be saved as 'main')
     return layout.reduce((r, x) => {

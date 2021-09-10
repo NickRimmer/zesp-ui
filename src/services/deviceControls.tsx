@@ -1,7 +1,6 @@
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {DataControlSettings} from "../models/DataControlSettings";
 import {ZespReportInfo} from "./zesp/models/ZespReportInfo";
-import {IGlobalState} from "../global-state";
 import {ReportKeyInfo} from "../models/ReportKeyInfo";
 
 export const DeviceControls = {
@@ -23,19 +22,19 @@ export const DeviceControls = {
     return [settings, report];
   },
 
-  setControlReport: (globalState: IGlobalState, props: IDeviceControlProps<DataControlSettings>, value: string, reportKeyInfo?: ReportKeyInfo | null): boolean => {
+  setControlReport: (props: IDeviceControlProps<DataControlSettings>, value: string, reportKeyInfo?: ReportKeyInfo | null): boolean => {
     const saveReportKeyInfo = reportKeyInfo || props.config.reportKey;
     if (!saveReportKeyInfo) return false;
 
-    const devices = globalState.state.devices;
-    const device = devices?.find(x => x.zespInfo.IEEE === props.deviceInfo.zespInfo.IEEE);
-    if (!device) return false;
-
-    const reportKey = saveReportKeyInfo.endpoint + saveReportKeyInfo.clusterId + saveReportKeyInfo.attributeId;
-    const report = device.zespInfo.Report[reportKey];
-    report.val = value;
-
-    globalState.setState(x => ({...x, ...{devices}}));
+    // const devices = globalState.state.devices;
+    // const device = devices?.find(x => x.zespInfo.IEEE === props.deviceInfo.zespInfo.IEEE);
+    // if (!device) return false;
+    //
+    // const reportKey = saveReportKeyInfo.endpoint + saveReportKeyInfo.clusterId + saveReportKeyInfo.attributeId;
+    // const report = device.zespInfo.Report[reportKey];
+    // report.val = value;
+    //
+    // globalState.setState(x => ({...x, ...{devices}}));
     return true;
   }
 }

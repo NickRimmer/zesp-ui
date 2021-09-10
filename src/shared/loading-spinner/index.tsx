@@ -1,22 +1,16 @@
-import React, {Fragment} from "react";
-import $ from "jquery";
+import React from "react";
 import "./styles.scss"
 import {Spinner} from "react-bootstrap";
-import {useGlobalState} from "../global-state-provider";
+import {useSelector} from "react-redux";
+import {getSpinnerShow} from "../../store/slices/spinnerSlice";
 
-const Result = () => {
-  const {state} = useGlobalState();
-
-  if (state.spinnerLoadingShow) {
-    setTimeout(() => $(".loading-overlay").removeClass("hidden"), 0);
-    return (
-      <div className={"loading-overlay hidden"}>
-        <Spinner animation="border" variant="light"/>
-      </div>
-    );
-  }
-
-  return <Fragment/>;
+const LoadingSpinner = () => {
+  const spinnerShow = useSelector(getSpinnerShow);
+  return (
+    <div className={`loading-overlay ${spinnerShow ? "show" : "hidden"}`}>
+      <Spinner animation="border" variant="light"/>
+    </div>
+  );
 }
 
-export default Result;
+export default LoadingSpinner;

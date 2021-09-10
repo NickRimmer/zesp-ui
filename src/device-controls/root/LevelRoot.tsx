@@ -4,13 +4,11 @@ import FormRange from "react-bootstrap/FormRange";
 import {LayoutSettingsLevel} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {Single} from "../../services/single";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
 // TODO add localization
 export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
-  const globalState = useGlobalState();
   const report = DeviceControls.getControlReport(props);
   const currentValue = report?.val ? Number(report.val) : ((props.config.arguments.max - props.config.arguments.min) / 2 + props.config.arguments.min);
   const [value, setValue] = useState(currentValue);
@@ -22,13 +20,13 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
 
   const inRange = (value: number) => Math.max(Math.min(props.config.arguments.max, value), props.config.arguments.min);
 
-  const setCurrentValue = (value: number) => DeviceControls.setControlReport(globalState, props, value.toString());
+  // const setCurrentValue = (value: number) => DeviceControls.setControlReport(globalState, props, value.toString());
 
   const sliderChangeHandler = () => {
     const result = inRange(value);
     const data = props.config.arguments.command.replace("{value}", result.toString(16));
     Single.ZespConnector.send({data: data});
-    setCurrentValue(result);
+    // setCurrentValue(result);
   }
 
   const inputChangeHandler = (value: number) => {
@@ -36,7 +34,7 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
     setValue(result);
     const data = props.config.arguments.command.replace("{value}", result.toString(16));
     Single.ZespConnector.send({data: data});
-    setCurrentValue(result);
+    // setCurrentValue(result);
   }
 
   return (

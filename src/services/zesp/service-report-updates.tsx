@@ -1,16 +1,16 @@
 import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
-import {IGlobalState} from "../../global-state";
 import {ZespDeviceUpdate} from "./models/ZespDeviceUpdate";
+import {ZespReportInfo} from "./models/ZespReportInfo";
 
 export default {
-  subscribeToEvents: (zesp: IZespConnector, getGlobalState: () => IGlobalState) => {
-    zesp.subscribe(TypedZespResponseValidator("rep"), event => onUpdate(event, getGlobalState))
+  subscribeToEvents: (zesp: IZespConnector, onReport: (ieee: string, reportKey: string, updates: Partial<ZespReportInfo>) => void) => {
+    zesp.subscribe(TypedZespResponseValidator("rep"), event => onUpdate(event, onReport))
   }
 }
 
-const onUpdate = (event: ZespDataEvent, getGlobalState: () => IGlobalState): void => {
+const onUpdate = (event: ZespDataEvent, onReport: (ieee: string, reportKey: string, updates: Partial<ZespReportInfo>) => void): void => {
   // we are expecting 'rep|{...}' string
   if (event.dataParts.length < 2) {
     console.warn("Unknown format of updated received");
@@ -18,31 +18,13 @@ const onUpdate = (event: ZespDataEvent, getGlobalState: () => IGlobalState): voi
     return;
   }
 
-  const globalState = getGlobalState();
-  const devices = globalState.state.devices;
   const ieee = event.dataParts[1];
-  const device = devices?.find(x => x.zespInfo.IEEE === ieee);
-
-  if (!device) {
-    console.debug(`Update received for unknown device: ${ieee}`);
-    return;
-  }
-
   const data = JSON.parse(event.dataParts[0]) as ZespDeviceUpdate;
-  const reportId = data.EndPoint + data.ClusterId + data.AttribId;
-  const report = device.zespInfo.Report[reportId];
+  const reportKey = data.EndPoint + data.ClusterId + data.AttribId;
+  const report = {
+    parsed: data.parsed,
+    val: data.Data
+  } as Partial<ZespReportInfo>
 
-  if (!report) {
-    console.debug(`Report '${reportId}' not found for '${device.zespInfo.IEEE}' device (${device.zespInfo.Name ?? device.zespInfo.ModelId})`);
-    // console.debug(data);
-    return;
-  }
-
-  if (report.val !== data.Data && report.parsed !== data.parsed) {
-    report.parsed = data.parsed;
-    report.val = data.Data;
-    globalState.setState(x => ({...x, ...{devices: devices}}));
-  }
-
-  // console.debug(`Device '${device.IEEE}' (${device.Name ?? device.ModelId}) report '${reportId}' updated with value '${data.Data}'`);
+  onReport(ieee, reportKey, report);
 }

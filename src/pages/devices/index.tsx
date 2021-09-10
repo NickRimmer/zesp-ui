@@ -1,28 +1,37 @@
-import React, {Fragment} from "react";
+import React from "react";
 import "./styles.scss";
 import {FadeIn} from "../../shared/fadein-transition";
 import {Card} from "react-bootstrap";
 import Item from "./item";
-import {useGlobalState} from "../../shared/global-state-provider";
 import {useTranslation} from "react-i18next";
 import {DeviceInfo} from "../../models/DeviceInfo";
+import {DeviceListItem} from "../../models/DeviceListItem";
+import HomeAutoClusters from "../../data/reports.json";
+import {DataReportInfo} from "../../models/DataReportInfo";
+import {Devices} from "../../services/devices";
+import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
+import {Single} from "../../services/single";
+import {getAllDevices} from "../../store/slices/devicesSlice";
+import {useSelector} from "react-redux";
 
 const Result = () => {
-  const globalState = useGlobalState();
-  const {t} = useTranslation("pages.devices");
-
-  //TODO style and translate it
-  if (!globalState.state.devices || globalState.state.devices.length == 0) return (
+  const devices = useSelector(getAllDevices, (a: DeviceInfo[], b: DeviceInfo[]) => a.length === b.length);
+  if (devices.length == 0) return (
     <div>No devices found...</div>
   )
 
-  const devices = globalState.state.devices.sort();
+  console.debug("Building list of devices to show...");
+  const deviceItems = [...devices]
+    .sort(devicesSorting)
+    .map(buildListItem);
+
+  console.debug("devices page updated...");
   return (
     <FadeIn>
       <div className="devices">
         <Card>
           <Card.Body>
-            <DevicesGroup title={t("groups.all")} devices={devices}/>
+            <DevicesList devices={deviceItems}/>
           </Card.Body>
         </Card>
       </div>
@@ -30,20 +39,77 @@ const Result = () => {
   );
 }
 
-const DevicesGroup = (props: { devices: DeviceInfo[], title?: string | null }) => props.devices.length == 0
-  ? (<Fragment/>)
-  : (
+const DevicesList = (props: { devices: DeviceListItem[] }) => {
+  const {t} = useTranslation("pages.devices");
+  const {devices} = props;
+
+  return (
     <div className="group border-top pt-4">
-      {props.title && (
-        <div className="title h5 pb-3">
-          <span>{props.title}</span>
-          {props.devices.length > 1 && (<span className="badge bg-secondary ms-2">{props.devices.length}</span>)}
-        </div>
-      )}
+      <div className="title h5 pb-3">
+        <span>{t("groups.all")}</span>
+        {devices.length > 1 && (<span className="badge bg-secondary ms-2">{devices.length}</span>)}
+      </div>
       <div className="items d-flex flex-wrap">
-        {props.devices.map((device, i) => (<Item device={device} key={i}/>))}
+        {devices.map((device, i) => (<Item device={device} key={i}/>))}
       </div>
     </div>
-  )
+  );
+}
 
-export default Result; 
+const devicesSorting = (a: DeviceInfo, b: DeviceInfo): number => {
+  if (a.zespInfo.ModelId === "ZESP_Root") return -1;
+  if (b.zespInfo.ModelId === "ZESP_Root") return 1;
+
+  if (a.zespInfo.ModelId < b.zespInfo.ModelId) return -1;
+  if (a.zespInfo.ModelId > b.zespInfo.ModelId) return 1;
+
+  return 0;
+}
+
+const buildListItem = (device: DeviceInfo): DeviceListItem => {
+  const title = device.zespInfo.Name && device.zespInfo.Name.length > 0 ? device.zespInfo.Name : device.zespInfo.ModelId;
+  const image = getImageUrl(device);
+  const tags = getTagsFromReports(device.zespInfo.Report, device.zespInfo.DevType);
+
+  return {
+    title,
+    ieee: device.zespInfo.IEEE,
+    image,
+    tags
+  };
+}
+
+const getImageUrl = (device: DeviceInfo): string => {
+  // device.settings?.image || device.zespInfo.Img
+  if (device.settings?.image)
+    return `${process.env.PUBLIC_URL}/device-images/${device.settings.image}`;
+
+  const serverAddress = Single.ZespConnector.getServerAddress();
+  if (device.zespInfo.Img)
+    return `http://${serverAddress}:8081/${device.zespInfo.Img}`
+
+  const modelId = device.zespInfo.ModelId;
+  return `http://${serverAddress}:8081/img/${modelId}.jpg`;
+}
+
+const getTagsFromReports = (reports: { [key: string]: ZespReportInfo }, deviceType: string): string[] => {
+  const result: string[] = [];
+
+  for (const key of Object.keys(reports)) {
+    const reportKeyDetails = Devices.getReportKeyDetails(key, deviceType);
+
+    if (!reportKeyDetails) {
+      console.warn(`Cannot read report '${key}' details for '${deviceType}' device type`);
+      continue;
+    }
+
+    const clusterInfo = HomeAutoClusters.find(x => x.clusterId === reportKeyDetails.clusterId) as DataReportInfo | undefined
+    result.push(clusterInfo?.name || reportKeyDetails.clusterId);
+  }
+
+  return result
+    .filter((x, i) => result.indexOf(x) == i)
+    .sort((a, b) => a > b ? 1 : -1);
+}
+
+export default Result;
