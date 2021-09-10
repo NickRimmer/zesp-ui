@@ -1,0 +1,51 @@
+$primaryColor: #2DCC6D;
+$secondaryColor: #3583fb;
+$unknownColor: #d81616;
+
+.custom-layout {
+  font-size: 115%;
+  margin-top: -10px;
+
+  .col.left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .bi {
+      font-size: 130px;
+    }
+
+    &:after {
+      content: "";
+      width: 7px;
+      height: calc(100% - 30px);
+      background-color: #F2F2F2;
+      right: -10px;
+      position: absolute;
+      border-radius: 5px;
+      border: solid 1px #F2F2F2;
+    }
+  }
+
+  .col.right {
+    overflow: auto;
+
+    .status {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+  }
+
+  .status-secondary {
+    color: $secondaryColor;
+  }
+
+  .status-primary {
+    color: $primaryColor;
+  }
+
+  .status-unknown {
+    color: $unknownColor;
+  }
+}

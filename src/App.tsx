@@ -23,8 +23,6 @@ const Content = () => {
 }
 
 const App = (props: { server: IServerInfo }) => {
-  console.debug("App starting...");
-
   return (
     <>
       <ZespAgent server={props.server}/>

@@ -8,5 +8,6 @@ export type ZespDeviceInfo = {
   Report: { [reportId: string]: ZespReportInfo },
   DevType: string,
   Img: string,
+  class: string,
   // EP: { [epKey: string]: object },
 }

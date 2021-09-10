@@ -4,5 +4,5 @@ export type ZespReportInfo = {
   mat: string,
   role: string,
   parsed: string,
-  time: string,
+  time: number,
 }

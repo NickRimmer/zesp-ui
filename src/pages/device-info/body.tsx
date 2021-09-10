@@ -2,9 +2,9 @@ import {DataLayoutItemsGroup} from "../../models/DataControlSettings";
 import {Modal} from "react-bootstrap";
 import React, {FunctionComponent} from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
-import {BinarySensorLayout} from "../../device-controls/layouts/binary-sensor";
 import {LayoutProps} from "../../models/LayoutProps";
 import {DefaultLayout} from "../../device-controls/layouts/DefaultLayout";
+import {layoutsAvailable} from "../../device-controls/layouts";
 
 export default (props: {
   device: DeviceInfo,
@@ -20,7 +20,7 @@ export default (props: {
   };
 
   const layoutName = props.device.settings?.layout || "default";
-  const LayoutTag: FunctionComponent<LayoutProps> = layouts[layoutName] || DefaultLayout;
+  const LayoutTag: FunctionComponent<LayoutProps> = layoutsAvailable[layoutName] || DefaultLayout;
 
   return (
     <Modal.Body className="text-start device-dialog p-4">
@@ -28,8 +28,3 @@ export default (props: {
     </Modal.Body>
   )
 }
-
-const layouts = {
-  default: DefaultLayout,
-  binarySensorLayout: BinarySensorLayout,
-} as { [name: string]: FunctionComponent<LayoutProps> };

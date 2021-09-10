@@ -7,9 +7,6 @@ import {ReportKeyInfo} from "../models/ReportKeyInfo";
 const defaultLayoutGroupName = "main";
 
 export const Devices = {
-  getDevice: (ieee: string): DeviceInfo | undefined => undefined,
-  // globalState.state.devices?.find(x => x.zespInfo.IEEE === ieee),
-
   getControlGroups: (device: DeviceInfo): DataLayoutItemsGroup[] => {
     const layout = device.customLayout && device.customLayout.length > 0
       ? device.customLayout
@@ -81,7 +78,7 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] 
 
     // if cluster information not found
     if (!registeredCluster) {
-      console.debug(`Report key '${reportKey}' with unregistered cluster '${reportKeyInfo.clusterId}' received`);
+      // console.debug(`Report key '${reportKey}' with unregistered cluster '${reportKeyInfo.clusterId}' received`);
       return result;
     }
 

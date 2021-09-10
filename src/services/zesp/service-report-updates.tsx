@@ -23,7 +23,8 @@ const onUpdate = (event: ZespDataEvent, onReport: (ieee: string, reportKey: stri
   const reportKey = data.EndPoint + data.ClusterId + data.AttribId;
   const report = {
     parsed: data.parsed,
-    val: data.Data
+    val: data.Data,
+    time: data.time,
   } as Partial<ZespReportInfo>
 
   onReport(ieee, reportKey, report);

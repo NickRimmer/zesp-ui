@@ -7,7 +7,7 @@ import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceInfo} from "../../models/DeviceInfo";
 import {DataDeviceSettings} from "../../models/DataDeviceSettings";
 import {ZespReportInfo} from "./models/ZespReportInfo";
-import {LayoutAutoDetection} from "./service-auto-layouts";
+import {layoutTools} from "../../device-controls/layouts";
 
 const ServiceDevices = {
   getDevicesListAsync: (zesp: IZespConnector) => new Promise<DeviceInfo[]>((resolve, reject) => {
@@ -39,7 +39,7 @@ export const getDeviceModelSettings = (modelId: string): { settings: DataDeviceS
   return {settings, controls};
 }
 
-const buildDeviceInfo = (zespInfo: ZespDeviceInfo) => {
+const buildDeviceInfo = (zespInfo: ZespDeviceInfo): DeviceInfo => {
   const {settings, controls} = getDeviceModelSettings(zespInfo.ModelId);
   controls.forEach(control => {
     if (!control.reportKey) return;
@@ -48,14 +48,13 @@ const buildDeviceInfo = (zespInfo: ZespDeviceInfo) => {
   });
 
   // try to autodetect layout by reports
-  const layout = settings.layout
-    || LayoutAutoDetection.binarySensor(zespInfo);
+  const layout = settings.layout || layoutTools.autoDetect(zespInfo);
 
   return {
     zespInfo: zespInfo,
     settings: {...settings, ...{layout: layout}},
     customLayout: controls
-  } as DeviceInfo;
+  };
 }
 
 export default ServiceDevices;
