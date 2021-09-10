@@ -49,9 +49,8 @@ const Result = () => {
 }
 
 export const SaveSettings = (data: Partial<ZespSettings>, settings: ZespSettings | undefined, dispatch: Dispatch) => new Promise<void>((resolve, reject) => {
-  // const dispatch = useDispatch();
-  // const settings = useSelector(getSettings);
   if (!settings) reject("Settings not loaded");
+  dispatch(setSpinnerShow(true));
 
   const updatedSettings: ZespSettings = ({...settings, ...data}) as ZespSettings;
   ZespSettingsService
@@ -64,7 +63,8 @@ export const SaveSettings = (data: Partial<ZespSettings>, settings: ZespSettings
     .catch(reason => {
       toast.error(`Cannot save: ${reason}`);
       reject(reason);
-    });
+    })
+    .finally(() => dispatch(setSpinnerShow(false)));
 })
 
 export default Result;

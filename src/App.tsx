@@ -23,7 +23,7 @@ const Content = () => {
 }
 
 const App = (props: { server: IServerInfo }) => {
-  console.log("App loaded...");
+  console.debug("App starting...");
 
   return (
     <>
