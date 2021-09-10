@@ -18,6 +18,7 @@ const Content = () => {
     ? null
     : servers[serverIndex!];
 
+
   return selectedServer ? (<App server={selectedServer}/>) : (<WelcomePage setServerIndex={setServerIndex}/>);
 }
 
@@ -46,13 +47,16 @@ const App = (props: { server: IServerInfo }) => {
 
 const Result = () => {
   return (
-    <Router>
-      <Switch>
-        <Content/>
-        <LoadingSpinner/>
-        <Toaster/>
-      </Switch>
-    </Router>
+    <>
+      <Router>
+        <Switch>
+          <Content/>
+        </Switch>
+      </Router>
+
+      <LoadingSpinner/>
+      <Toaster/>
+    </>
   );
 }
 

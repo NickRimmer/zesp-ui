@@ -3,12 +3,21 @@ import {Redirect, Route} from "react-router-dom";
 import {DeviceInfoPage, DevicesPage, SetupPage, SocketTestPage} from "./pages";
 import {NotImplementedYetPage, SetupMqttPage, SetupWifiPage} from "./pages/setup/setup-pages";
 import {getInitialized} from "./store/slices/zespSlice"
-import {useSelector} from "react-redux";
+import {setSpinnerShow} from "./store/slices/spinnerSlice"
+import {useDispatch, useSelector} from "react-redux";
 
 export const Routes = () => {
   const isInitialized = useSelector(getInitialized);
+  const dispatch = useDispatch();
 
-  if (!isInitialized) return (<div>Initialization...</div>);
+  if (!isInitialized) {
+    // return (<div>Initialization...</div>);
+    setTimeout(() => dispatch(setSpinnerShow(true)), 0);
+    return (<Fragment/>);
+  }
+
+  setTimeout(() => dispatch(setSpinnerShow(false)), 300);
+
   return (
     <Fragment>
       {/*<Route exact path="/" component={MainPage}/>*/}

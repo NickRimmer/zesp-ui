@@ -1,7 +1,6 @@
 import React, {Fragment, useEffect} from "react";
 import {Container, Nav} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
-import {Single} from "../../services/single";
 import {FadeIn} from "../../shared/fadein-transition";
 import {ZespSettings} from "../../services/zesp/models/ZespSettings";
 import toast from "react-hot-toast";
@@ -12,11 +11,11 @@ import ZespSettingsService from "../../services/zesp/service-settings";
 const Result = () => {
 
   useEffect(() => {
-    Single.Spinner.show();
+    // Single.Spinner.show();
     ZespSettingsService.getAsync()
       .then(data => {
         // globalState.setState(prev => ({...prev, ...{zespSettings: data}}))
-        Single.Spinner.hide();
+        // Single.Spinner.hide();
       })
       .catch(error => {
         //TODO show error window
