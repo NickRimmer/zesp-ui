@@ -5,16 +5,20 @@ import {LayoutProps} from "../../models/LayoutProps";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {ZespDeviceInfo} from "../../services/zesp/models/ZespDeviceInfo";
 import AutoDetectionBinarySensor from "./binary-sensor/auto";
+import AutoDetectionBleBeacon from "./ble-beacon/auto";
+import BleBeaconLayout from "./ble-beacon";
 
 // list of available layouts with names
 export const layoutsAvailable = {
   default: DefaultLayout,
   binarySensorLayout: BinarySensorLayout,
+  bleBeacon: BleBeaconLayout,
 } as { [name: string]: FunctionComponent<LayoutProps> };
 
 // list of layout auto detection functions, which return layout name
 const autoDetectors: { (zespInfo: ZespDeviceInfo): string | undefined }[] = [
-  AutoDetectionBinarySensor
+  AutoDetectionBinarySensor,
+  AutoDetectionBleBeacon,
 ];
 
 // region help methods
@@ -28,7 +32,7 @@ export const layoutTools = {
     return undefined;
   },
 
-  deviceClassIs: (expectedDeviceClasses: string[], report: ZespReportInfo): boolean => {
+  roleDeviceClassIs: (expectedDeviceClasses: string[], report: ZespReportInfo): boolean => {
     const roleParts = report.role && report.role.split("&");
     if (roleParts.length < 2) return false;
 

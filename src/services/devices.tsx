@@ -78,7 +78,7 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] 
 
     // if cluster information not found
     if (!registeredCluster) {
-      console.debug(`Report key '${reportKey}' with unregistered cluster '${reportKeyInfo.clusterId}' received`);
+      // console.debug(`Report key '${reportKey}' with unregistered cluster '${reportKeyInfo.clusterId}' received`);
       return result;
     }
 
