@@ -22,23 +22,28 @@ export const BleBeacon: FunctionComponent<LayoutProps> = (props) => {
     }
   }, [lastUpdateMs]);
 
-  const statusName = relative < lastUpdateTresholdSeconds
+  const lastUpdateStyle = relative < lastUpdateTresholdSeconds
     ? "status-primary"
-    : "status-secondary";
+    : "status-unknown";
+
+  const rangeStyle = isInRange
+    ? "status-primary"
+    : "status-unknown";
 
   return (
     <div className="row custom-layout">
-      <div className="col col-5 left">
-        <i className={`bi bi-wifi ${isInRange ? "status-primary" : "status-secondary"}`}/>
+      <div className="col col-5 left flex-column position-relative">
+        <i className={`bi bi-wifi ${rangeStyle}`}/>
+        <div className={`icon-description ${rangeStyle}`}>{isInRange ? "In range" : "Out of range"}</div>
       </div>
       <div className="col right flex-column justify-content-center">
         <div className="text-center">
           <div>Signal level:</div>
-          <div className={`status ${statusName}`}><HighlightOnUpdate>{signalLevel}</HighlightOnUpdate></div>
+          <div className={`status ${rangeStyle}`}><HighlightOnUpdate>{signalLevel}</HighlightOnUpdate></div>
         </div>
         <div className="text-center mt-3">
           <div>Last update:</div>
-          <div className={`status ${statusName}`}>{lastDate.toLocaleDateString()} {lastDate.toLocaleTimeString()}</div>
+          <div className={`status ${lastUpdateStyle}`}>{lastDate.toLocaleDateString()} {lastDate.toLocaleTimeString()}</div>
           <div className="small text-muted opacity-50">{
             relative < 60 ? `${relative} seconds ago` :
               relative / 60 < 60 ? `${Math.round(relative / 60)} minutes ago` :
