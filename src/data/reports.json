@@ -33,5 +33,13 @@
   {
     "clusterId": "BBBB",
     "name": "Custom"
+  },
+  {
+    "clusterId": "ble_InRange",
+    "name": "In range"
+  },
+  {
+    "clusterId": "ble_signal_level",
+    "name": "Signal level"
   }
 ]
