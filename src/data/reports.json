@@ -5,18 +5,21 @@
   },
   {
     "clusterId": "0006",
-    "name": "On_Off",
+    "name": "On/Off",
     "attributes": {
-      "0000": {
-        "id": "on_off_control",
-        "commandOn": "cmd_on|...",
-        "commandOff": "cmd_off|..."
+      "0000:light": {
+        "id": "on_off_toggle",
+        "arguments": {
+          "commandOn": "01 {device} 01 01",
+          "commandOff": "01 {device} 01 00",
+          "commandToggle": "01 {device} 01 02"
+        }
       }
     }
   },
   {
     "clusterId": "0008",
-    "name": "Level_Control"
+    "name": "Level"
   },
   {
     "clusterId": "0106",
@@ -24,11 +27,11 @@
   },
   {
     "clusterId": "0300",
-    "name": "Color_Control"
+    "name": "Color"
   },
   {
     "clusterId": "0406",
-    "name": "Occupancy_Sensing"
+    "name": "Occupancy"
   },
   {
     "clusterId": "BBBB",

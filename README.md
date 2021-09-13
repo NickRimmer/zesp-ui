@@ -2,7 +2,7 @@
 
 Hello, my friend! I hope you are doing good (=
 
-A few words about the tool - currently this is an experimental application to provide just another client for awesome ZESP service (there are ZESP
+A few words about the tool - currently this is an experimental application to provide just another client for awesome ZESP service (there is ZESP
 developers [telegram channel](https://t.me/zesp32)).
 
 # How to use
