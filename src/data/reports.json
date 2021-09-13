@@ -37,7 +37,17 @@
   },
   {
     "clusterId": "0300",
-    "name": "Color"
+    "name": "Color",
+    "attributes": {
+      "0007:light": {
+        "id": "level_control",
+        "arguments": {
+          "command": "MoveToColorTemp|{device}|1|01|{value}|0001",
+          "min": 100,
+          "max": 600
+        }
+      }
+    }
   },
   {
     "clusterId": "0406",
