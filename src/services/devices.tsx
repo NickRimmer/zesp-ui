@@ -78,7 +78,7 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] 
 
     // if cluster information not found
     if (!registeredCluster) {
-      // console.debug(`Report key '${reportKey}' with unregistered cluster '${reportKeyInfo.clusterId}' received`);
+      console.debug(`Report key '${reportKey}' with unregistered cluster '${reportKeyInfo.clusterId}' received`);
       return result;
     }
 
@@ -100,16 +100,17 @@ const buildLayoutSettingsFromZesp = (device: DeviceInfo): DataControlSettings[] 
 }
 
 const buildLayoutItemForRole = (roleParts: string[], dataCluster: DataReportInfo, reportKey: string, deviceType: string): DataControlSettings | undefined => {
+  // return undefined;
   const reportKeyInfo = Devices.getReportKeyDetails(reportKey, deviceType);
   if (!reportKeyInfo) return undefined;
 
-  const attributeId = roleParts[0];
+  const roleName = roleParts[0];
   const roleSettings = roleParts.length > 1 ? roleParts[1] : null;
   const layoutItem = !dataCluster.attributes
-    ? {id: attributeId} as DataControlSettings // if no attributes at all
-    : dataCluster.attributes[`${reportKeyInfo.attributeId}:${attributeId}`]
-    || dataCluster.attributes[attributeId]
-    || {id: attributeId} as DataControlSettings; // if required attribute not found
+    ? {id: roleName} as DataControlSettings // if no attributes at all
+    : dataCluster.attributes[`${reportKeyInfo.attributeId}:${roleName}`]
+    || dataCluster.attributes[roleName]
+    || {id: roleName} as DataControlSettings; // if required attribute not found
 
   // add role configured settings
   if (roleSettings)

@@ -14,6 +14,14 @@ export type LayoutSettingsOnOff = DataControlSettings & {
   }
 }
 
+export type LayoutSettingsOnOffToggle = DataControlSettings & {
+  arguments: {
+    commandOn: string,
+    commandOff: string,
+    commandToggle: string,
+  }
+}
+
 export type LayoutSettingsLevel = DataControlSettings & {
   arguments: {
     command: string,

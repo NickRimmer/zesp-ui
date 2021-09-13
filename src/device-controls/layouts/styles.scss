@@ -69,3 +69,16 @@ $unknownColor: #d81616;
     color: $unknownColor;
   }
 }
+
+.default-layout {
+  .elements.unknown {
+    &.hide {
+      display: none;
+    }
+  }
+
+  .show-unknown-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

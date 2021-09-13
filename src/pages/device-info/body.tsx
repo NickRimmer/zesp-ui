@@ -20,11 +20,11 @@ export default (props: {
   };
 
   const layoutName = props.device.settings?.layout || "default";
-  const LayoutTag: FunctionComponent<LayoutProps> = layoutsAvailable[layoutName] || DefaultLayout;
+  const LayoutElements: FunctionComponent<LayoutProps> = layoutsAvailable[layoutName] || DefaultLayout;
 
   return (
     <Modal.Body className="text-start device-dialog p-4">
-      <LayoutTag {...layoutProps}/>
+      <LayoutElements {...layoutProps}/>
     </Modal.Body>
   )
 }

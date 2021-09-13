@@ -1,5 +1,5 @@
 import React, {FunctionComponent} from "react";
-import {LayoutSettingsCommand, LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsSensor} from "./settings";
+import {LayoutSettingsCommand, LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsOnOffToggle, LayoutSettingsSensor} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {OnOffRoot} from "./root/OnOffRoot";
 import {LevelRoot} from "./root/LevelRoot";
@@ -14,6 +14,7 @@ import {PlayerSrcRoot} from "./root/PlayerSrcRoot";
 import {OnOffBinarySensor} from "./sensors/OnOffBinarySensor";
 import {ValueSensor} from "./sensors/ValueSensor";
 import {Col} from "react-bootstrap";
+import {OnOffToggle} from "./controls/OnOffToggle";
 
 export const getControlForDevice = (config: DataControlSettings, deviceInfo: DeviceInfo): JSX.Element | undefined => {
   const controlProps: IDeviceControlProps<DataControlSettings> = {
@@ -43,6 +44,9 @@ export const getControlForDevice = (config: DataControlSettings, deviceInfo: Dev
     case "sensor" :
       return (<ValueSensor {...controlProps} config={controlProps.config as DataControlSettings}/>);
 
+    case "on_off_toggle":
+      return (<OnOffToggle {...controlProps} config={controlProps.config as LayoutSettingsOnOffToggle}/>);
+
     default:
       return (<UnknownControl {...controlProps}/>)
   }
@@ -54,4 +58,4 @@ export const DeviceControlCol1: FunctionComponent<React.HTMLProps<HTMLButtonElem
 
 export const DeviceControlCol2: FunctionComponent<React.HTMLProps<HTMLButtonElement>> = (props) => {
   return (<Col>{props.children}</Col>)
-} 
+}

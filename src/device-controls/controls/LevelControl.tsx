@@ -7,7 +7,6 @@ import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
 
-// TODO add localization
 export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
   const minMaxAttributes = {
     min: props.config.arguments.min,
@@ -15,31 +14,32 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
   };
 
   const report = DeviceControls.getControlReport(props);
-  const currentValue = report?.val ? Number(report.val) : ((minMaxAttributes.max - minMaxAttributes.min) / 2 + minMaxAttributes.min);
+  const currentValue = report?.parsed ? Number(report.parsed) : ((minMaxAttributes.max - minMaxAttributes.min) / 2 + minMaxAttributes.min);
   const [value, setValue] = useState(currentValue);
 
   const inRange = (value: number) => Math.max(Math.min(props.config.arguments.max, value), props.config.arguments.min);
-  // const setReportValue = (value: number) => DeviceControls.setControlReport(globalState, props, value.toString())
 
   const sliderChangeHandler = () => {
     const result = inRange(value);
-    const data = formatCommand(props.config.arguments.command, result);
-    Single.ZespConnector.send({data: data});
-    // setReportValue(result);
+    sendValueToZesp(result);
   }
 
   const inputChangeHandler = (value: number) => {
     const result = inRange(value);
     setValue(result);
-
-    const data = formatCommand(props.config.arguments.command, result);
-    Single.ZespConnector.send({data: data});
-    // setReportValue(result);
+    sendValueToZesp(result);
   }
+
+  const sendValueToZesp = (value: number) => {
+    const data = formatCommand(props.config.arguments.command, value, props);
+    Single.ZespConnector.send({data: data});
+  }
+
+  const label = report?.label || props.config.label || "Level";
 
   return (
     <Row>
-      <DeviceControlCol1>{props.config.label || "Level"}:</DeviceControlCol1>
+      <DeviceControlCol1>{label}:</DeviceControlCol1>
       <DeviceControlCol2>
         <FormControl
           style={{width: "100px"}}
@@ -61,6 +61,7 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
   )
 }
 
-const formatCommand = (command: string, value: number): string => command
+const formatCommand = (command: string, value: number, props: IDeviceControlProps<LayoutSettingsLevel>): string => command
+  .replace("{device}", props.deviceInfo.zespInfo.Device)
   .replace("{value}", value.toString(16))
   .replace("{value:dec}", value.toString());
