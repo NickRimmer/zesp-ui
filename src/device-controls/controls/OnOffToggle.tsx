@@ -24,7 +24,7 @@ export const OnOffToggle = (props: IDeviceControlProps<LayoutSettingsOnOffToggle
     Single.ZespConnector.send({data: command, isBinary: true});
   }
 
-  const label = report?.label || "Power";
+  const label = report?.label || props.config.label || "Power";
 
   return (
     <Row>

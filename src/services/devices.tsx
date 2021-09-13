@@ -12,8 +12,6 @@ export const Devices = {
       ? device.customLayout
       : buildLayoutSettingsFromZesp(device);
 
-    console.log(layout);
-
     // group by group name (undefined groups will be saved as 'main')
     return layout.reduce((r, x) => {
       const groupName = x.group || defaultLayoutGroupName;

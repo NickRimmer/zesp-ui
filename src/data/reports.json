@@ -19,7 +19,17 @@
   },
   {
     "clusterId": "0008",
-    "name": "Level"
+    "name": "Level",
+    "attributes": {
+      "0000:light": {
+        "id": "level_control",
+        "arguments": {
+          "command": "MoveToLevel|{device}|1|01|1|{value}|0001|0",
+          "min": 0,
+          "max": 255
+        }
+      }
+    }
   },
   {
     "clusterId": "0106",
