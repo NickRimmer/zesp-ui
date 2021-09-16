@@ -7,6 +7,7 @@ import {IServerInfo} from "../../pages/welcome/interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {setConnected, setDisconnected, getStatus, setInitialized} from "store/slices/zespSlice";
 import {setDevices, updateReport, updateRootReports} from "store/slices/devicesSlice";
+import {setZespFirmwareInstalledVersion} from "store/slices/zespFirmwareSlice";
 import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 
@@ -27,8 +28,9 @@ export const ZespAgent = (props: IProps) => {
 
     .then(zesp => new Promise<IZespConnector>((resolve, reject) => {
       ServiceDevices.getDevicesListAsync(zesp)
-        .then(devices => {
-          dispatch(setDevices(devices));
+        .then(result => {
+          dispatch(setDevices(result.devices));
+          dispatch(setZespFirmwareInstalledVersion(result.firmwareInstalledVersion));
           resolve(zesp);
         })
         .catch(reason => reject(reason));

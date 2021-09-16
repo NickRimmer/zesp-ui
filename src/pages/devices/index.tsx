@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.scss";
 import {FadeIn} from "../../shared/fadein-transition";
-import {Card} from "react-bootstrap";
+import {Card, Row} from "react-bootstrap";
 import Item from "./item";
 import {useTranslation} from "react-i18next";
 import {DeviceInfo} from "../../models/DeviceInfo";
@@ -49,9 +49,9 @@ const DevicesList = (props: { devices: DeviceListItem[] }) => {
         <span>{t("groups.all")}</span>
         {devices.length > 1 && (<span className="badge bg-secondary ms-2">{devices.length}</span>)}
       </div>
-      <div className="items d-flex flex-wrap">
+      <Row className="items">
         {devices.map((device, i) => (<Item device={device} key={i}/>))}
-      </div>
+      </Row>
     </div>
   );
 }
