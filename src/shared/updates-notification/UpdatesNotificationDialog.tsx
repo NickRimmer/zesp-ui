@@ -1,18 +1,38 @@
 import React, {useState} from "react";
 import {DictionaryStrings} from "../../models/DictionaryStrings";
 import {Col, Modal, Row} from "react-bootstrap";
+import toast from "react-hot-toast";
 
-const UpdatesNotificationDialog: React.FC<{ onClosed: () => void }> = ({onClosed}): React.ReactElement => {
+interface IProps {
+  zespFirmwareUpdate: DictionaryStrings,
+  zespFirmwareCurrentVersion: string,
+  onClosed: () => void,
+}
+
+const UpdatesNotificationDialog: React.FC<IProps> = ({
+  onClosed,
+  zespFirmwareUpdate,
+  zespFirmwareCurrentVersion
+}): React.ReactElement => {
   const [show, setShow] = useState(true);
+
   const onHideHandler = () => setShow(false);
+
+  const zespFirmwareUpdateVersion = zespFirmwareUpdate["ver"] || "unknown";
+
   const updateData: DictionaryStrings = {
-    "ModelId": "ZESP",
-    "board": "esp32",
-    "link": "http:/82.146.46.112/fw/zesp.bin",
-    "ver": "Beta16092021",
-    "Manufacturer": "VLK_SW",
-    "Description": " "
-  };
+    ...{"Current version": zespFirmwareCurrentVersion},
+    ...{"New version": zespFirmwareUpdateVersion},
+    ...{...zespFirmwareUpdate, ...{"ver": undefined}} // skip ver from "other" properties, cause we'll show it before
+  }
+
+  const onUpdateClickHandler = () => {
+    toast.success("Not implemented yet...", {icon: (<i className="bi bi-cone-striped text-warning"/>)});
+  }
+
+  const onSkipClickHandler = () => {
+    toast.success("Not implemented yet...", {icon: (<i className="bi bi-cone-striped text-warning"/>)});
+  }
 
   return (
     <Modal show={show} onExited={onClosed} onHide={onHideHandler}>
@@ -26,14 +46,14 @@ const UpdatesNotificationDialog: React.FC<{ onClosed: () => void }> = ({onClosed
         <div className="rows-striped">
           {Object.keys(updateData).map((key, i) => {
             return updateData[key]
-              && updateData[key].trim().length > 0
+              && updateData[key]!.trim().length > 0
               && (<Row><Col xs={4} className="py-2 text-capitalize text-muted text-end">{key}</Col><Col className="py-2 text-dark">{updateData[key]}</Col></Row>);
           })}
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <button className="btn btn-primary">Update now</button>
-        <button className="btn btn-secondary">Skip this version</button>
+        <button className="btn btn-primary" onClick={onUpdateClickHandler}>Update ZESP service</button>
+        <button className="btn btn-secondary" onClick={onSkipClickHandler}>Skip this version</button>
       </Modal.Footer>
     </Modal>
   )

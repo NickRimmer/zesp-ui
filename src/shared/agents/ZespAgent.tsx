@@ -3,11 +3,12 @@ import {Single} from "../../services/single";
 import ServiceDevices from "../../services/zesp/service-devices";
 import ServiceUpdates from "../../services/zesp/service-report-updates";
 import ServiceRoot from "../../services/zesp/service-root";
+import ServiceFirmware from "../../services/zesp/service-firmware";
 import {IServerInfo} from "../../pages/welcome/interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {setConnected, setDisconnected, getStatus, setInitialized} from "store/slices/zespSlice";
 import {setDevices, updateReport, updateRootReports} from "store/slices/devicesSlice";
-import {setZespFirmwareInstalledVersion} from "store/slices/zespFirmwareSlice";
+import {setZespFirmwareInstalledVersion, setZespFirmwareUpdate} from "store/slices/zespFirmwareSlice";
 import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 
@@ -29,8 +30,7 @@ export const ZespAgent = (props: IProps) => {
     .then(zesp => new Promise<IZespConnector>((resolve, reject) => {
       ServiceDevices.getDevicesListAsync(zesp)
         .then(result => {
-          dispatch(setDevices(result.devices));
-          dispatch(setZespFirmwareInstalledVersion(result.firmwareInstalledVersion));
+          dispatch(setDevices(result));
           resolve(zesp);
         })
         .catch(reason => reject(reason));
@@ -46,6 +46,22 @@ export const ZespAgent = (props: IProps) => {
         })
         .catch(reason => reject(reason));
     }))
+
+    .then(zesp => {
+      ServiceFirmware
+        .getFirmwareInfoAsync(zesp)
+        .then(firmwareInfo => {
+          dispatch(setZespFirmwareInstalledVersion(firmwareInfo.currentVersion));
+          dispatch(setZespFirmwareUpdate(firmwareInfo.updatesInformation));
+        })
+        .catch(reason => {
+          //TODO show warning toast 
+          console.warn(reason);
+        });
+
+      // continue without waiting of results
+      return zesp;
+    })
 
     .then(zesp => {
       const onReport = (ieee: string, reportKey: string, update: Partial<ZespReportInfo>) => {

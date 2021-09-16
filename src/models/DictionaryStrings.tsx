@@ -1,3 +1,3 @@
 export type DictionaryStrings = {
-  [key: string]: string
+  [key: string]: string | undefined
 }

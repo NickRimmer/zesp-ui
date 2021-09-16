@@ -9,7 +9,7 @@ interface IState {
 
 const initialState: IState = {
   zespFirmwareUpdateInfo: undefined,
-  zespFirmwareInstalledVersion: "unknown",
+  zespFirmwareInstalledVersion: "-",
 }
 
 export const zespFirmwareSlice = createSlice({
