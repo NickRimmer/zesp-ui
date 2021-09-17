@@ -27,7 +27,7 @@ export const devicesSlice = createSlice({
       }
 
       device.zespInfo.Report[action.payload.reportKey] = {...device.zespInfo.Report[action.payload.reportKey], ...action.payload.update};
-      console.debug(`Device '${action.payload.ieee}' with report '${action.payload.reportKey}' has been updated`);
+      // console.debug(`Device '${action.payload.ieee}' with report '${action.payload.reportKey}' has been updated`);
     },
     updateRootReports: (state, action: PayloadAction<ZespReportUpdates>) => {
       const device = state.devices.find(x => x.zespInfo.ModelId === "ZESP_Root");
