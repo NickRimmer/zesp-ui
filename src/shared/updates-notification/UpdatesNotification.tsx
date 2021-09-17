@@ -2,13 +2,17 @@ import React, {Fragment, useState} from "react";
 import UpdatesNotificationDialog from "./UpdatesNotificationDialog";
 import {useSelector} from "react-redux";
 import {getZespFirmwareInstalledVersion, getZespFirmwareUpdateInfo} from "../../store/slices/zespFirmwareSlice";
+import {getUiSettings} from "../../store/slices/settingsSlice";
 
 export const UpdatesNotification: React.FC = (): React.ReactElement => {
   const zespFirmwareUpdate = useSelector(getZespFirmwareUpdateInfo);
   const zespCurrentVersion = useSelector(getZespFirmwareInstalledVersion);
+  const uiSettings = useSelector(getUiSettings);
   const [showDialog, setShowDialog] = useState(false);
 
-  if (!zespFirmwareUpdate || zespFirmwareUpdate["ver"] === zespCurrentVersion) return (<Fragment/>);
+  if (!zespFirmwareUpdate
+    || zespFirmwareUpdate["ver"] === zespCurrentVersion
+    || uiSettings?.firmwareSkipUpdate === zespFirmwareUpdate["ver"]) return (<Fragment/>);
 
   const title = `${zespCurrentVersion} to ${zespFirmwareUpdate["ver"]} update`;
   const onUpdatesClickedHandler = () => {

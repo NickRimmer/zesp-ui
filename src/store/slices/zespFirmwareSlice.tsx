@@ -5,11 +5,13 @@ import {DictionaryStrings} from "../../models/DictionaryStrings";
 interface IState {
   zespFirmwareUpdateInfo: DictionaryStrings | undefined,
   zespFirmwareInstalledVersion: string,
+  zespSkipVersion: string | undefined,
 }
 
 const initialState: IState = {
   zespFirmwareUpdateInfo: undefined,
   zespFirmwareInstalledVersion: "-",
+  zespSkipVersion: undefined,
 }
 
 export const zespFirmwareSlice = createSlice({

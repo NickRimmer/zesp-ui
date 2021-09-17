@@ -14,7 +14,7 @@ const Result = () => {
   const allSettings = useSelector(getZespSettings);
   const {t} = useTranslation(["pages.setup-wifi", "common"]);
 
-  if (!allSettings) return (<div>No settings found...</div>);
+  if (!allSettings) return (<Fragment/>);
   const settings = allSettings.Wifi;
 
   const onSubmit = (data: ZespWifiSettings): Promise<void> => SaveSettings({Wifi: data}, allSettings, dispatch);

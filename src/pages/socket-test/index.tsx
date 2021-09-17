@@ -17,14 +17,21 @@ export default () => {
   const [messages, _setMessages] = useState<string[]>([]);
   const [messageSendValue, setMessageSendValue] = useState<string>("");
   const [paused, _setPaused] = useState<boolean>(false);
+  const [repsPaused, _setRepsPaused] = useState<boolean>(true);
 
   const messagesRef = useRef(messages);
   const pausedRef = useRef(paused);
+  const repsPausedRef = useRef(repsPaused);
 
   const addMessages = (message: string) => {
     if (pausedRef.current) return;
 
-    const data: string[] = [message.substr(0, 250), ...messagesRef.current];
+    if (repsPausedRef.current && (
+      message.startsWith("rep|") ||
+      message.startsWith("ArBle|")
+    )) return;
+
+    const data: string[] = [message.substr(0, 500), ...messagesRef.current];
     const cutCount = data.length - maxMessagesCount;
     if (cutCount > 0) data.splice(data.length - cutCount, cutCount)
 
@@ -36,6 +43,12 @@ export default () => {
     const data = !pausedRef.current;
     pausedRef.current = data;
     _setPaused(data);
+  }
+
+  const toggleRepsPause = () => {
+    const data = !repsPausedRef.current;
+    repsPausedRef.current = data;
+    _setRepsPaused(data);
   }
 
   const onSend = (data: IFormData) => {
@@ -92,7 +105,7 @@ export default () => {
               <div className="col">
                 <div>
                   {predefinedMessages.map((x, i) => (
-                    <button key={i} type="submit" className="btn btn-sm btn-outline-primary me-1" onClick={onSendPredefined}>{x}</button>
+                    <button key={i} type="button" className="btn btn-sm btn-outline-primary me-1" onClick={onSendPredefined}>{x}</button>
                   ))}
                 </div>
                 <div className="mt-1">
@@ -118,6 +131,8 @@ export default () => {
           <span>Communication log <span className="badge bg-secondary small">{messages.length}</span></span>
           <button className="btn btn-outline-secondary ms-3 btn-sm" onClick={onClearLog}>Clear log</button>
           <button className="btn btn-outline-secondary ms-3 btn-sm" onClick={() => togglePause()}>{paused ? "Start logs" : "Pause logs"}</button>
+          <button className={`btn btn-outline-${repsPaused ? "secondary" : "info"} ms-3 btn-sm float-end`}
+                  onClick={() => toggleRepsPause()}>{repsPaused ? "REPs disabled" : "REPs enabled"}</button>
         </Card.Header>
         <Card.Body>
           {messages.map((message, i) => message.startsWith(">")

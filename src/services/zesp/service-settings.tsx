@@ -1,8 +1,9 @@
 import {ZespSettings} from "./models/ZespSettings";
 import {Single} from "../single";
 import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
+import {UiSettings} from "../../models/UiSettings";
 
-export default {
+const ServiceSettings = {
   getAsync: (): Promise<ZespSettings> => new Promise<ZespSettings>((resolve, reject) => {
     Single.ZespConnector.requestAsync({data: "loadConfig", responseValidator: TypedZespResponseValidator("jsconfig")})
       .then(event => parseResponse(event.dataParts[0]))
@@ -43,6 +44,10 @@ export default {
       })
   },
 
+  setUiSettings: (data: UiSettings): void => {
+    ServiceSettings.setCustom("zesp_ui", data);
+  },
+
   setCustom: function setCustom<T>(name: string, data: T): void {
     const fileName = `/${name}.json`;
     const dataStr = JSON.stringify(data);
@@ -60,3 +65,5 @@ function parseResponse(jsonString: string): ZespSettings {
 
   return result;
 }
+
+export default ServiceSettings;

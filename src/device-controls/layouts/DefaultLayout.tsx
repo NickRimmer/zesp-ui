@@ -10,7 +10,7 @@ export const DefaultLayout: FunctionComponent<LayoutProps> = (props: LayoutProps
     const element = getControlForDevice(settings, props.device);
     if (!element) return;
 
-    if (element?.type.name === "UnknownControl") unknown.push(element);
+    if (element?.type.name.toLowerCase() === "UnknownControl".toLocaleLowerCase()) unknown.push(element);
     else controls.push(element);
   });
 

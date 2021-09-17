@@ -33,7 +33,6 @@ const Result = () => {
 
   return (
     <FadeIn>
-      <div className="aaa">...</div>
       <Container className="p-0">
         <Nav variant="pills">
           <Nav.Item><NavLink className="nav-link" to="/setup" exact>Wifi client</NavLink></Nav.Item>
