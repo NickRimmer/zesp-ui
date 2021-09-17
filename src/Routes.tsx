@@ -31,6 +31,7 @@ export const Routes = () => {
       <Route path="/setup/telegram" component={NotImplementedYetPage}/>
       <Route path="/setup/z2m" component={NotImplementedYetPage}/>
       <Route path="/setup/zesp-ui" component={NotImplementedYetPage}/>
+      <Route path="/setup/firmware" component={NotImplementedYetPage}/>
       <Route path="/socket-test" component={SocketTestPage}/>
     </Fragment>
   )

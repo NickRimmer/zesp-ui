@@ -1,0 +1,20 @@
+.app-footer {
+  $color: rgba(255, 255, 255, .3);
+
+  color: $color;
+
+  a, a:visited, a:active {
+    color: $color;
+    transition: color 300ms;
+    text-decoration: none;
+
+    &:hover {
+      color: rgba(255, 255, 255, .5);
+      text-decoration: underline;
+    }
+  }
+
+  .highlight {
+    color: rgba(255, 255, 255, .5);
+  }
+}

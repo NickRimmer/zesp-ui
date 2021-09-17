@@ -1,6 +1,6 @@
 import {ZespSettings} from "./models/ZespSettings";
 import {Single} from "../single";
-import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
+import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
 
 export default {
   getAsync: (): Promise<ZespSettings> => new Promise<ZespSettings>((resolve, reject) => {
@@ -26,6 +26,30 @@ export default {
         })
         .catch(error => reject(error));
     })
+  },
+
+  getCustomAsync: function getCustom<T>(name: string): Promise<T | undefined> {
+    return Single.ZespConnector
+      .requestAsync({
+        data: `LoadJson|/${name}.json`,
+        responseValidator: JsonZespResponseValidator(name)
+      })
+      .then(event => {
+        if (event.dataParts.length < 1) throw new Error("Unexpected JSON file response from ZESP");
+        const jsonStr = event.dataParts[1];
+
+        if (!jsonStr || jsonStr.length === 0 || jsonStr.trim().toLocaleLowerCase() === "null") return undefined;
+        return JSON.parse(jsonStr) as T;
+      })
+  },
+
+  setCustom: function setCustom<T>(name: string, data: T): void {
+    const fileName = `/${name}.json`;
+    const dataStr = JSON.stringify(data);
+
+    Single.ZespConnector.send({
+      data: `SaveJson|${fileName}|${dataStr}`
+    });
   }
 }
 

@@ -23,10 +23,13 @@ body {
 .masthead {
   margin-bottom: 2rem;
   color: #fff;
+  display: flex;
+  justify-content: space-between;
 
   a {
     color: #fff;
     transition: color 300ms;
+    text-decoration: none;
 
     &:hover {
       color: #ffffff99;
@@ -38,11 +41,11 @@ body {
   margin-bottom: 0;
 }
 
-@media (min-width: 48em) {
-  .masthead-brand {
-    float: left;
-  }
-}
+//@media (min-width: 48em) {
+//  .masthead-brand {
+//    float: left;
+//  }
+//}
 
 .content-light {
   color: #fff;
@@ -64,20 +67,6 @@ body {
     text-shadow: none; /* Prevent inheritance from `body` */
     background-color: #fff;
     border: .05rem solid #fff;
-  }
-}
-
-
-.mastfoot {
-  color: rgba(255, 255, 255, .3);
-
-  a, a:visited, a:active {
-    color: rgba(255, 255, 255, .4);
-    transition: color 300ms;
-
-    &:hover {
-      color: rgba(255, 255, 255, .5);
-    }
   }
 }
 
@@ -112,5 +101,24 @@ body {
 
   &.show {
     display: block;
+  }
+}
+
+.notification-updates {
+  font-size: 1rem;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: opacity 300ms;
+
+  &:hover {
+    opacity: .75;
+  }
+}
+
+.rows-striped {
+  > .row:nth-child(2n) {
+    background-color: #efefef;
   }
 }

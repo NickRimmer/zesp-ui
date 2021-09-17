@@ -9,6 +9,8 @@ import {Routes} from "./Routes";
 import {WelcomePage} from "./pages/welcome";
 import {IServerInfo} from "./pages/welcome/interfaces";
 import {ZespAgent} from "./shared/agents/ZespAgent";
+import {UpdatesNotification} from "./shared/updates-notification";
+import {AppFooter} from "./shared/footer";
 
 const Content = () => {
   const [serverIndex, setServerIndex] = useState<number | null>(null);
@@ -29,15 +31,15 @@ const App = (props: { server: IServerInfo }) => {
       <div className="container-md d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header className="masthead">
           <a href="/"><h3 className="masthead-brand">ZESP:UI</h3></a>
-          <TopMenu/>
+          <div className="d-flex flex-row align-items-center">
+            <TopMenu/>
+            <UpdatesNotification/>
+          </div>
         </header>
         <main role="main" className="text-start d-flex flex-grow-1 flex-column">
           <Routes/>
         </main>
-        <footer className="mastfoot mt-3">
-          <p>ZESP UI application, by <a href="https://t.me/NickRimmer" target={"_blank"} rel="noreferrer">@NickRimmer</a>. (0.0.0 version, <span>dev build</span>)
-          </p>
-        </footer>
+        <AppFooter/>
       </div>
     </>
   )
