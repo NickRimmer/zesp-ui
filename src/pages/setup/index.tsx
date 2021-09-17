@@ -41,6 +41,7 @@ const Result = () => {
           <Nav.Item><NavLink className="nav-link" to="/setup/mqtt">MQTT client</NavLink></Nav.Item>
           <Nav.Item><NavLink className="nav-link" to="/setup/telegram">Telegram bot</NavLink></Nav.Item>
           <Nav.Item><NavLink className="nav-link" to="/setup/z2m">Z2M client</NavLink></Nav.Item>
+          <Nav.Item><NavLink className="nav-link" to="/setup/firmware">Firmware manager</NavLink></Nav.Item>
           <Nav.Item className="ms-auto"><NavLink className="nav-link" to="/setup/zesp-ui"><BsGearFill style={{marginTop: "-3px"}}/> ZESP:UI</NavLink></Nav.Item>
         </Nav>
       </Container>
