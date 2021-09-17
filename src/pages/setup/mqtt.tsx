@@ -7,11 +7,11 @@ import {FadeIn} from "../../shared/fadein-transition";
 import {ZespMqttSettings} from "../../services/zesp/models/ZespSettings";
 import {SaveSettings} from "./index";
 import {useDispatch, useSelector} from "react-redux";
-import {getSettings} from "../../store/slices/settingsSlice";
+import {getZespSettings} from "../../store/slices/settingsSlice";
 
 const Result = () => {
   const dispatch = useDispatch();
-  const allSettings = useSelector(getSettings);
+  const allSettings = useSelector(getZespSettings);
   const {t} = useTranslation(["pages.setup-mqtt", "common"]);
 
   if (!allSettings) return (<div>No settings found...</div>);

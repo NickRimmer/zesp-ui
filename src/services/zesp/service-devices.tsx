@@ -9,15 +9,23 @@ import {DataDeviceSettings} from "../../models/DataDeviceSettings";
 import {ZespReportInfo} from "./models/ZespReportInfo";
 import {layoutTools} from "../../device-controls/layouts";
 
+interface IGetDevicesResponse {
+  devices: DeviceInfo[],
+  zespVersion: string | undefined,
+}
+
 const ServiceDevices = {
-  getDevicesListAsync: (zesp: IZespConnector) => new Promise<DeviceInfo[]>((resolve, reject) => {
+  getDevicesListAsync: (zesp: IZespConnector) => new Promise<IGetDevicesResponse>((resolve, reject) => {
     zesp.requestAsync({
       data: "getDeviceList",
       responseValidator: TypedZespResponseValidator("alldev")
     })
       .then(event => {
         const result = onDevicesListReceived(event);
-        resolve(result);
+        resolve({
+          devices: result,
+          zespVersion: event.dataParts.length > 1 ? event.dataParts[1] : undefined,
+        } as IGetDevicesResponse);
       })
       .catch(reason => reject(reason));
   })

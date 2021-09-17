@@ -47,7 +47,7 @@ const UpdatesNotificationDialog: React.FC<IProps> = ({
           {Object.keys(updateData).map((key, i) => {
             return updateData[key]
               && updateData[key]!.trim().length > 0
-              && (<Row><Col xs={4} className="py-2 text-capitalize text-muted text-end">{key}</Col><Col className="py-2 text-dark">{updateData[key]}</Col></Row>);
+              && (<Row key={i}><Col xs={4} className="py-2 text-capitalize text-muted text-end">{key}</Col><Col className="py-2 text-dark">{updateData[key]}</Col></Row>);
           })}
         </div>
       </Modal.Body>
