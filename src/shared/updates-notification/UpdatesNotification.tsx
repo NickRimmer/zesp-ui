@@ -1,7 +1,7 @@
 import React, {Fragment, useState} from "react";
 import UpdatesNotificationDialog from "./UpdatesNotificationDialog";
-import {useDispatch, useSelector} from "react-redux";
-import {getZespFirmwareInstalledVersion, getZespFirmwareUpdateInfo, setZespFirmwareUpdate} from "../../store/slices/zespFirmwareSlice";
+import {useSelector} from "react-redux";
+import {getZespFirmwareInstalledVersion, getZespFirmwareUpdateInfo} from "../../store/slices/zespFirmwareSlice";
 
 export const UpdatesNotification: React.FC = (): React.ReactElement => {
   const zespFirmwareUpdate = useSelector(getZespFirmwareUpdateInfo);

@@ -52,7 +52,7 @@ const UpdatesNotificationDialog: React.FC<IProps> = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <button className="btn btn-primary" onClick={onUpdateClickHandler}>Update ZESP service</button>
+        <button className="btn btn-primary" onClick={onUpdateClickHandler}>Download and Update</button>
         <button className="btn btn-secondary" onClick={onSkipClickHandler}>Skip this version</button>
       </Modal.Footer>
     </Modal>

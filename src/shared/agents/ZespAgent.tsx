@@ -13,7 +13,7 @@ import {setZespFirmwareInstalledVersion, setZespFirmwareUpdate} from "store/slic
 import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {UiDefaultSettings, UiSettings} from "../../models/UiSettings";
-import {getUiSettings, setUiSettings} from "../../store/slices/settingsSlice";
+import {setUiSettings} from "../../store/slices/settingsSlice";
 
 interface IProps {
   server: IServerInfo
