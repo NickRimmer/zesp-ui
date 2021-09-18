@@ -38,22 +38,28 @@ export default () => {
 
   const [activeGroupName, setActiveGroupName] = useState(groups[0].name);
 
-  const handleClose = () => setShow(false);
+  const onCloseClickHandler = () => setShow(false);
   const handleExit = () => setTimeout(() => history.push("/devices"), 100);
-  const handleDetails = () => {
+  const onDebugDeviceHandler = () => {
     console.log(deviceInfo);
-    toast.success("Check console for logs", {icon: "👽"});
+    toast.success("Check console for debug info", {icon: "👽"});
+  }
+
+  const headerHandlers = {
+    onCloseClickHandler,
+    onEditDeviceHandler: () => console.debug("edit clicked"),
+    onDeleteDeviceHandler: () => console.debug("delete clicked"),
+    onDebugDeviceHandler,
   }
 
   return (
-    <Modal show={show} onHide={handleClose} onExited={handleExit}>
+    <Modal show={show} onHide={onCloseClickHandler} onExited={handleExit}>
       <CustomHeader
         groups={groups}
         device={deviceInfo}
         activeGroupName={activeGroupName}
         setActiveGroupName={setActiveGroupName}
-        onCloseClicked={handleClose}
-        onDetailsClicked={handleDetails}
+        {...headerHandlers}
       />
 
       <CustomBody

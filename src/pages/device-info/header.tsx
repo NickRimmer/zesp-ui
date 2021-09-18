@@ -1,5 +1,5 @@
 import {DataLayoutItemsGroup} from "../../models/DataControlSettings";
-import {Modal} from "react-bootstrap";
+import {Dropdown, Modal} from "react-bootstrap";
 import React from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
 
@@ -8,9 +8,12 @@ export default (props: {
   groups: DataLayoutItemsGroup[],
   activeGroupName: string,
   setActiveGroupName: (group: string) => void,
-  onCloseClicked: () => void,
-  onDetailsClicked?: () => void,
+  onCloseClickHandler: () => void,
+  onEditDeviceHandler: () => void,
+  onDeleteDeviceHandler: () => void,
+  onDebugDeviceHandler: () => void,
 }) => {
+  // const [showDropdown, setShowDropdown] = useState(false);
   const title = props.device.zespInfo.Name || props.device.zespInfo.ModelId;
 
   const buildMultiply = () => (
@@ -36,12 +39,22 @@ export default (props: {
   const headerContent = props.groups.length > 1 ? buildMultiply() : buildSingle();
 
   return (
-    <Modal.Header className={headerClassName}>
+    <Modal.Header className={`${headerClassName} with-buttons`}>
       <div>{headerContent}</div>
       <div className="text-end modal-right-buttons">
-        {props.onDetailsClicked && (<button type="button" className="btn" onClick={props.onDetailsClicked}><i className="bi bi-three-dots-vertical"/></button>)}
-        <span className="border-end ms-2 me-3"/>
-        <button type="button" className="btn-close me-1" aria-label="Close" onClick={props.onCloseClicked}/>
+        <Dropdown className="d-inline-block">
+          {/*<button type="button" className="btn" onClick={() => setShowDropdown(!showDropdown)}><i className="bi bi-three-dots-vertical"/></button>*/}
+          <Dropdown.Toggle variant="link"><i className="bi bi-three-dots-vertical"/></Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={props.onEditDeviceHandler}>Edit device</Dropdown.Item>
+            <Dropdown.Item onClick={props.onDeleteDeviceHandler}>Delete</Dropdown.Item>
+            <Dropdown.Divider/>
+            <Dropdown.Item onClick={props.onDebugDeviceHandler}>Debug</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        {/*<button type="button" className="btn"><i className="bi bi-three-dots-vertical"/></button>*/}
+        <span className="border-end mx-2"/>
+        <button type="button" className="btn" aria-label="Close" onClick={props.onCloseClickHandler}><i className="bi bi-x-lg"/></button>
       </div>
     </Modal.Header>
   )
