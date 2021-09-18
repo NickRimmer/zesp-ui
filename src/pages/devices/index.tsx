@@ -13,6 +13,7 @@ import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {getAllDevices} from "../../store/slices/devicesSlice";
 import {useSelector} from "react-redux";
 import {ZespContext} from "../../shared/agents/ZespAgent";
+import {AddDeviceButton} from "./add-buttons";
 
 const Result: React.FC = (): React.ReactElement => {
   const {getServerAddress} = useContext(ZespContext);
@@ -47,9 +48,13 @@ const DevicesList = (props: { devices: DeviceListItem[] }) => {
 
   return (
     <div className="group border-top pt-4">
-      <div className="title h5 pb-3">
-        <span>{t("groups.all")}</span>
-        {devices.length > 1 && (<span className="badge bg-secondary ms-2">{devices.length}</span>)}
+      <div className="title h5 pb-2 d-flex justify-content-between align-items-center">
+        <div>
+          <span>{t("groups.all")}</span>
+          {devices.length > 1 && (<span className="badge bg-secondary ms-2">{devices.length}</span>)}
+        </div>
+
+        <AddDeviceButton/>
       </div>
       <Row className="items">
         {devices.map((device, i) => (<Item device={device} key={i}/>))}
