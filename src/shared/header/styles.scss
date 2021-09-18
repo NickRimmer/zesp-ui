@@ -1,0 +1,30 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
+.app-header {
+  margin-bottom: 2rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+
+  @include media-breakpoint-only(xs) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  a {
+    color: #fff;
+    transition: color 300ms;
+    text-decoration: none;
+
+    &:hover {
+      color: #ffffff99;
+    }
+  }
+
+  h3.title {
+    margin-bottom: 0;
+  }
+}

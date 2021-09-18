@@ -20,33 +20,6 @@ body {
   max-width: 42em;
 }
 
-.masthead {
-  margin-bottom: 2rem;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-
-  a {
-    color: #fff;
-    transition: color 300ms;
-    text-decoration: none;
-
-    &:hover {
-      color: #ffffff99;
-    }
-  }
-}
-
-.masthead-brand {
-  margin-bottom: 0;
-}
-
-//@media (min-width: 48em) {
-//  .masthead-brand {
-//    float: left;
-//  }
-//}
-
 .content-light {
   color: #fff;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
@@ -121,4 +94,12 @@ body {
   > .row:nth-child(2n) {
     background-color: #efefef;
   }
+}
+
+.fullscreen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
