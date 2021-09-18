@@ -7,12 +7,11 @@ export const DefaultLayout: FunctionComponent<LayoutProps> = (props: LayoutProps
   const unknown: React.ReactElement[] = [];
 
   props.settings.forEach(settings => {
-    const element = getControlForDevice(settings, props.device);
-    if (!element) return;
+    const control = getControlForDevice(settings, props.device);
+    if (control.type === "skip") return;
 
-    if (element?.type.name.toLowerCase() === "UnknownControl".toLocaleLowerCase()) unknown.push(element);
-    else controls.push(element);
-    console.log(element?.type.name); //TODO remove this log
+    if (control.type === "unknown") unknown.push(control.element);
+    else controls.push(control.element);
   });
 
   // show by default if now identified controls found

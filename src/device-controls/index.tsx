@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react";
+import React, {Fragment, FunctionComponent} from "react";
 import {LayoutSettingsCommand, LayoutSettingsLevel, LayoutSettingsOnOff, LayoutSettingsOnOffToggle, LayoutSettingsSensor} from "./settings";
 import {IDeviceControlProps} from "../interfaces/IDeviceControlProps";
 import {OnOffRoot} from "./root/OnOffRoot";
@@ -16,7 +16,14 @@ import {ValueSensor} from "./sensors/ValueSensor";
 import {Col} from "react-bootstrap";
 import {OnOffToggle} from "./controls/OnOffToggle";
 
-export const getControlForDevice = (config: DataControlSettings, deviceInfo: DeviceInfo): JSX.Element | undefined => {
+type ElementTypes = "regular" | "skip" | "unknown";
+
+interface IResult {
+  element: JSX.Element,
+  type: ElementTypes
+}
+
+export const getControlForDevice = (config: DataControlSettings, deviceInfo: DeviceInfo): IResult => {
   const controlProps: IDeviceControlProps<DataControlSettings> = {
     config,
     deviceInfo,
@@ -24,31 +31,31 @@ export const getControlForDevice = (config: DataControlSettings, deviceInfo: Dev
 
   switch (config.id) {
     case "on_off_root" :
-      return (<OnOffRoot {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>);
+      return {type: "regular", element: (<OnOffRoot {...controlProps} config={controlProps.config as LayoutSettingsOnOff}/>)};
     case "level_root" :
-      return (<LevelRoot {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>);
+      return {type: "regular", element: (<LevelRoot {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>)};
     case "rgb_root" :
-      return (<RgbRoot {...controlProps} config={controlProps.config as LayoutSettingsCommand}/>);
+      return {type: "regular", element: (<RgbRoot {...controlProps} config={controlProps.config as LayoutSettingsCommand}/>)};
     case "player_src_root" :
-      return (<PlayerSrcRoot {...controlProps} config={controlProps.config as DataControlSettings}/>);
+      return {type: "regular", element: (<PlayerSrcRoot {...controlProps} config={controlProps.config as DataControlSettings}/>)};
     case "player_control_root":
-      return undefined;
+      return {type: "skip", element: (<Fragment/>)};
 
     case "level_control" :
-      return (<LevelControl {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>);
+      return {type: "regular", element: (<LevelControl {...controlProps} config={controlProps.config as LayoutSettingsLevel}/>)};
 
     case "illuminance_sensor" :
-      return (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>);
+      return {type: "regular", element: (<IlluminanceSensor {...controlProps} config={controlProps.config as LayoutSettingsSensor}/>)};
     case "binary_sensor" :
-      return (<OnOffBinarySensor {...controlProps} config={controlProps.config as DataControlSettings}/>);
+      return {type: "regular", element: (<OnOffBinarySensor {...controlProps} config={controlProps.config as DataControlSettings}/>)};
     case "sensor" :
-      return (<ValueSensor {...controlProps} config={controlProps.config as DataControlSettings}/>);
+      return {type: "regular", element: (<ValueSensor {...controlProps} config={controlProps.config as DataControlSettings}/>)};
 
     case "on_off_toggle":
-      return (<OnOffToggle {...controlProps} config={controlProps.config as LayoutSettingsOnOffToggle}/>);
+      return {type: "regular", element: (<OnOffToggle {...controlProps} config={controlProps.config as LayoutSettingsOnOffToggle}/>)};
 
     default:
-      return (<UnknownControl {...controlProps}/>)
+      return {type: "unknown", element: (<UnknownControl {...controlProps}/>)}
   }
 }
 
