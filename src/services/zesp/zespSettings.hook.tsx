@@ -1,16 +1,17 @@
 import {ZespSettings} from "./models/ZespSettings";
-import {Single} from "../single";
 import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
+import {UiSettings} from "../../models/UiSettings";
+import {IZespConnector} from "./common/service-connector.interfaces";
 
-export default {
-  getAsync: (): Promise<ZespSettings> => new Promise<ZespSettings>((resolve, reject) => {
-    Single.ZespConnector.requestAsync({data: "loadConfig", responseValidator: TypedZespResponseValidator("jsconfig")})
+export const useZespSettings = ({zespRequestAsync, zespSend}: IZespConnector) => {
+  const getAsync = (): Promise<ZespSettings> => new Promise<ZespSettings>((resolve, reject) => {
+    zespRequestAsync({data: "loadConfig", responseValidator: TypedZespResponseValidator("jsconfig")})
       .then(event => parseResponse(event.dataParts[0]))
       .then(settings => resolve(settings))
       .catch(error => reject(error));
-  }),
+  })
 
-  setAsync: (settings: ZespSettings): Promise<void> => {
+  const setAsync = (settings: ZespSettings): Promise<void> => {
     const data = [
       "SaveJson",
       "/jsconfig.txt",
@@ -18,7 +19,7 @@ export default {
     ].join("|");
 
     return new Promise((resolve, reject) => {
-      Single.ZespConnector.requestAsync({data: data, responseValidator: TypedZespResponseValidator("ZD_RSP")})
+      zespRequestAsync({data: data, responseValidator: TypedZespResponseValidator("ZD_RSP")})
         .then(event => {
           // console.log(event);
           if (event.dataParts[1].toLocaleLowerCase() === "ok") resolve();
@@ -26,14 +27,13 @@ export default {
         })
         .catch(error => reject(error));
     })
-  },
+  }
 
-  getCustomAsync: function getCustom<T>(name: string): Promise<T | undefined> {
-    return Single.ZespConnector
-      .requestAsync({
-        data: `LoadJson|/${name}.json`,
-        responseValidator: JsonZespResponseValidator(name)
-      })
+  const getCustomAsync = function getCustom<T>(name: string): Promise<T | undefined> {
+    return zespRequestAsync({
+      data: `LoadJson|/${name}.json`,
+      responseValidator: JsonZespResponseValidator(name)
+    })
       .then(event => {
         if (event.dataParts.length < 1) throw new Error("Unexpected JSON file response from ZESP");
         const jsonStr = event.dataParts[1];
@@ -41,15 +41,27 @@ export default {
         if (!jsonStr || jsonStr.length === 0 || jsonStr.trim().toLocaleLowerCase() === "null") return undefined;
         return JSON.parse(jsonStr) as T;
       })
-  },
+  }
 
-  setCustom: function setCustom<T>(name: string, data: T): void {
+  const setCustom = function setCustom<T>(name: string, data: T): void {
     const fileName = `/${name}.json`;
     const dataStr = JSON.stringify(data);
 
-    Single.ZespConnector.send({
+    zespSend({
       data: `SaveJson|${fileName}|${dataStr}`
     });
+  }
+
+  const setUiSettings = (data: UiSettings): void => {
+    setCustom("zesp_ui", data);
+  }
+
+  return {
+    getAsync,
+    setAsync,
+    getCustomAsync,
+    setCustom,
+    setUiSettings,
   }
 }
 
@@ -60,3 +72,5 @@ function parseResponse(jsonString: string): ZespSettings {
 
   return result;
 }
+
+export default useZespSettings;

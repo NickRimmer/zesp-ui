@@ -1,14 +1,15 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {FormControl, Row} from "react-bootstrap";
 import FormRange from "react-bootstrap/FormRange";
 import {LayoutSettingsLevel} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 // TODO add localization
 export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
+  const {zespSend} = useContext(ZespContext);
   const report = DeviceControls.getControlReport(props);
   const currentValue = report?.val ? Number(report.val) : ((props.config.arguments.max - props.config.arguments.min) / 2 + props.config.arguments.min);
   const [value, setValue] = useState(currentValue);
@@ -25,7 +26,7 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
   const sliderChangeHandler = () => {
     const result = inRange(value);
     const data = props.config.arguments.command.replace("{value}", result.toString(16));
-    Single.ZespConnector.send({data: data});
+    zespSend({data: data});
     // setCurrentValue(result);
   }
 
@@ -33,7 +34,7 @@ export const LevelRoot = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
     const result = inRange(value);
     setValue(result);
     const data = props.config.arguments.command.replace("{value}", result.toString(16));
-    Single.ZespConnector.send({data: data});
+    zespSend({data: data});
     // setCurrentValue(result);
   }
 

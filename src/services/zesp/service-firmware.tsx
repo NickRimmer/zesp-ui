@@ -1,11 +1,11 @@
-import {IZespConnector} from "./interfaces/IZespConnector";
 import {FirmwareInfo} from "../../models/FirmwareInfo";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {DictionaryStrings} from "../../models/DictionaryStrings";
+import {IZespConnector} from "./common/service-connector.interfaces";
 
 export default {
   getFirmwareInfoAsync: (zesp: IZespConnector): Promise<FirmwareInfo> => zesp
-    .requestAsync({
+    .zespRequestAsync({
       data: "loadfwlist",
       responseValidator: TypedZespResponseValidator("rsploadfwlist"),
       timeoutSeconds: 15,

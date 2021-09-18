@@ -1,15 +1,16 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {LayoutSettingsCommand} from "../settings";
 import {HuePicker, GithubPicker, CompactPicker, RGBColor} from "react-color";
 import {Row} from "react-bootstrap";
-import {Single} from "../../services/single";
 import {useLocalStorage} from "../../services/localStorage";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 //TODO localize
 export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
+  const {zespSend} = useContext(ZespContext);
   const report = DeviceControls.getControlReport(props);
   let currentValue: number[] = report?.val ? report?.val.split(":").map(x => Number(x)) : [255, 255, 255];
   if (currentValue.length !== 3) {
@@ -27,7 +28,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
     const [x, y] = rgbToXY(rgb);
     let command = props.config.arguments.command.replace("{x}", x.toString(16));
     command = command.replace("{y}", y.toString(16));
-    Single.ZespConnector.send({data: command});
+    zespSend({data: command});
     // setCurrentValue(rgb);
   }
 
@@ -37,7 +38,7 @@ export const RgbRoot = (props: IDeviceControlProps<LayoutSettingsCommand>) => {
     let command = props.config.arguments.command.replace("{x}", x.toString(16));
     command = command.replace("{y}", y.toString(16));
 
-    Single.ZespConnector.send({data: command});
+    zespSend({data: command});
     // setCurrentValue(color);
   }
 

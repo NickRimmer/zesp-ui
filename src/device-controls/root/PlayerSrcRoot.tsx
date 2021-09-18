@@ -1,15 +1,16 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {Row} from "react-bootstrap";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
 import {DataControlSettings} from "../../models/DataControlSettings";
 import {DeviceControls} from "../../services/deviceControls";
 import toast from "react-hot-toast";
 import {LayoutSettingsOnOff} from "../settings";
-import {Single} from "../../services/single";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 // TODO add localization
 export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) => {
+  const {zespSend} = useContext(ZespContext);
   const srcReport = DeviceControls.getControlReport(props);
   const [playSettings, playReport] = DeviceControls.getControlSettings<LayoutSettingsOnOff>(props, "player_control_root");
 
@@ -56,7 +57,7 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) =
     setSrc("");
     // DeviceControls.setControlReport(globalState, props, "");
 
-    if (playSettings) Single.ZespConnector.send({data: playSettings.arguments.commandOff});
+    if (playSettings) zespSend({data: playSettings.arguments.commandOff});
     else console.warn("No configured OFF command for 'player_control_root' operation found in layout");
   }
 
@@ -68,7 +69,7 @@ export const PlayerSrcRoot = (props: IDeviceControlProps<DataControlSettings>) =
 
     setPlay("ON");
     // DeviceControls.setControlReport(globalState, props, "ON", playSettings!.reportKey);
-    if (playSettings) Single.ZespConnector.send({data: playSettings.arguments.commandOn.replace("{value}", src)});
+    if (playSettings) zespSend({data: playSettings.arguments.commandOn.replace("{value}", src)});
     else console.warn("No configured ON command for 'player_control_root' operation found in layout");
   }
 

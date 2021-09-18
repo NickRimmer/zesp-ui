@@ -16,6 +16,15 @@
     margin-left: 1rem;
   }
 
+  .clickable {
+    transition: color 300ms;
+
+    &:hover {
+      opacity: 1;
+      color: #fff;
+    }
+  }
+
   .active {
     color: #fff;
     border-bottom-color: #fff;

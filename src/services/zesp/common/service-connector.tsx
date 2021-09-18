@@ -1,0 +1,205 @@
+import {Websocket, WebsocketBuilder} from "websocket-ts";
+import {IServerInfo} from "../../../pages/welcome/interfaces";
+import Constants from "./Constants";
+import {IZespResponseValidator} from "../interfaces/IZespResponseValidator";
+import {ZespDataEvent, ZespDataEventType} from "./ZespDataEvent";
+import {IRequestAsyncArgs, ISendArgs, ZespConnectedAction, ZespConnectorHandler, ZespConnectorListener} from "./service-connector.interfaces";
+import {AllMessagesZespResponseValidator} from "./ZespResponseValidators";
+
+export const useZespConnector = () => {
+  const _onMessageEvent = new EventTarget();
+  let _ws: Websocket | undefined = undefined;
+  let _server: IServerInfo | undefined;
+  let _lastMessageTimestamp: number = Date.now();
+  let _watcher: NodeJS.Timeout | undefined = undefined;
+
+  const _onMessageReceived = (ws: Websocket, e: MessageEvent) => {
+    _lastMessageTimestamp = Date.now();
+    const messageParts = e.data
+      .replace(/\|(?=([^"]*"[^"]*")*[^"]*$)/ig, "\x00")
+      .split("\x00");
+
+    if (messageParts.length == 0) {
+      console.warn("Received empty message from zesp");
+      return;
+    }
+
+    let messageType = messageParts.shift();
+
+    const jsonMatch = /\/(.+)\.json/ig.exec(messageType);
+    if (jsonMatch) {
+      messageParts.unshift(messageType);
+      messageType = "json";
+    }
+
+    const resultEvent = new ZespDataEvent(messageType, messageParts, e.data);
+    _onMessageEvent.dispatchEvent(resultEvent);
+  }
+
+  const _tryToCloseWS = (): boolean => {
+    if (_ws) {
+      try {
+        _ws.close(1000);
+        return true;
+      } catch {
+        // it's ok :P
+      }
+    }
+    return false;
+  }
+
+  const _tryConnectWs = (zespStatusChangeHandler: ZespConnectedAction) => new Promise<void>((resolve, reject) => {
+    const protocol = document.location.protocol === "https:" ? "wss" : "ws";
+    const serverAddress = `${protocol}://${_server!.address}:81`;
+    console.debug(`Create connection to ${serverAddress}`)
+    _ws = new WebsocketBuilder(serverAddress)
+      .onOpen(() => {
+        console.debug("ZESP connected");
+        zespStatusChangeHandler("connected");
+        resolve();
+      })
+      .onClose(() => {
+        console.debug("ZESP connection closed");
+        zespStatusChangeHandler("closed");
+        reject("ZESP connection closed");
+      })
+      .onError(() => reject("ZESP connection error"))
+      .onMessage(_onMessageReceived)
+      .build();
+  });
+
+  const _getBinaryData = (message: string): Uint8Array => {
+    const data = message.replaceAll(" ", "");
+    const dataHex = data.match(/[\da-f]{2}/gi)?.map(group => parseInt(group, 16)) as ArrayLike<number>;
+    return new Uint8Array(dataHex);
+  }
+
+  const _pingAsync = (): Promise<ZespDataEvent> =>
+    zespRequestAsync({data: "LoadJson|/ping.json", responseValidator: AllMessagesZespResponseValidator})
+
+  const _runWatcher = (zespStatusChangeHandler: ZespConnectedAction): Promise<void> => {
+    if (_watcher) {
+      console.debug("Stop old watcher");
+      clearInterval(_watcher);
+    }
+
+    console.debug("Start watcher");
+    _watcher = setInterval(() => {
+      if (_ws?.underlyingWebsocket?.readyState !== 1) return;
+
+      const periodWithoutMessageSeconds = (Date.now() - _lastMessageTimestamp) / 1000;
+      if (periodWithoutMessageSeconds > Constants.WatcherIntervalSeconds) {
+        _lastMessageTimestamp = Date.now() + Constants.DefaultRequestTimeoutSeconds * 1000;
+        if (_watcher) clearInterval(_watcher); // stop watcher until 'ping' finished
+        
+        _pingAsync()
+          .then(() => _runWatcher(zespStatusChangeHandler)) // everything fine, continue watching
+          .catch(() => zespStatusChangeHandler("reconnect")); // oops, try to restart. Do not start watcher at the moment
+      }
+    }, 5000);
+
+    return Promise.resolve();
+  }
+
+  const connectAsync = (server: IServerInfo, zespStatusChangeHandler: ZespConnectedAction, force: boolean) => {
+    _server = server;
+    return new Promise<void>((resolve, reject) => {
+      console.debug("Start WS connection...");
+
+      if (!force) {
+        if (_ws?.underlyingWebsocket?.readyState === 0) {
+          reject("Already connecting");
+          return;
+        }
+
+        if (_ws?.underlyingWebsocket?.readyState === 1) {
+          console.debug("ZESP already connected, skip connection");
+          resolve();
+          return;
+        }
+      }
+
+      _tryToCloseWS();
+      _tryConnectWs(zespStatusChangeHandler)
+        .then(() => _runWatcher(zespStatusChangeHandler))
+        .then(resolve)
+        .catch(reject);
+    })
+  }
+
+  const zespSend = (args: ISendArgs): void => {
+    if (!_ws) {
+      console.warn("WebSocket client is not initialized yet");
+      return;
+    }
+
+    const data = args.isBinary === true
+      ? _getBinaryData(args.data)
+      : args.data;
+
+    _ws.send(data);
+  }
+
+  const zespRequestAsync = (args: IRequestAsyncArgs) => new Promise<ZespDataEvent>((resolve, reject) => {
+    if (!args.timeoutSeconds || args.timeoutSeconds <= 0) args.timeoutSeconds = Constants.DefaultRequestTimeoutSeconds;
+    if (args.isBinary !== true) args.isBinary = false;
+
+    let responseReceived = false;
+    const validator = args.responseValidator;
+
+    // on response received from zesp
+    const listener = (event: Event) => {
+      const result = event as ZespDataEvent;
+      if (!validator.isValid(result)) return;
+
+      responseReceived = true;
+      _onMessageEvent.removeEventListener(ZespDataEventType, listener);
+      resolve(result);
+    }
+
+    // if no response for a specific time (timeout)
+    const onTimeout = () => {
+      if (responseReceived) return;
+
+      _onMessageEvent.removeEventListener(ZespDataEventType, listener);
+      console.warn(`zesp response did not received (timeout: ${args.timeoutSeconds} seconds)`);
+      reject("timeout");
+    };
+
+    // send request
+    try {
+      _onMessageEvent.addEventListener(ZespDataEventType, listener);
+      zespSend({data: args.data, isBinary: args.isBinary})
+      setTimeout(onTimeout, args.timeoutSeconds * 1000);
+    } catch (error) {
+      reject(`exception: ${error}`);
+    }
+  })
+
+  const subscribe = (validator: IZespResponseValidator, handler: ZespConnectorHandler): ZespConnectorListener => {
+    const listener = (event: Event): void => {
+      const zespEvent = event as ZespDataEvent;
+      if (!validator.isValid(zespEvent)) return;
+
+      handler(zespEvent);
+    }
+
+    _onMessageEvent.addEventListener(ZespDataEventType, listener)
+    return listener;
+  }
+
+  const unsubscribe = (listener: ZespConnectorListener) => _onMessageEvent.removeEventListener(ZespDataEventType, listener)
+
+  const getServerAddress = () => _server?.address;
+
+  return {
+    connectAsync,
+    zespSend,
+    zespRequestAsync,
+    subscribe,
+    unsubscribe,
+    getServerAddress,
+  }
+}
+
+export default useZespConnector;

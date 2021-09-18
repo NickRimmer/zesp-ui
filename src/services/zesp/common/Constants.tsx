@@ -3,10 +3,13 @@ const Result = {
   ConnectionStartTimeout: 100,
 
   // connection verify interval
-  VerifyConnectionTimeout: 5000,
+  RestartConnectionTimeout: 5000,
 
   // default timeout for requests in seconds 
   DefaultRequestTimeoutSeconds: 5,
+
+  // connection checker interval, should be greater then 'DefaultRequestTimeoutSeconds' 
+  WatcherIntervalSeconds: 15,
 }
 
 export default Result;

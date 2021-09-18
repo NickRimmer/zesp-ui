@@ -1,13 +1,13 @@
-import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {ZespRootData} from "./models/ZespRootData";
 import {ZespReportInfo} from "./models/ZespReportInfo";
 import {getDeviceModelSettings} from "./service-devices";
+import {IZespConnector} from "./common/service-connector.interfaces";
 
 export default {
   getRootDataAsync: (zesp: IZespConnector) => new Promise<ZespReportUpdates>((resolve, reject) => {
-    zesp.requestAsync({
+    zesp.zespRequestAsync({
       data: "get_Mi_lamp",
       responseValidator: TypedZespResponseValidator("Mi_lamp"),
     })

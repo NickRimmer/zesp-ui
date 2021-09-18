@@ -1,13 +1,14 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {FormControl, Row} from "react-bootstrap";
 import FormRange from "react-bootstrap/FormRange";
 import {LayoutSettingsLevel} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) => {
+  const {zespSend} = useContext(ZespContext);
   const minMaxAttributes = {
     min: props.config.arguments.min,
     max: props.config.arguments.max
@@ -32,7 +33,7 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
 
   const sendValueToZesp = (value: number) => {
     const data = formatCommand(props.config.arguments.command, value, props);
-    Single.ZespConnector.send({data: data});
+    zespSend({data: data});
   }
 
   const label = report?.label || props.config.label || "Level";

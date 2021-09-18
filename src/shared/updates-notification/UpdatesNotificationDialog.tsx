@@ -1,7 +1,12 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {DictionaryStrings} from "../../models/DictionaryStrings";
 import {Col, Modal, Row} from "react-bootstrap";
 import toast from "react-hot-toast";
+import {useDispatch, useSelector} from "react-redux";
+import {getUiSettings, setUiSettings} from "../../store/slices/settingsSlice";
+import {UiSettings} from "../../models/UiSettings";
+import {ZespContext} from "../agents/ZespAgent";
+import useZespSettings from "../../services/zesp/zespSettings.hook";
 
 interface IProps {
   zespFirmwareUpdate: DictionaryStrings,
@@ -15,23 +20,30 @@ const UpdatesNotificationDialog: React.FC<IProps> = ({
   zespFirmwareCurrentVersion
 }): React.ReactElement => {
   const [show, setShow] = useState(true);
+  const dispatch = useDispatch();
+  const zesp = useContext(ZespContext);
+  const SettingsService = useZespSettings(zesp);
+  const uiSettings = useSelector(getUiSettings);
+  const zespFirmwareUpdateVersion = zespFirmwareUpdate["ver"] || "unknown";
 
   const onHideHandler = () => setShow(false);
-
-  const zespFirmwareUpdateVersion = zespFirmwareUpdate["ver"] || "unknown";
 
   const updateData: DictionaryStrings = {
     ...{"Current version": zespFirmwareCurrentVersion},
     ...{"New version": zespFirmwareUpdateVersion},
     ...{...zespFirmwareUpdate, ...{"ver": undefined}} // skip ver from "other" properties, cause we'll show it before
   }
-
   const onUpdateClickHandler = () => {
     toast.success("Not implemented yet...", {icon: (<i className="bi bi-cone-striped text-warning"/>)});
   }
 
   const onSkipClickHandler = () => {
-    toast.success("Not implemented yet...", {icon: (<i className="bi bi-cone-striped text-warning"/>)});
+    const update: UiSettings = {...uiSettings || {} as UiSettings, ...{firmwareSkipUpdate: zespFirmwareUpdateVersion}};
+
+    dispatch(setUiSettings(update));
+    SettingsService.setUiSettings(update);
+
+    toast.success("Notification for this version disabled", {icon: (<i className="bi bi-bell-slash-fill text-success"/>)});
   }
 
   return (

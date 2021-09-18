@@ -23,7 +23,7 @@ export const settingsSlice = createSlice({
 
     setUiSettings: (state, action: PayloadAction<UiSettings>): void => {
       state.uiSettings = action.payload;
-    }
+    },
   }
 });
 

@@ -1,20 +1,21 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Button, ButtonGroup, Row} from "react-bootstrap";
 import {LayoutSettingsOnOff} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 export const OnOffRoot = (props: IDeviceControlProps<LayoutSettingsOnOff>) => {
+  const {zespSend} = useContext(ZespContext);
   const report = DeviceControls.getControlReport(props);
 
   const onHandler = () => {
-    Single.ZespConnector.send({data: props.config.arguments.commandOn, isBinary: true});
+    zespSend({data: props.config.arguments.commandOn, isBinary: true});
   };
 
   const offHandler = () => {
-    Single.ZespConnector.send({data: props.config.arguments.commandOff, isBinary: true});
+    zespSend({data: props.config.arguments.commandOff, isBinary: true});
   };
 
   return (
