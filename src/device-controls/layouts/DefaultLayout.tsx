@@ -12,6 +12,7 @@ export const DefaultLayout: FunctionComponent<LayoutProps> = (props: LayoutProps
 
     if (element?.type.name.toLowerCase() === "UnknownControl".toLocaleLowerCase()) unknown.push(element);
     else controls.push(element);
+    console.log(element?.type.name); //TODO remove this log
   });
 
   // show by default if now identified controls found
