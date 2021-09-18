@@ -21,7 +21,7 @@ export default (props: IProps) => {
 
   return (
     <div className="container welcome-page h-100">
-      <FadeIn>
+      <FadeIn className="fullscreen">
         <Card className="text-start">
           <Card.Header>{t("list.title")}</Card.Header>
           <Card.Body>

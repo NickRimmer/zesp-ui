@@ -1,3 +1,7 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
 .welcome-page {
   display: flex;
   flex-direction: column;
@@ -6,6 +10,10 @@
 
   .card {
     width: 430px;
+
+    @include media-breakpoint-only(xs) {
+      width: 100%;
+    }
   }
 
   .servers-list {

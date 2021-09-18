@@ -2,15 +2,14 @@ import React, {useState} from 'react';
 import {BrowserRouter as Router, Switch} from "react-router-dom";
 import './bootstrap-updates.scss';
 import './App.scss';
-import TopMenu from "./shared/top-menu";
 import LoadingSpinner from "./shared/loading-spinner";
 import {Toaster} from "react-hot-toast";
 import {Routes} from "./Routes";
 import {WelcomePage} from "./pages/welcome";
 import {IServerInfo} from "./pages/welcome/interfaces";
 import {ZespAgent} from "./shared/agents/ZespAgent";
-import {UpdatesNotification} from "./shared/updates-notification";
 import {AppFooter} from "./shared/footer";
+import AppHeader from "./shared/header";
 
 const Content = () => {
   const [serverIndex, setServerIndex] = useState<number | null>(null);
@@ -28,13 +27,7 @@ const App = (props: { server: IServerInfo }) => {
   return (
     <ZespAgent server={props.server}>
       <div className="container-md d-flex w-100 h-100 p-3 mx-auto flex-column">
-        <header className="masthead">
-          <a href="/"><h3 className="masthead-brand">ZESP:UI</h3></a>
-          <div className="d-flex flex-row align-items-center">
-            <TopMenu/>
-            <UpdatesNotification/>
-          </div>
-        </header>
+        <AppHeader/>
         <main role="main" className="text-start d-flex flex-grow-1 flex-column">
           <Routes/>
         </main>
