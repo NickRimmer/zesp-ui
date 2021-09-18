@@ -1,15 +1,21 @@
 import React from "react";
 import "./styles.scss"
-import {Spinner} from "react-bootstrap";
+import {Modal, Spinner} from "react-bootstrap";
 import {useSelector} from "react-redux";
-import {getSpinnerShow} from "../../store/slices/spinnerSlice";
+import {getSpinner} from "../../store/slices/spinnerSlice";
 
 const LoadingSpinner = () => {
-  const spinnerShow = useSelector(getSpinnerShow);
+  const {spinnerShow, spinnerMessage} = useSelector(getSpinner);
+
   return (
-    <div className={`loading-overlay ${spinnerShow ? "show" : "hidden"}`}>
-      <Spinner animation="border" variant="light"/>
-    </div>
+    <Modal show={spinnerShow} centered size="sm" backdrop={true}>
+      <Modal.Body>
+        <div className="d-flex align-items-center">
+          <Spinner animation="border" variant="primary" className="me-3"/>
+          <div>{spinnerMessage}</div>
+        </div>
+      </Modal.Body>
+    </Modal>
   );
 }
 
