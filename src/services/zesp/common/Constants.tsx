@@ -7,6 +7,9 @@ const Result = {
 
   // default timeout for requests in seconds 
   DefaultRequestTimeoutSeconds: 5,
+
+  // connection checker interval, should be greater then 'DefaultRequestTimeoutSeconds' 
+  WatcherIntervalSeconds: 15,
 }
 
 export default Result;

@@ -4,15 +4,17 @@ import Constants from "./Constants";
 import {IZespResponseValidator} from "../interfaces/IZespResponseValidator";
 import {ZespDataEvent, ZespDataEventType} from "./ZespDataEvent";
 import {IRequestAsyncArgs, ISendArgs, ZespConnectedAction, ZespConnectorHandler, ZespConnectorListener} from "./service-connector.interfaces";
-
-//TODO move ZespConnectedAction to service-connector.interfaces.tsx
+import {AllMessagesZespResponseValidator} from "./ZespResponseValidators";
 
 export const useZespConnector = () => {
   const _onMessageEvent = new EventTarget();
   let _ws: Websocket | undefined = undefined;
   let _server: IServerInfo | undefined;
+  let _lastMessageTimestamp: number = Date.now();
+  let _watcher: NodeJS.Timeout | undefined = undefined;
 
   const _onMessageReceived = (ws: Websocket, e: MessageEvent) => {
+    _lastMessageTimestamp = Date.now();
     const messageParts = e.data
       .replace(/\|(?=([^"]*"[^"]*")*[^"]*$)/ig, "\x00")
       .split("\x00");
@@ -72,6 +74,33 @@ export const useZespConnector = () => {
     return new Uint8Array(dataHex);
   }
 
+  const _pingAsync = (): Promise<ZespDataEvent> =>
+    zespRequestAsync({data: "LoadJson|/ping.json", responseValidator: AllMessagesZespResponseValidator})
+
+  const _runWatcher = (zespStatusChangeHandler: ZespConnectedAction): Promise<void> => {
+    if (_watcher) {
+      console.debug("Stop old watcher");
+      clearInterval(_watcher);
+    }
+
+    console.debug("Start watcher");
+    _watcher = setInterval(() => {
+      if (_ws?.underlyingWebsocket?.readyState !== 1) return;
+
+      const periodWithoutMessageSeconds = (Date.now() - _lastMessageTimestamp) / 1000;
+      if (periodWithoutMessageSeconds > Constants.WatcherIntervalSeconds) {
+        _lastMessageTimestamp = Date.now() + Constants.DefaultRequestTimeoutSeconds * 1000;
+        if (_watcher) clearInterval(_watcher); // stop watcher until 'ping' finished
+        
+        _pingAsync()
+          .then(() => _runWatcher(zespStatusChangeHandler)) // everything fine, continue watching
+          .catch(() => zespStatusChangeHandler("reconnect")); // oops, try to restart. Do not start watcher at the moment
+      }
+    }, 5000);
+
+    return Promise.resolve();
+  }
+
   const connectAsync = (server: IServerInfo, zespStatusChangeHandler: ZespConnectedAction, force: boolean) => {
     _server = server;
     return new Promise<void>((resolve, reject) => {
@@ -92,6 +121,7 @@ export const useZespConnector = () => {
 
       _tryToCloseWS();
       _tryConnectWs(zespStatusChangeHandler)
+        .then(() => _runWatcher(zespStatusChangeHandler))
         .then(resolve)
         .catch(reject);
     })
@@ -110,7 +140,6 @@ export const useZespConnector = () => {
     _ws.send(data);
   }
 
-  //TODO move request to separate hook
   const zespRequestAsync = (args: IRequestAsyncArgs) => new Promise<ZespDataEvent>((resolve, reject) => {
     if (!args.timeoutSeconds || args.timeoutSeconds <= 0) args.timeoutSeconds = Constants.DefaultRequestTimeoutSeconds;
     if (args.isBinary !== true) args.isBinary = false;
