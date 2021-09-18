@@ -26,8 +26,7 @@ const Content = () => {
 
 const App = (props: { server: IServerInfo }) => {
   return (
-    <>
-      <ZespAgent server={props.server}/>
+    <ZespAgent server={props.server}>
       <div className="container-md d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header className="masthead">
           <a href="/"><h3 className="masthead-brand">ZESP:UI</h3></a>
@@ -41,7 +40,7 @@ const App = (props: { server: IServerInfo }) => {
         </main>
         <AppFooter/>
       </div>
-    </>
+    </ZespAgent>
   )
 }
 

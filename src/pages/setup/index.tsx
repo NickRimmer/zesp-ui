@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment, useContext, useEffect} from "react";
 import {Container, Nav} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {FadeIn} from "../../shared/fadein-transition";
@@ -8,17 +8,20 @@ import {BsGearFill} from "react-icons/bs";
 import {useDispatch, useSelector} from "react-redux";
 import {setSpinnerShow} from "../../store/slices/spinnerSlice"
 import {setZespSettings, getZespSettings} from "../../store/slices/settingsSlice"
-import ZespSettingsService from "../../services/zesp/service-settings";
+import useZespSettings from "../../services/zesp/zespSettings.hook";
 import {Dispatch} from "@reduxjs/toolkit";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 const Result = () => {
   const dispatch = useDispatch();
+  const zesp = useContext(ZespContext);
   const settings = useSelector(getZespSettings);
+  const {getAsync} = useZespSettings(zesp);
 
   useEffect(() => {
     dispatch(setSpinnerShow(true));
 
-    ZespSettingsService.getAsync()
+    getAsync()
       .then(data => {
         dispatch(setZespSettings(data));
       })
@@ -48,23 +51,27 @@ const Result = () => {
   );
 }
 
-export const SaveSettings = (data: Partial<ZespSettings>, settings: ZespSettings | undefined, dispatch: Dispatch) => new Promise<void>((resolve, reject) => {
-  if (!settings) reject("Settings not loaded");
-  dispatch(setSpinnerShow(true));
+export const SaveSettings = (
+  data: Partial<ZespSettings>,
+  settings: ZespSettings | undefined,
+  dispatch: Dispatch,
+  setAsync: { (settings: ZespSettings): Promise<void> }) =>
+  new Promise<void>((resolve, reject) => {
+    if (!settings) reject("Settings not loaded");
+    dispatch(setSpinnerShow(true));
 
-  const updatedSettings: ZespSettings = ({...settings, ...data}) as ZespSettings;
-  ZespSettingsService
-    .setAsync(updatedSettings)
-    .then(() => {
-      dispatch(setZespSettings(updatedSettings));
-      resolve();
-      toast.success("Settings updated");
-    })
-    .catch(reason => {
-      toast.error(`Cannot save: ${reason}`);
-      reject(reason);
-    })
-    .finally(() => dispatch(setSpinnerShow(false)));
-})
+    const updatedSettings: ZespSettings = ({...settings, ...data}) as ZespSettings;
+    setAsync(updatedSettings)
+      .then(() => {
+        dispatch(setZespSettings(updatedSettings));
+        resolve();
+        toast.success("Settings updated");
+      })
+      .catch(reason => {
+        toast.error(`Cannot save: ${reason}`);
+        reject(reason);
+      })
+      .finally(() => dispatch(setSpinnerShow(false)));
+  })
 
 export default Result;

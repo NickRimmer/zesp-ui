@@ -1,5 +1,4 @@
 import {Dispatch} from "redux";
-import {Single} from "../../services/single";
 import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
 import {setConnected, setDisconnected} from "../../store/slices/zespSlice";
 import {IServerInfo} from "../../pages/welcome/interfaces";
@@ -7,7 +6,7 @@ import ServiceDevices from "../../services/zesp/service-devices";
 import {setDevices, updateReport, updateRootReports} from "../../store/slices/devicesSlice";
 import {setZespFirmwareInstalledVersion, setZespFirmwareUpdate} from "../../store/slices/zespFirmwareSlice";
 import ServiceRoot from "../../services/zesp/service-root";
-import ServiceSettings from "../../services/zesp/service-settings";
+import useZespSettings from "../../services/zesp/zespSettings.hook";
 import ServiceFirmware from "../../services/zesp/service-firmware";
 import {UiDefaultSettings, UiSettings} from "../../models/UiSettings";
 import {setUiSettings} from "../../store/slices/settingsSlice";
@@ -20,8 +19,7 @@ export const useZespAgent = (dispatch: Dispatch) => {
   const firmwareUpdateMinTimout = 1000 * 60 * 60 * 24;
 
   // init
-  const connectAsync = (server: IServerInfo): Promise<IZespConnector> => Single
-    .ZespConnector
+  const connectAsync = (server: IServerInfo, zesp: IZespConnector): Promise<IZespConnector> => zesp
     .connectAsync(server, (status) => dispatch(status ? setConnected() : setDisconnected()))
 
   // read devices list
@@ -42,7 +40,7 @@ export const useZespAgent = (dispatch: Dispatch) => {
     .then(() => zesp);
 
   // read ui settings
-  const readUiSettings = (zesp: IZespConnector): Promise<IZespConnector> => ServiceSettings
+  const readUiSettings = (zesp: IZespConnector): Promise<IZespConnector> => useZespSettings(zesp)
     .getCustomAsync<UiSettings>("zesp_ui")
     .then(settings => {
       const result = settings || UiDefaultSettings;
@@ -60,7 +58,7 @@ export const useZespAgent = (dispatch: Dispatch) => {
         dispatch(setZespFirmwareUpdate(firmwareInfo.updatesInformation));
 
         uiSettingsRef.current = {...uiSettingsRef.current, ...{firmwareUpdate: firmwareInfo.updatesInformation, firmwareLastCheck: Date.now()}};
-        ServiceSettings.setCustom("zesp_ui", uiSettingsRef.current);
+        useZespSettings(zesp).setCustom("zesp_ui", uiSettingsRef.current);
 
         dispatch(setUiSettings(uiSettingsRef.current));
         console.debug("Firmware updates information loaded");

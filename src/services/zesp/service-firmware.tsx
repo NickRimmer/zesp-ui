@@ -5,7 +5,7 @@ import {DictionaryStrings} from "../../models/DictionaryStrings";
 
 export default {
   getFirmwareInfoAsync: (zesp: IZespConnector): Promise<FirmwareInfo> => zesp
-    .requestAsync({
+    .zespRequestAsync({
       data: "loadfwlist",
       responseValidator: TypedZespResponseValidator("rsploadfwlist"),
       timeoutSeconds: 15,

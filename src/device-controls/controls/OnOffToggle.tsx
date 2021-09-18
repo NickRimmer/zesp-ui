@@ -1,27 +1,28 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Button, ButtonGroup, Row} from "react-bootstrap";
 import {LayoutSettingsOnOffToggle} from "../settings";
 import {IDeviceControlProps} from "../../interfaces/IDeviceControlProps";
-import {Single} from "../../services/single";
 import {DeviceControls} from "../../services/deviceControls";
 import {DeviceControlCol1, DeviceControlCol2} from "../index";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 export const OnOffToggle = (props: IDeviceControlProps<LayoutSettingsOnOffToggle>) => {
+  const {zespSend} = useContext(ZespContext);
   const report = DeviceControls.getControlReport(props);
 
   const onHandler = () => {
     const command = props.config.arguments.commandOn.replace("{device}", props.deviceInfo.zespInfo.Device)
-    Single.ZespConnector.send({data: command, isBinary: true});
+    zespSend({data: command, isBinary: true});
   };
 
   const offHandler = () => {
     const command = props.config.arguments.commandOff.replace("{device}", props.deviceInfo.zespInfo.Device)
-    Single.ZespConnector.send({data: command, isBinary: true});
+    zespSend({data: command, isBinary: true});
   };
 
   const toggleHandler = () => {
     const command = props.config.arguments.commandToggle.replace("{device}", props.deviceInfo.zespInfo.Device)
-    Single.ZespConnector.send({data: command, isBinary: true});
+    zespSend({data: command, isBinary: true});
   }
 
   const label = report?.label || props.config.label || "Power";

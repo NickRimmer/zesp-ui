@@ -16,7 +16,7 @@ interface IGetDevicesResponse {
 
 const ServiceDevices = {
   getDevicesListAsync: (zesp: IZespConnector) => new Promise<IGetDevicesResponse>((resolve, reject) => {
-    zesp.requestAsync({
+    zesp.zespRequestAsync({
       data: "getDeviceList",
       responseValidator: TypedZespResponseValidator("alldev")
     })

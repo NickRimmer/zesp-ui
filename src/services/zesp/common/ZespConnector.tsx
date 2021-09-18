@@ -2,7 +2,6 @@ import {Websocket, WebsocketBuilder} from "websocket-ts";
 import Constants from "./Constants";
 import {ZespDataEvent, ZespDataEventType} from "./ZespDataEvent";
 import {IZespConnector, ZespConnectedAction, ZespConnectorHandler, ZespConnectorListener} from "../interfaces/IZespConnector";
-import {Single} from "../../single";
 import {CloseEventCodes} from "../enums/CloseEventCodes";
 import {IZespResponseValidator} from "../interfaces/IZespResponseValidator";
 import {IServerInfo} from "../../../pages/welcome/interfaces";
@@ -19,17 +18,12 @@ const ZespConnector: IZespConnector = {
     server,
     zespConnectedAction: ZespConnectedAction
   ) => new Promise<IZespConnector>((resolve, reject) => {
-    if (_server) {
-      console.warn("ZespConnector already initialized");
-      return;
-    }
-
     _server = server;
 
     // start with delay
-    setTimeout(() => ZespConnector.reconnectAsync(true, zespConnectedAction)
+    setTimeout(() => ZespConnector.zespReconnectAsync(true, zespConnectedAction)
         .then(() => {
-          resolve(Single.ZespConnector)
+          resolve(ZespConnector)
         })
         .catch(error => {
           zespConnectedAction(false);
@@ -38,7 +32,7 @@ const ZespConnector: IZespConnector = {
       Constants.ConnectionStartTimeout);
 
     // setup watchdog
-    _reconnecter = setInterval(() => ZespConnector.reconnectAsync(false, zespConnectedAction)
+    _reconnecter = setInterval(() => ZespConnector.zespReconnectAsync(false, zespConnectedAction)
         // .then(() => resolve(Single.ZespConnector))
         .catch(error => {
           console.warn(`Reconnection is failed: ${error}`);
@@ -48,30 +42,23 @@ const ZespConnector: IZespConnector = {
       Constants.VerifyConnectionTimeout);
   }),
 
-  disconnect: () => {
+  disconnect: (): void => {
     if (_reconnecter) {
       clearInterval(_reconnecter);
       _reconnecter = null;
     }
-    _server = null;
 
-    try {
-      if (_ws?.underlyingWebsocket?.readyState === 3 || _ws?.underlyingWebsocket?.readyState == null) {
-        console.debug("zesp connection already closed");
-        return;
-      } else if (_ws?.underlyingWebsocket?.readyState === 1) {
-        console.debug("zesp connection closing...");
+    if (_ws) {
+      onMessageEvent.removeEventListener(ZespDataEventType, null);
+      try {
         _ws.close(1000); // closed normal
-        return;
-      } else {
-        _ws?.close(1000); // closed normal
+      } catch {
+        //it's ok (;
       }
-    } catch {
-      //it's ok (;
     }
   },
 
-  reconnectAsync: (force, zespConnectedAction) => new Promise<void>((resolve, reject) => {
+  zespReconnectAsync: (force, zespConnectedAction) => new Promise<void>((resolve, reject) => {
     if (!_server) {
       reject("Server configuration missed");
       // throw new Error("ZespConnector is not initialized yet")
@@ -118,7 +105,7 @@ const ZespConnector: IZespConnector = {
       .build();
   }),
 
-  send: (args) => {
+  zespSend: (args): void => {
     if (!_ws) {
       console.error("ZespConnector.send: WebSocket client is not initialized yet");
       return;
@@ -131,7 +118,7 @@ const ZespConnector: IZespConnector = {
     _ws.send(data);
   },
 
-  requestAsync: (args) => new Promise<ZespDataEvent>(((resolve, reject) => {
+  zespRequestAsync: (args) => new Promise<ZespDataEvent>(((resolve, reject) => {
     if (!args.timeoutSeconds || args.timeoutSeconds <= 0) args.timeoutSeconds = Constants.DefaultRequestTimeoutSeconds;
     if (args.isBinary !== true) args.isBinary = false;
 
@@ -160,30 +147,12 @@ const ZespConnector: IZespConnector = {
     // send request
     try {
       onMessageEvent.addEventListener(ZespDataEventType, listener);
-      ZespConnector.send({data: args.data, isBinary: args.isBinary})
+      ZespConnector.zespSend({data: args.data, isBinary: args.isBinary})
       setTimeout(onTimeout, args.timeoutSeconds * 1000);
     } catch (error) {
       reject(`exception: ${error}`);
     }
   })),
-
-  request: (args) => new Promise<IZespConnector>((resolve, reject) => {
-    ZespConnector
-      .requestAsync(args)
-      .then(event => {
-        if (args.onSuccess) args.onSuccess(event);
-        else console.debug(`zesp request completed (${args.responseValidator.name})`);
-
-        resolve(Single.ZespConnector);
-      })
-      .catch(error => {
-        const errorMessage = `${error} (${args.responseValidator.name}; ${args.data})`;
-
-        if (args.onError) args.onError(errorMessage);
-        else console.warn(`zesp request failed: ${errorMessage}`);
-        reject(errorMessage);
-      });
-  }),
 
   subscribe: (validator: IZespResponseValidator, handler: ZespConnectorHandler): ZespConnectorListener => {
     const listener = (event: Event): void => {

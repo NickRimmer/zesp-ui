@@ -1,11 +1,12 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {DictionaryStrings} from "../../models/DictionaryStrings";
 import {Col, Modal, Row} from "react-bootstrap";
 import toast from "react-hot-toast";
 import {useDispatch, useSelector} from "react-redux";
-import SettingsService from "../../services/zesp/service-settings";
 import {getUiSettings, setUiSettings} from "../../store/slices/settingsSlice";
 import {UiSettings} from "../../models/UiSettings";
+import {ZespContext} from "../agents/ZespAgent";
+import useZespSettings from "../../services/zesp/zespSettings.hook";
 
 interface IProps {
   zespFirmwareUpdate: DictionaryStrings,
@@ -20,6 +21,8 @@ const UpdatesNotificationDialog: React.FC<IProps> = ({
 }): React.ReactElement => {
   const [show, setShow] = useState(true);
   const dispatch = useDispatch();
+  const zesp = useContext(ZespContext);
+  const SettingsService = useZespSettings(zesp);
   const uiSettings = useSelector(getUiSettings);
   const zespFirmwareUpdateVersion = zespFirmwareUpdate["ver"] || "unknown";
 

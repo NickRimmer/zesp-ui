@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {AppDialog} from "../app-dialog";
 import {Button} from "react-bootstrap";
 import {useDispatch} from "react-redux";
 import {setSpinner} from "../../store/slices/spinnerSlice";
-import {Single} from "../../services/single";
+import {ZespContext} from "../agents/ZespAgent";
 
 export const PowerDialogLink: React.FC = (): React.ReactElement => {
   const [show, setShow] = useState(false);
+  const {zespSend} = useContext(ZespContext);
   const dispatch = useDispatch();
 
   const showPowerDialogClickHandler = () => setShow(true);
@@ -14,14 +15,14 @@ export const PowerDialogLink: React.FC = (): React.ReactElement => {
   const onRestartClickedHandler = () => {
     dispatch(setSpinner({show: true, message: "Restarting, please wait..."}));
     setShow(false);
-    Single.ZespConnector.send({data: "RebootESP"});
+    zespSend({data: "RebootESP"});
   };
 
   const onShutdownClickedHandler = () => {
     dispatch(setSpinner({show: true, message: "Shutting down..."}));
     setShow(false);
     setTimeout(() => document.location.href = "/", 2000);
-    Single.ZespConnector.send({data: "Shutdown"});
+    zespSend({data: "Shutdown"});
   };
 
   const navLink = (<span className="nav-link clickable" onClick={showPowerDialogClickHandler}><i className="bi bi-power"/></span>)

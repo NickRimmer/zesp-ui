@@ -1,16 +1,21 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useContext} from "react";
 import {IServerInfo} from "../../pages/welcome/interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {getStatus, setInitialized} from "store/slices/zespSlice";
 import useZespAgent from "./ZespAgent.hook";
+import ZespConnectorImplementation from "../../services/zesp/common/ZespConnector";
+import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
 
 interface IProps {
   server: IServerInfo
 }
 
-export const ZespAgent = (props: IProps) => {
+export const ZespContext = React.createContext<IZespConnector>(ZespConnectorImplementation);
+
+export const ZespAgent: React.FC<IProps> = ({server, children}): React.ReactElement => {
   const dispatch = useDispatch();
   const zespStatus = useSelector(getStatus);
+  const zesp = useContext(ZespContext);
   const {
     connectAsync,
     getDevices,
@@ -20,9 +25,15 @@ export const ZespAgent = (props: IProps) => {
     subscribeReportUpdates,
   } = useZespAgent(dispatch);
 
-  if (zespStatus === "connected") return (<Fragment/>);
+  if (zespStatus === "connected") return (
+    <ZespContext.Provider value={ZespConnectorImplementation}>
+      {children}
+    </ZespContext.Provider>
+  );
 
-  connectAsync(props.server)
+  if (zespStatus !== "disconnected") return (<Fragment/>);
+
+  connectAsync(server, zesp)
     .then(getDevices)
     .then(getRoot)
     .then(readUiSettings)

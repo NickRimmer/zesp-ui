@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {FadeIn} from "../../shared/fadein-transition";
 import {Button, Card} from "react-bootstrap";
 import {ReactForm} from "../../shared/form/react-form";
-import {Single} from "../../services/single";
 import {AllMessagesZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 const maxMessagesCount = 15;
 const predefinedMessages = ["getDeviceList", "get_Mi_lamp", "LoadJson|/location.json", "LoadJson|/groups.json", "LoadJson|/zesp_ui.json"];
@@ -13,7 +13,8 @@ interface IFormData {
   messageToSend?: string,
 }
 
-export default () => {
+export default (): React.ReactElement => {
+  const {zespSend, subscribe, unsubscribe} = useContext(ZespContext);
   const [messages, _setMessages] = useState<string[]>([]);
   const [messageSendValue, setMessageSendValue] = useState<string>("");
   const [paused, _setPaused] = useState<boolean>(false);
@@ -54,7 +55,7 @@ export default () => {
   const onSend = (data: IFormData) => {
     if (!data.messageToSend) return;
     addMessages(`>${data.messageToSend}`);
-    Single.ZespConnector.send({data: data.messageToSend});
+    zespSend({data: data.messageToSend});
   }
 
   const onSendPredefined = (event: React.MouseEvent): void => {
@@ -65,7 +66,7 @@ export default () => {
 
   const onSendBinary = (message?: string | null): void => {
     const data = message || messageSendValue;
-    Single.ZespConnector.send({data: data, isBinary: true});
+    zespSend({data: data, isBinary: true});
 
     // const dataHex = data.match(/[\da-f]{2}/gi)?.map(group => parseInt(group, 16)) as ArrayLike<number>;
     // const dataToSend = new Uint8Array(dataHex);
@@ -80,11 +81,11 @@ export default () => {
   }
 
   useEffect(() => {
-    const listener = Single.ZespConnector.subscribe(AllMessagesZespResponseValidator, (event) => {
+    const listener = subscribe(AllMessagesZespResponseValidator, (event) => {
       const message = event.response;
       addMessages(message);
     });
-    return () => Single.ZespConnector.unsubscribe(listener);
+    return () => unsubscribe(listener);
   }, []);
 
   return (

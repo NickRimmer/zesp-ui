@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {Button, Card, Col, Row} from "react-bootstrap";
 import {CheckGroupInline, InputGroupHorizontal} from "../../shared/form";
@@ -8,16 +8,20 @@ import {ZespMqttSettings} from "../../services/zesp/models/ZespSettings";
 import {SaveSettings} from "./index";
 import {useDispatch, useSelector} from "react-redux";
 import {getZespSettings} from "../../store/slices/settingsSlice";
+import useZespSettings from "../../services/zesp/zespSettings.hook";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 const Result = () => {
   const dispatch = useDispatch();
+  const zesp = useContext(ZespContext);
+  const zespSettings = useZespSettings(zesp);
   const allSettings = useSelector(getZespSettings);
   const {t} = useTranslation(["pages.setup-mqtt", "common"]);
 
   if (!allSettings) return (<div>No settings found...</div>);
   const settings = allSettings.MQTT;
 
-  const onSubmit = (data: ZespMqttSettings) => SaveSettings({MQTT: data}, allSettings, dispatch);
+  const onSubmit = (data: ZespMqttSettings) => SaveSettings({MQTT: data}, allSettings, dispatch, zespSettings.setAsync);
 
   return (
     <FadeIn>

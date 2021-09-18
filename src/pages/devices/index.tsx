@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./styles.scss";
 import {FadeIn} from "../../shared/fadein-transition";
 import {Card, Row} from "react-bootstrap";
@@ -10,20 +10,22 @@ import HomeAutoClusters from "../../data/reports.json";
 import {DataReportInfo} from "../../models/DataReportInfo";
 import {Devices} from "../../services/devices";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
-import {Single} from "../../services/single";
 import {getAllDevices} from "../../store/slices/devicesSlice";
 import {useSelector} from "react-redux";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
-const Result = () => {
+const Result: React.FC = (): React.ReactElement => {
+  const {getServerAddress} = useContext(ZespContext);
   const devices = useSelector(getAllDevices, (a: DeviceInfo[], b: DeviceInfo[]) => a.length === b.length);
   if (devices.length == 0) return (
     <div>No devices found...</div>
   )
 
   console.debug("Building list of devices to show...");
+  const serverAddress = getServerAddress() || "/";
   const deviceItems = [...devices]
     .sort(devicesSorting)
-    .map(buildListItem);
+    .map(x => buildListItem(x, serverAddress));
 
   console.debug("devices page updated...");
   return (
@@ -66,9 +68,9 @@ const devicesSorting = (a: DeviceInfo, b: DeviceInfo): number => {
   return 0;
 }
 
-const buildListItem = (device: DeviceInfo): DeviceListItem => {
+const buildListItem = (device: DeviceInfo, serverAddress: string): DeviceListItem => {
   const title = device.zespInfo.Name && device.zespInfo.Name.length > 0 ? device.zespInfo.Name : device.zespInfo.ModelId;
-  const image = getImageUrl(device);
+  const image = getImageUrl(device, serverAddress);
   const tags = getTagsFromReports(device.zespInfo.Report, device.zespInfo.DevType);
 
   return {
@@ -79,12 +81,11 @@ const buildListItem = (device: DeviceInfo): DeviceListItem => {
   };
 }
 
-const getImageUrl = (device: DeviceInfo): string => {
+const getImageUrl = (device: DeviceInfo, serverAddress: string): string => {
   // device.settings?.image || device.zespInfo.Img
   if (device.settings?.image)
     return `${process.env.PUBLIC_URL}/device-images/${device.settings.image}`;
 
-  const serverAddress = Single.ZespConnector.getServerAddress();
   if (device.zespInfo.Img)
     return `http://${serverAddress}:8081/${device.zespInfo.Img}`
 

@@ -7,7 +7,7 @@ import {getDeviceModelSettings} from "./service-devices";
 
 export default {
   getRootDataAsync: (zesp: IZespConnector) => new Promise<ZespReportUpdates>((resolve, reject) => {
-    zesp.requestAsync({
+    zesp.zespRequestAsync({
       data: "get_Mi_lamp",
       responseValidator: TypedZespResponseValidator("Mi_lamp"),
     })
