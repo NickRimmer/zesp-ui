@@ -1,6 +1,6 @@
 import {DataLayoutItemsGroup} from "../../models/DataControlSettings";
-import {Dropdown, Modal} from "react-bootstrap";
-import React from "react";
+import {Button, Dropdown, Modal, OverlayTrigger, Popover} from "react-bootstrap";
+import React, {useState} from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
 
 export default (props: {
@@ -13,7 +13,7 @@ export default (props: {
   onDeleteDeviceHandler: () => void,
   onDebugDeviceHandler: () => void,
 }) => {
-  // const [showDropdown, setShowDropdown] = useState(false);
+  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const title = props.device.zespInfo.Name || props.device.zespInfo.ModelId;
 
   const buildMultiply = () => (
@@ -38,21 +38,35 @@ export default (props: {
   const headerClassName = props.groups.length > 1 ? "with-tabs" : "";
   const headerContent = props.groups.length > 1 ? buildMultiply() : buildSingle();
 
+  const onDeleteDeviceHandler = () => {
+    if (deleteConfirmed) props.onDeleteDeviceHandler();
+  }
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3" className="bg-danger text-light">Achtung! Are you sure?</Popover.Header>
+      <Popover.Body>
+        To delete device registration, click <span className="badge bg-danger">Delete</span> one more time...
+      </Popover.Body>
+    </Popover>
+  );
+
   return (
     <Modal.Header className={`${headerClassName} with-buttons`}>
       <div>{headerContent}</div>
       <div className="text-end modal-right-buttons">
         <Dropdown className="d-inline-block">
-          {/*<button type="button" className="btn" onClick={() => setShowDropdown(!showDropdown)}><i className="bi bi-three-dots-vertical"/></button>*/}
           <Dropdown.Toggle variant="link"><i className="bi bi-three-dots-vertical"/></Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item onClick={props.onEditDeviceHandler}>Edit device</Dropdown.Item>
-            <Dropdown.Item onClick={props.onDeleteDeviceHandler}>Delete</Dropdown.Item>
+            <OverlayTrigger trigger="click" placement="left" overlay={popover} rootClose={true} onToggle={setDeleteConfirmed}>
+              <button className="dropdown-item" onClick={onDeleteDeviceHandler}>Delete</button>
+            </OverlayTrigger>
             <Dropdown.Divider/>
             <Dropdown.Item onClick={props.onDebugDeviceHandler}>Debug</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        {/*<button type="button" className="btn"><i className="bi bi-three-dots-vertical"/></button>*/}
+
         <span className="border-end mx-2"/>
         <button type="button" className="btn" aria-label="Close" onClick={props.onCloseClickHandler}><i className="bi bi-x-lg"/></button>
       </div>

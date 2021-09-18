@@ -8,13 +8,16 @@ import CustomBody from "./body";
 import CustomDeviceNotFound from "./not-found";
 import toast from "react-hot-toast";
 import {getDeviceByIee} from "../../store/slices/devicesSlice";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/configure";
 import {DeviceInfo} from "../../models/DeviceInfo";
+import {setSpinner, setSpinnerShow} from "../../store/slices/spinnerSlice";
 
 export default () => {
   const {ieee} = useParams<{ ieee: string }>();
   const [show, setShow] = useState(true);
+  const [autoExit, setAutoExit] = useState(false);
+  const dispatch = useDispatch();
   const history = useHistory();
   const deviceInfo = useSelector((state: RootState) => getDeviceByIee(state, ieee), (a: DeviceInfo | undefined, b: DeviceInfo | undefined) => {
     if (!a || !b) return false;
@@ -38,17 +41,36 @@ export default () => {
 
   const [activeGroupName, setActiveGroupName] = useState(groups[0].name);
 
-  const onCloseClickHandler = () => setShow(false);
-  const handleExit = () => setTimeout(() => history.push("/devices"), 100);
+  const returnBack = () => history.push("/devices");
+
+  const onCloseClickHandler = () => {
+    setAutoExit(true);
+    setShow(false)
+  };
+  const handleExit = () => {
+    if (!autoExit) return;
+    setTimeout(returnBack, 100)
+  };
   const onDebugDeviceHandler = () => {
     console.log(deviceInfo);
     toast.success("Check console for debug info", {icon: "👽"});
   }
 
+  const onDeleteDeviceHandler = () => {
+    dispatch(setSpinner({show: true, message: "Deleting..."}));
+    setShow(false);
+
+    setTimeout(() => {
+      toast.success("Device deleted", {icon: "😵‍💫"});
+      dispatch(setSpinnerShow(false));
+      returnBack();
+    }, 3000);
+  }
+
   const headerHandlers = {
     onCloseClickHandler,
     onEditDeviceHandler: () => console.debug("edit clicked"),
-    onDeleteDeviceHandler: () => console.debug("delete clicked"),
+    onDeleteDeviceHandler,
     onDebugDeviceHandler,
   }
 
