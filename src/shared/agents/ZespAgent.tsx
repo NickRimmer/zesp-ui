@@ -1,21 +1,34 @@
-import React, {Fragment, useContext} from "react";
+import React, {Fragment, useContext, useEffect, useRef, useState} from "react";
 import {IServerInfo} from "../../pages/welcome/interfaces";
 import {useDispatch, useSelector} from "react-redux";
-import {getStatus, setInitialized} from "store/slices/zespSlice";
+import {getStatus, setConnectionStatus, setInitialized} from "store/slices/zespSlice";
 import useZespAgent from "./ZespAgent.hook";
-import ZespConnectorImplementation from "../../services/zesp/common/ZespConnector";
-import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
+import useZespConnector from "../../services/zesp/common/service-connector";
+import Constants from "../../services/zesp/common/Constants";
+import {IZespConnector} from "../../services/zesp/common/service-connector.interfaces";
 
 interface IProps {
   server: IServerInfo
 }
 
-export const ZespContext = React.createContext<IZespConnector>(ZespConnectorImplementation);
+export const ZespContext = React.createContext<IZespConnector>(useZespConnector());
 
-export const ZespAgent: React.FC<IProps> = ({server, children}): React.ReactElement => {
+export const ZespAgent: React.FC<IProps> = ({server, children})
+  : React.ReactElement => {
   const dispatch = useDispatch();
   const zespStatus = useSelector(getStatus);
-  const zesp = useContext(ZespContext);
+  const [zesp, setZesp] = useState(useContext(ZespContext));
+  const _restartTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+
+  useEffect(() => {
+    if (zespStatus === "reconnect") {
+      setZesp(useZespConnector());
+      dispatch(setConnectionStatus("disconnected"));
+    }
+
+    console.log(`ZESP agent status: ${zespStatus}`);
+  }, [zespStatus])
+
   const {
     connectAsync,
     getDevices,
@@ -23,17 +36,32 @@ export const ZespAgent: React.FC<IProps> = ({server, children}): React.ReactElem
     readUiSettings,
     readFirmwareUpdates,
     subscribeReportUpdates,
-  } = useZespAgent(dispatch);
+  } = useZespAgent(dispatch, zesp);
 
   if (zespStatus === "connected") return (
-    <ZespContext.Provider value={ZespConnectorImplementation}>
+    <ZespContext.Provider value={zesp}>
       {children}
     </ZespContext.Provider>
   );
 
-  if (zespStatus !== "disconnected") return (<Fragment/>);
+  if (zespStatus === "closed") {
+    if (_restartTimerRef.current) {
+      clearTimeout(_restartTimerRef.current);
+      _restartTimerRef.current = undefined;
+    }
 
-  connectAsync(server, zesp)
+    _restartTimerRef.current = setTimeout(() => {
+      if (zespStatus === "closed") {
+        dispatch(setConnectionStatus("reconnect"));
+      } else {
+        console.debug(`Cancel restarting, cause status: ${zespStatus}`);
+      }
+    }, Constants.RestartConnectionTimeout);
+  }
+
+  if (zespStatus !== "disconnected") return (<Fragment/>);
+  dispatch(setConnectionStatus("connecting"));
+  connectAsync(server)
     .then(getDevices)
     .then(getRoot)
     .then(readUiSettings)
@@ -43,7 +71,10 @@ export const ZespAgent: React.FC<IProps> = ({server, children}): React.ReactElem
     // final steps
     .then(() => dispatch(setInitialized(true)))
     .catch(reason => console.error(reason))
-    .finally(() => console.debug("ZESP initialization completed"));
+    .finally(() => {
+      setZesp(zesp);
+      console.debug("ZESP initialization completed");
+    });
 
   return (<Fragment/>);
 }

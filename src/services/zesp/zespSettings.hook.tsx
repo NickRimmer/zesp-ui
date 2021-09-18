@@ -1,7 +1,7 @@
 import {ZespSettings} from "./models/ZespSettings";
 import {JsonZespResponseValidator, TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {UiSettings} from "../../models/UiSettings";
-import {IZespConnector} from "./interfaces/IZespConnector";
+import {IZespConnector} from "./common/service-connector.interfaces";
 
 export const useZespSettings = ({zespRequestAsync, zespSend}: IZespConnector) => {
   const getAsync = (): Promise<ZespSettings> => new Promise<ZespSettings>((resolve, reject) => {

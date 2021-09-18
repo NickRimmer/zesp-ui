@@ -1,6 +1,5 @@
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {ZespDeviceInfo} from "./models/ZespDeviceInfo";
-import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import predefinedDevices from "../../data/devices.json";
 import {DataControlSettings} from "../../models/DataControlSettings";
@@ -8,6 +7,7 @@ import {DeviceInfo} from "../../models/DeviceInfo";
 import {DataDeviceSettings} from "../../models/DataDeviceSettings";
 import {ZespReportInfo} from "./models/ZespReportInfo";
 import {layoutTools} from "../../device-controls/layouts";
+import {IZespConnector} from "./common/service-connector.interfaces";
 
 interface IGetDevicesResponse {
   devices: DeviceInfo[],

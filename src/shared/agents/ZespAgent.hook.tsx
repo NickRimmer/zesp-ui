@@ -1,6 +1,5 @@
 import {Dispatch} from "redux";
-import {IZespConnector} from "../../services/zesp/interfaces/IZespConnector";
-import {setConnected, setDisconnected} from "../../store/slices/zespSlice";
+import {setConnectionStatus} from "../../store/slices/zespSlice";
 import {IServerInfo} from "../../pages/welcome/interfaces";
 import ServiceDevices from "../../services/zesp/service-devices";
 import {setDevices, updateReport, updateRootReports} from "../../store/slices/devicesSlice";
@@ -13,44 +12,42 @@ import {setUiSettings} from "../../store/slices/settingsSlice";
 import {useRef} from "react";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import ServiceUpdates from "../../services/zesp/service-report-updates";
+import {IZespConnector} from "../../services/zesp/common/service-connector.interfaces";
 
-export const useZespAgent = (dispatch: Dispatch) => {
+export const useZespAgent = (dispatch: Dispatch, zesp: IZespConnector) => {
   const uiSettingsRef = useRef<UiSettings>({} as UiSettings);
   const firmwareUpdateMinTimout = 1000 * 60 * 60 * 24;
 
   // init
-  const connectAsync = (server: IServerInfo, zesp: IZespConnector): Promise<IZespConnector> => zesp
-    .connectAsync(server, (status) => dispatch(status ? setConnected() : setDisconnected()))
+  const connectAsync = (server: IServerInfo): Promise<void> => zesp
+    .connectAsync(server, (status) => dispatch(setConnectionStatus(status)), false)
 
   // read devices list
-  const getDevices = (zesp: IZespConnector): Promise<IZespConnector> => ServiceDevices.getDevicesListAsync(zesp)
+  const getDevices = (): Promise<void> => ServiceDevices.getDevicesListAsync(zesp)
     .then(result => {
       dispatch(setDevices(result.devices));
       if (result.zespVersion) dispatch(setZespFirmwareInstalledVersion(result.zespVersion));
-    })
-    .then(() => zesp);
+    });
 
   // read root info
-  const getRoot = (zesp: IZespConnector): Promise<IZespConnector> => ServiceRoot
+  const getRoot = (): Promise<void> => ServiceRoot
     .getRootDataAsync(zesp)
     .then(reports => {
       dispatch(updateRootReports(reports))
       console.debug("Root device reports updated");
-    })
-    .then(() => zesp);
+    });
 
   // read ui settings
-  const readUiSettings = (zesp: IZespConnector): Promise<IZespConnector> => useZespSettings(zesp)
+  const readUiSettings = (): Promise<void> => useZespSettings(zesp)
     .getCustomAsync<UiSettings>("zesp_ui")
     .then(settings => {
       const result = settings || UiDefaultSettings;
       dispatch(setUiSettings(result))
       uiSettingsRef.current = result;
-      return zesp;
     })
 
   // private firmware updates downloading
-  const _getFirmware = (zesp: IZespConnector): void => {
+  const _getFirmware = (): void => {
     ServiceFirmware
       .getFirmwareInfoAsync(zesp)
       .then(firmwareInfo => {
@@ -70,29 +67,29 @@ export const useZespAgent = (dispatch: Dispatch) => {
   }
 
   // read firmware updates
-  const readFirmwareUpdates = (zesp: IZespConnector): Promise<IZespConnector> => {
+  const readFirmwareUpdates = (): Promise<void> => {
     const uiSettings = uiSettingsRef.current
     if (!uiSettings) throw new Error("Read UI settings before firmware checking");
 
     if (uiSettings.firmwareUpdate && uiSettings.firmwareLastCheck && (Date.now() - uiSettings.firmwareLastCheck) < firmwareUpdateMinTimout) {
       dispatch(setZespFirmwareUpdate(uiSettings.firmwareUpdate));
       console.debug("Firmware information read from settings");
-      return Promise.resolve(zesp);
+      return Promise.resolve();
     }
 
     // run firmware loading in background
-    _getFirmware(zesp);
+    _getFirmware();
 
-    return Promise.resolve(zesp);
+    return Promise.resolve();
   }
 
   // subscribe to report updates events
-  const subscribeReportUpdates = (zesp: IZespConnector): Promise<IZespConnector> => {
+  const subscribeReportUpdates = (): Promise<void> => {
     const onReport = (ieee: string, reportKey: string, update: Partial<ZespReportInfo>) =>
       dispatch(updateReport({ieee, reportKey, update}));
 
     ServiceUpdates.subscribeToEvents(zesp, onReport);
-    return Promise.resolve(zesp);
+    return Promise.resolve();
   }
 
   return {

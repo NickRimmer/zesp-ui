@@ -20,6 +20,7 @@ export const PowerDialogLink: React.FC = (): React.ReactElement => {
 
   const onShutdownClickedHandler = () => {
     dispatch(setSpinner({show: true, message: "Shutting down..."}));
+    // dispatch(setConnectionStatus("reconnect"));
     setShow(false);
     setTimeout(() => document.location.href = "/", 2000);
     zespSend({data: "Shutdown"});

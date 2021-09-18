@@ -1,8 +1,8 @@
-import {IZespConnector} from "./interfaces/IZespConnector";
 import {TypedZespResponseValidator} from "./common/ZespResponseValidators";
 import {ZespDataEvent} from "./common/ZespDataEvent";
 import {ZespDeviceUpdate} from "./models/ZespDeviceUpdate";
 import {ZespReportInfo} from "./models/ZespReportInfo";
+import {IZespConnector} from "./common/service-connector.interfaces";
 
 export default {
   subscribeToEvents: (zesp: IZespConnector, onReport: (ieee: string, reportKey: string, updates: Partial<ZespReportInfo>) => void) => {
