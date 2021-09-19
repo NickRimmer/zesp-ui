@@ -32,7 +32,7 @@ function loadResources() {
             try {
                 // eslint-disable-next-line 
                 result[lang][ns] = require('' + path); // wtf with JS???
-                console.debug(`${path} (ok)`);
+              // console.debug(`${path} (ok)`);
             } catch (error) {
                 // it's ok
                 console.debug(`${path} (error)`);

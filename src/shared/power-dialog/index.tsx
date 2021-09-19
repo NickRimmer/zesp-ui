@@ -37,10 +37,12 @@ export const PowerDialogLink: React.FC = (): React.ReactElement => {
   return (
     <>
       {navLink}
-      <AppDialog title="Power management" show={show} setShow={setShow} footer={buttons}>
-        <div className="mb-3">Restart of ZESP service can take a few minutes. This page will be reloaded automatically when restart completed.</div>
-        <div>To shutdown, just click Shutdown button. But this is way with one direction, make sure you know what are you doing.</div>
-      </AppDialog>
+      {show && (
+        <AppDialog title="Power management" footer={buttons} onClosed={() => setShow(false)}>
+          <div className="mb-3">Restart of ZESP service can take a few minutes. This page will be reloaded automatically when restart completed.</div>
+          <div>To shutdown, just click Shutdown button. But this is way with one direction, make sure you know what are you doing.</div>
+        </AppDialog>
+      )}
     </>
   )
 }

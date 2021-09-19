@@ -97,7 +97,7 @@ export const useZespAgent = (dispatch: Dispatch, zesp: IZespConnector) => {
     const onUpdate = (devices: DeviceInfo[]): void => {
       // devices.pop();
       dispatch(updateDevices(devices));
-      console.log("Devices list updated");
+      console.debug("Devices list updated");
     }
 
     ServiceDevices.subscribeListUpdate(zesp, onUpdate);

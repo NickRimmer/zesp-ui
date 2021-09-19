@@ -5,19 +5,19 @@ import AddZigbeeDialog from "../add-zigbee-dialog";
 
 export const AddDeviceButton: React.FC = (): React.ReactElement => {
   const {
-    onAddZigbeeClockedHandler,
-    onAddBleClockedHandler,
-    showZigbeeDialog,
-    setShowZigbeeDialog
+    onAddZigbeeClickedHandler,
+    onAddBleClickedHandler,
+    showDialog,
+    setShowDialog,
   } = useHook();
 
   return (
     <>
       <DropdownButton title="Add device" variant="outline-secondary">
-        <Dropdown.Item onClick={onAddZigbeeClockedHandler}>Zigbee</Dropdown.Item>
-        <Dropdown.Item onClick={onAddBleClockedHandler}>Bluetooth</Dropdown.Item>
+        <Dropdown.Item onClick={onAddZigbeeClickedHandler}>Zigbee</Dropdown.Item>
+        <Dropdown.Item onClick={onAddBleClickedHandler}>Bluetooth</Dropdown.Item>
       </DropdownButton>
-      <AddZigbeeDialog show={showZigbeeDialog} setShow={setShowZigbeeDialog}/>
+      {showDialog && (<AddZigbeeDialog onClosed={() => setShowDialog(false)}/>)}
     </>
   )
 }

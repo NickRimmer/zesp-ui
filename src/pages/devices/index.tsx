@@ -11,6 +11,7 @@ const Result: React.FC = (): React.ReactElement => {
   const {
     deviceItems
   } = useHook();
+
   const {t} = useTranslation("pages.devices");
 
   if (deviceItems.length == 0) return (
