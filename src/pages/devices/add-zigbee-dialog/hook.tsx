@@ -61,8 +61,13 @@ export default () => {
     isCompletedRef.current = true;
   }
 
+  const onChannelChangedHandler = (channel: string): void => {
+    zespSend({data: `addDevice||${channel}`});
+  }
+
   return {
     logs,
     isCompleted,
+    onChannelChangedHandler,
   }
 }
