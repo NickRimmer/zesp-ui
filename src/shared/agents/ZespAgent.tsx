@@ -26,7 +26,7 @@ export const ZespAgent: React.FC<IProps> = ({server, children})
       dispatch(setConnectionStatus("disconnected"));
     }
 
-    console.log(`ZESP agent status: ${zespStatus}`);
+    console.debug(`ZESP agent status: ${zespStatus}`);
   }, [zespStatus])
 
   const {

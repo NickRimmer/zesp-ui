@@ -2,31 +2,34 @@ import React, {Fragment, useEffect, useState} from "react";
 import {Modal} from "react-bootstrap";
 
 interface IProps {
-  show: boolean,
   title: string,
-  setShow: (show: boolean) => void,
-  footer: React.ReactElement | undefined,
+  className?: string,
+  footer?: React.ReactElement | undefined,
+  onShow?: () => void,
+  onHide?: () => void,
+  onClosed?: () => void,
 }
 
 export const AppDialog: React.FunctionComponent<IProps> = ({
   children,
-  show,
   title,
-  setShow,
+  className,
   footer,
+  onShow,
+  onHide,
+  onClosed,
 }): React.ReactElement => {
-  const [dialogLoaded, setDialogLoaded] = useState(show);
+  const [show, setShow] = useState(true);
+  const onClosedHandler = () => {
+    if (onClosed) onClosed();
+  }
+  const onHideHandler = () => {
+    setShow(false)
+    if (onHide) onHide();
+  };
 
-  useEffect(() => {
-    if (show) setDialogLoaded(true);
-  }, [show]);
-
-  const onClosedHandler = () => setDialogLoaded(false);
-  const onHideHandler = () => setShow(false);
-
-  if (!dialogLoaded) return (<Fragment/>);
   return (
-    <Modal show={show} onExited={onClosedHandler} onHide={onHideHandler}>
+    <Modal show={show} onExited={onClosedHandler} onHide={onHideHandler} onShow={onShow} className={className}>
       <Modal.Header>
         <div>{title}</div>
         <div className="text-end modal-right-buttons">
