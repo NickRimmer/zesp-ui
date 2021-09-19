@@ -8,10 +8,9 @@ import CustomBody from "./body";
 import CustomDeviceNotFound from "./not-found";
 import toast from "react-hot-toast";
 import {getDeviceByIee} from "../../store/slices/devicesSlice";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../../store/configure";
 import {DeviceInfo} from "../../models/DeviceInfo";
-import {setSpinner, setSpinnerShow} from "../../store/slices/spinnerSlice";
 import {TypedZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
 import {ZespContext} from "../../shared/agents/ZespAgent";
 
@@ -20,7 +19,6 @@ export default () => {
   const [show, setShow] = useState(true);
   const [autoExit, setAutoExit] = useState(false);
   const {zespRequestAsync} = useContext(ZespContext);
-  const dispatch = useDispatch();
   const history = useHistory();
   const deviceInfo = useSelector((state: RootState) => getDeviceByIee(state, ieee), (a: DeviceInfo | undefined, b: DeviceInfo | undefined) => {
     if (!a || !b) return false;
@@ -60,22 +58,21 @@ export default () => {
   }
 
   const onDeleteDeviceHandler = () => {
-    dispatch(setSpinner({show: true, message: "Deleting..."}));
-    setShow(false);
+    returnBack();
+    // zespSend({data: "getDeviceList"});
 
     zespRequestAsync({
       data: `removeDevice|${deviceInfo.zespInfo.Device}|${deviceInfo.zespInfo.IEEE}`,
+      // data: "getDeviceList",
       responseValidator: TypedZespResponseValidator("alldev")
     })
       .then(() => {
         toast.success("Device deleted", {icon: "😵‍💫"});
-        returnBack();
       })
       .catch(reason => {
         toast.error("Cannot delete selected device", {duration: 3000});
         setShow(true);
-      })
-      .finally(() => dispatch(setSpinnerShow(false)));
+      });
   }
 
   const headerHandlers = {

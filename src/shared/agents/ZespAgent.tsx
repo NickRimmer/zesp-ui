@@ -36,6 +36,7 @@ export const ZespAgent: React.FC<IProps> = ({server, children})
     readUiSettings,
     readFirmwareUpdates,
     subscribeReportUpdates,
+    subscribeDevicesListUpdate,
   } = useZespAgent(dispatch, zesp);
 
   if (zespStatus === "connected") return (
@@ -67,6 +68,7 @@ export const ZespAgent: React.FC<IProps> = ({server, children})
     .then(readUiSettings)
     .then(readFirmwareUpdates)
     .then(subscribeReportUpdates)
+    .then(subscribeDevicesListUpdate)
 
     // final steps
     .then(() => dispatch(setInitialized(true)))

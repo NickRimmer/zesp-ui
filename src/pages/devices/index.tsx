@@ -28,7 +28,6 @@ const Result: React.FC = (): React.ReactElement => {
     .sort(devicesSorting)
     .map(x => buildListItem(x, serverAddress));
 
-  console.debug("devices page updated...");
   return (
     <FadeIn>
       <div className="devices">
@@ -57,7 +56,7 @@ const DevicesList = (props: { devices: DeviceListItem[] }) => {
         <AddDeviceButton/>
       </div>
       <Row className="items">
-        {devices.map((device, i) => (<Item device={device} key={i}/>))}
+        {devices.map(device => (<Item device={device} key={device.ieee}/>))}
       </Row>
     </div>
   );

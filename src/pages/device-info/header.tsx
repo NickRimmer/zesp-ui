@@ -1,5 +1,5 @@
 import {DataLayoutItemsGroup} from "../../models/DataControlSettings";
-import {Button, Dropdown, Modal, OverlayTrigger, Popover} from "react-bootstrap";
+import {Dropdown, Modal, OverlayTrigger, Popover} from "react-bootstrap";
 import React, {useState} from "react";
 import {DeviceInfo} from "../../models/DeviceInfo";
 
