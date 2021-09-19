@@ -5,7 +5,7 @@ interface IProps {
   show: boolean,
   title: string,
   setShow: (show: boolean) => void,
-  footer: React.ReactElement | undefined,
+  footer?: React.ReactElement | undefined,
 }
 
 export const AppDialog: React.FunctionComponent<IProps> = ({

@@ -1,14 +1,21 @@
+import {useState} from "react";
+import toast from "react-hot-toast";
+
 export default () => {
+  const [showZigbeeDialog, setShowZigbeeDialog] = useState(false);
+
   const onAddZigbeeClockedHandler = () => {
-    console.log("add zigbee");
+    setShowZigbeeDialog(!showZigbeeDialog);
   }
 
   const onAddBleClockedHandler = () => {
-    console.log("add ble");
+    toast.success("Not implemented yet", {icon: "😅"})
   }
 
   return {
     onAddZigbeeClockedHandler,
-    onAddBleClockedHandler
+    onAddBleClockedHandler,
+    showZigbeeDialog,
+    setShowZigbeeDialog,
   }
 }
