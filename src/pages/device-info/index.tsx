@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import "./styles.scss";
 import {useHistory, useParams} from "react-router-dom";
 import {Modal} from "react-bootstrap";
@@ -11,10 +11,14 @@ import {getDeviceByIee} from "../../store/slices/devicesSlice";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/configure";
 import {DeviceInfo} from "../../models/DeviceInfo";
+import {TypedZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
+import {ZespContext} from "../../shared/agents/ZespAgent";
 
 export default () => {
   const {ieee} = useParams<{ ieee: string }>();
   const [show, setShow] = useState(true);
+  const [autoExit, setAutoExit] = useState(false);
+  const {zespRequestAsync} = useContext(ZespContext);
   const history = useHistory();
   const deviceInfo = useSelector((state: RootState) => getDeviceByIee(state, ieee), (a: DeviceInfo | undefined, b: DeviceInfo | undefined) => {
     if (!a || !b) return false;
@@ -38,22 +42,54 @@ export default () => {
 
   const [activeGroupName, setActiveGroupName] = useState(groups[0].name);
 
-  const handleClose = () => setShow(false);
-  const handleExit = () => setTimeout(() => history.push("/devices"), 100);
-  const handleDetails = () => {
+  const returnBack = () => history.push("/devices");
+
+  const onCloseClickHandler = () => {
+    setAutoExit(true);
+    setShow(false)
+  };
+  const handleExit = () => {
+    if (!autoExit) return;
+    setTimeout(returnBack, 100)
+  };
+  const onDebugDeviceHandler = () => {
     console.log(deviceInfo);
-    toast.success("Check console for logs", {icon: "👽"});
+    toast.success("Check console for debug info", {icon: "👽"});
+  }
+
+  const onDeleteDeviceHandler = () => {
+    returnBack();
+    // zespSend({data: "getDeviceList"});
+
+    zespRequestAsync({
+      data: `removeDevice|${deviceInfo.zespInfo.Device}|${deviceInfo.zespInfo.IEEE}`,
+      // data: "getDeviceList",
+      responseValidator: TypedZespResponseValidator("alldev")
+    })
+      .then(() => {
+        toast.success("Device deleted", {icon: "😵‍💫"});
+      })
+      .catch(reason => {
+        toast.error("Cannot delete selected device", {duration: 3000});
+        setShow(true);
+      });
+  }
+
+  const headerHandlers = {
+    onCloseClickHandler,
+    onEditDeviceHandler: () => console.debug("edit clicked"),
+    onDeleteDeviceHandler,
+    onDebugDeviceHandler,
   }
 
   return (
-    <Modal show={show} onHide={handleClose} onExited={handleExit}>
+    <Modal show={show} onHide={onCloseClickHandler} onExited={handleExit}>
       <CustomHeader
         groups={groups}
         device={deviceInfo}
         activeGroupName={activeGroupName}
         setActiveGroupName={setActiveGroupName}
-        onCloseClicked={handleClose}
-        onDetailsClicked={handleDetails}
+        {...headerHandlers}
       />
 
       <CustomBody

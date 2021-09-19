@@ -34,7 +34,6 @@ $space_between_spacer: 1rem;
 
   .btn {
     padding: 0.5rem 0.5rem;
-    margin: -1rem 0.2rem -1rem auto;
     box-sizing: content-box;
     width: 1em;
     height: 1em;
@@ -51,16 +50,29 @@ $space_between_spacer: 1rem;
   }
 }
 
-.modal-header.with-tabs {
-  padding-bottom: 0;
-
-  .nav-tabs {
-    margin-bottom: -1px;
+.modal-header {
+  .dropdown-toggle {
+    &:after {
+      display: none;
+    }
   }
 
-  .modal-right-buttons {
-    margin-top: -10px;
-    margin-bottom: 0;
+  &.with-tabs {
+    padding-bottom: 0;
+
+    .nav-tabs {
+      margin-bottom: -1px;
+    }
+
+    .modal-right-buttons {
+      margin-top: -10px;
+      margin-bottom: 0;
+
+    }
+  }
+
+  &.with-buttons {
+    padding-right: 10px;
   }
 }
 

@@ -2,7 +2,7 @@ import {Dispatch} from "redux";
 import {setConnectionStatus} from "../../store/slices/zespSlice";
 import {IServerInfo} from "../../pages/welcome/interfaces";
 import ServiceDevices from "../../services/zesp/service-devices";
-import {setDevices, updateReport, updateRootReports} from "../../store/slices/devicesSlice";
+import {setDevices, updateDevices, updateReport, updateRootReports} from "../../store/slices/devicesSlice";
 import {setZespFirmwareInstalledVersion, setZespFirmwareUpdate} from "../../store/slices/zespFirmwareSlice";
 import ServiceRoot from "../../services/zesp/service-root";
 import useZespSettings from "../../services/zesp/zespSettings.hook";
@@ -13,6 +13,7 @@ import {useRef} from "react";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import ServiceUpdates from "../../services/zesp/service-report-updates";
 import {IZespConnector} from "../../services/zesp/common/service-connector.interfaces";
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 export const useZespAgent = (dispatch: Dispatch, zesp: IZespConnector) => {
   const uiSettingsRef = useRef<UiSettings>({} as UiSettings);
@@ -92,6 +93,17 @@ export const useZespAgent = (dispatch: Dispatch, zesp: IZespConnector) => {
     return Promise.resolve();
   }
 
+  const subscribeDevicesListUpdate = (): Promise<void> => {
+    const onUpdate = (devices: DeviceInfo[]): void => {
+      // devices.pop();
+      dispatch(updateDevices(devices));
+      console.log("Devices list updated");
+    }
+
+    ServiceDevices.subscribeListUpdate(zesp, onUpdate);
+    return Promise.resolve();
+  }
+
   return {
     connectAsync,
     getDevices,
@@ -99,6 +111,7 @@ export const useZespAgent = (dispatch: Dispatch, zesp: IZespConnector) => {
     readUiSettings,
     readFirmwareUpdates,
     subscribeReportUpdates,
+    subscribeDevicesListUpdate,
   }
 }
 

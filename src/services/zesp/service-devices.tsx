@@ -28,7 +28,15 @@ const ServiceDevices = {
         } as IGetDevicesResponse);
       })
       .catch(reason => reject(reason));
-  })
+  }),
+
+  subscribeListUpdate: (zesp: IZespConnector, onUpdateHandler: (devices: DeviceInfo[]) => void): void => {
+    // setTimeout(() => zesp.zespSend({data: "getDeviceList"}), 3000);
+    zesp.subscribe(TypedZespResponseValidator("alldev"), event => {
+      const result = onDevicesListReceived(event);
+      onUpdateHandler(result);
+    })
+  }
 }
 
 // when list of devices received from ZESP
@@ -36,7 +44,6 @@ const onDevicesListReceived = (event: ZespDataEvent): DeviceInfo[] => {
   const jsonString: string = event.dataParts[0];
   const zespDevices: ZespDeviceInfo[] = [];
   Object.assign(zespDevices, JSON.parse(jsonString))
-
   return zespDevices.map(buildDeviceInfo);
 }
 
