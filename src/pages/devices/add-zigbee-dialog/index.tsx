@@ -1,7 +1,7 @@
 import React from "react";
 import useHook from "./hook";
 import {AppDialog} from "../../../shared/app-dialog";
-import {Col, Dropdown, Form, ProgressBar, Row} from "react-bootstrap";
+import {Col, Form, ProgressBar, Row} from "react-bootstrap";
 
 interface IProps {
   onClosed: () => void,
