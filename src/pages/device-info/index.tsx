@@ -6,7 +6,7 @@ import CustomHeader from "./header";
 import CustomBody from "./body";
 import CustomDeviceNotFound from "./not-found";
 import toast from "react-hot-toast";
-import {DeviceSettings} from "./settings";
+import DeviceSettings from "../../shared/device-settings";
 
 export default () => {
 

@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import useHook from "./hook";
-import {AppDialog} from "../../../shared/app-dialog";
 import {Row, Col, Form, Button} from "react-bootstrap";
-import {DeviceInfo} from "../../../models/DeviceInfo";
+import {DeviceInfo} from "../../models/DeviceInfo";
+import {AppDialog} from "../app-dialog";
 
 interface IProps {
   onClosed: () => void,

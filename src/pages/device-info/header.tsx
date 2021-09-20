@@ -47,7 +47,7 @@ export default (props: {
     <Popover id="popover-basic">
       <Popover.Header as="h3" className="bg-danger text-light">Achtung! Are you sure?</Popover.Header>
       <Popover.Body>
-        To delete device registration, click <span className="badge bg-danger">Unpair device</span> one more time...
+        To delete device registration, click <span className="text-danger">Unpair device</span> one more time...
       </Popover.Body>
     </Popover>
   );
