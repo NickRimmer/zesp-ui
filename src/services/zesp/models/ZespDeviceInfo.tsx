@@ -2,7 +2,8 @@ import {ZespReportInfo} from "./ZespReportInfo";
 
 export type ZespDeviceInfo = {
   Device: string,
-  Name: string | null,
+  Name: string | undefined,
+  Location: string | undefined,
   IEEE: string,
   ModelId: string,
   Report: { [reportId: string]: ZespReportInfo },

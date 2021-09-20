@@ -11,7 +11,7 @@ import {DataReportInfo} from "../../models/DataReportInfo";
 
 export default () => {
   const {getServerAddress} = useContext(ZespContext)
-  const devices = useSelector(getAllDevices, (a: DeviceInfo[], b: DeviceInfo[]) => a.length === b.length)
+  const devices = useSelector(getAllDevices, devicesUpdateDetector)
 
   const serverAddress = getServerAddress() || "/"
   const deviceItems = [...devices]
@@ -25,6 +25,15 @@ export default () => {
 }
 
 // region tools
+
+const devicesUpdateDetector = (a: DeviceInfo[], b: DeviceInfo[]) => {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].zespInfo.Name !== b[i].zespInfo.Name) return false;
+  }
+
+  return true;
+}
 
 const devicesSorting = (a: DeviceInfo, b: DeviceInfo): number => {
   if (a.zespInfo.ModelId === "ZESP_Root") return -1;
