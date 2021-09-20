@@ -31,6 +31,16 @@ export const devicesSlice = createSlice({
       const updateWithoutRoot = action.payload.filter(x => x.zespInfo.ModelId !== "ZESP_Root");
       state.devices = [root, ...updateWithoutRoot];
     },
+
+    updateDevice: (state, action: PayloadAction<DeviceInfo>): void => {
+      const deviceIndex = state.devices.findIndex(x => x.zespInfo.IEEE === action.payload.zespInfo.IEEE);
+      if (deviceIndex < 0) {
+        state.devices.push(action.payload);
+      } else {
+        state.devices[deviceIndex] = action.payload;
+      }
+    },
+
     updateReport: (state, action: PayloadAction<{ ieee: string, reportKey: string, update: Partial<ZespReportInfo> }>): void => {
       const device = state.devices.find(x => x.zespInfo.IEEE === action.payload.ieee);
       if (!device) {
@@ -60,5 +70,5 @@ const getters = {
 }
 
 export const {getDevicesByModelId, getDeviceByIee, getAllDevices} = getters;
-export const {setDevices, updateReport, updateRootReports, updateDevices} = devicesSlice.actions;
+export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice} = devicesSlice.actions;
 export default devicesSlice.reducer;
