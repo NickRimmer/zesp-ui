@@ -9,7 +9,7 @@ interface IProps {
   device: DeviceInfo,
 }
 
-export const DeviceSettings: React.FC<IProps> = ({
+export const DeviceSettingsDialog: React.FC<IProps> = ({
   device,
   onClosed
 }): React.ReactElement => {
@@ -50,4 +50,4 @@ export const DeviceSettings: React.FC<IProps> = ({
   )
 }
 
-export default DeviceSettings;
+export default DeviceSettingsDialog;

@@ -4,6 +4,7 @@ import {Modal} from "react-bootstrap";
 interface IProps {
   title: string,
   className?: string,
+  size?: 'sm' | 'lg' | 'xl',
   footer?: React.ReactElement | undefined,
   forceClose?: boolean,
   onShow?: () => void,
@@ -14,6 +15,7 @@ interface IProps {
 export const AppDialog: React.FunctionComponent<IProps> = ({
   children,
   title,
+  size,
   className,
   footer,
   forceClose,
@@ -35,7 +37,7 @@ export const AppDialog: React.FunctionComponent<IProps> = ({
   };
 
   return (
-    <Modal show={show} onExited={onClosedHandler} onHide={onHideHandler} onShow={onShow} className={className}>
+    <Modal show={show} onExited={onClosedHandler} onHide={onHideHandler} onShow={onShow} className={className} size={size}>
       <Modal.Header>
         <div>{title}</div>
         <div className="text-end modal-right-buttons">

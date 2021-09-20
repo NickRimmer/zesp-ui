@@ -87,3 +87,12 @@ $space_between_spacer: 1rem;
   border-bottom-color: #f1f1f1;
   background: #f1f1f1;
 }
+
+.card-header a {
+  color: $dark;
+  transition: opacity 300ms;
+
+  &:hover {
+    opacity: .75;
+  }
+}
