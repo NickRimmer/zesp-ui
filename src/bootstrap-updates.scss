@@ -132,12 +132,11 @@ $space_between_spacer: 1rem;
     }
   }
 
-  //.a {
-  //  color: $dark;
-  //  transition: opacity 300ms;
-  //
-  //  &:hover {
-  //    opacity: .75;
-  //  }
-  //}
+  .dropdown {
+    display: inline-flex !important;
+
+    .breadcrumb-item {
+      padding-left: 25px;
+    }
+  }
 }

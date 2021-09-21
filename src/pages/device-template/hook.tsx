@@ -3,6 +3,9 @@ import {useContext, useEffect, useState} from "react";
 import {ZespContext} from "../../shared/agents/ZespAgent";
 import {TypedZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
+import {useSelector} from "react-redux";
+import {getAllDevices} from "../../store/slices/devicesSlice";
+import {DeviceInfo} from "../../models/DeviceInfo";
 
 type hookStatuses = "loading" | "error" | "loaded";
 
@@ -18,6 +21,13 @@ export default () => {
   const fileName = `/Devices/${ieee}`;
   const [template, setTemplate] = useState<IDeviceTemplate>();
   const [status, setStatus] = useState<hookStatuses>("loading");
+
+  const devices = useSelector(getAllDevices)
+    .map(x => ({
+      name: x.zespInfo.Name || x.zespInfo.ModelId,
+      ieee: x.zespInfo.IEEE,
+    }))
+    .sort(devicesSorting);
 
   useEffect(() => {
     zespRequestAsync({data: `LoadJson|${fileName}`, responseValidator: TypedZespResponseValidator(fileName)})
@@ -40,11 +50,22 @@ export default () => {
       .catch(() => {
         setStatus("error");
       })
-  }, []);
+  }, [ieee]);
 
   return {
     template,
+    devices,
     status,
     ieee,
   }
+}
+
+const devicesSorting = (a: { name: string }, b: { name: string }): number => {
+  if (a.name === "ZESP_Root") return -1;
+  if (b.name === "ZESP_Root") return 1;
+
+  if (a.name < b.name) return -1;
+  if (a.name > b.name) return 1;
+
+  return 0;
 }
