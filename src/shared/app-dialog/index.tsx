@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Modal} from "react-bootstrap";
+import React, {FormEvent, useEffect, useState} from "react";
+import {Form, Modal} from "react-bootstrap";
 
 interface IProps {
   title: string,
@@ -10,6 +10,7 @@ interface IProps {
   onShow?: () => void,
   onHide?: () => void,
   onClosed?: () => void,
+  onSubmit?: () => void,
 }
 
 export const AppDialog: React.FunctionComponent<IProps> = ({
@@ -17,11 +18,13 @@ export const AppDialog: React.FunctionComponent<IProps> = ({
   title,
   size,
   className,
+
   footer,
   forceClose,
   onShow,
   onHide,
   onClosed,
+  onSubmit,
 }): React.ReactElement => {
   const [show, setShow] = useState(true);
   useEffect(() => {
@@ -31,13 +34,20 @@ export const AppDialog: React.FunctionComponent<IProps> = ({
   const onClosedHandler = () => {
     if (onClosed) onClosed();
   }
+
   const onHideHandler = () => {
     setShow(false)
     if (onHide) onHide();
-  };
+  }
 
-  return (
-    <Modal show={show} onExited={onClosedHandler} onHide={onHideHandler} onShow={onShow} className={className} size={size}>
+  const onSubmitHandler = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (onSubmit) onSubmit();
+  }
+
+  const result = (
+    <>
       <Modal.Header>
         <div>{title}</div>
         <div className="text-end modal-right-buttons">
@@ -53,6 +63,13 @@ export const AppDialog: React.FunctionComponent<IProps> = ({
           {footer}
         </Modal.Footer>
       )}
+    </>
+  )
+
+  return (
+    <Modal show={show} onExited={onClosedHandler} onHide={onHideHandler} onShow={onShow} className={className} size={size}>
+      {onSubmit && (<Form onSubmit={onSubmitHandler}>{result}</Form>)}
+      {!onSubmit && result}
     </Modal>
   )
 }

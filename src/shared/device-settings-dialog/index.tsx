@@ -5,8 +5,9 @@ import {DeviceInfo} from "../../models/DeviceInfo";
 import {AppDialog} from "../app-dialog";
 
 interface IProps {
-  onClosed: () => void,
   device: DeviceInfo,
+
+  onClosed: () => void,
 }
 
 export const DeviceSettingsDialog: React.FC<IProps> = ({
@@ -24,20 +25,17 @@ export const DeviceSettingsDialog: React.FC<IProps> = ({
   const [name, setName] = useState(device.zespInfo.Name || "");
   const [location, setLocation] = useState(device.zespInfo.Location || "");
 
-  // if (!deviceData) {
-  //   return (<CustomSpinner message="Read settings..."/>)
-  // }
+  const saveHandler = () => onSaveHandler(name, location)
 
-  // console.log(deviceData["ModelId"]);
   const footer = (
     <>
-      <Button onClick={() => onSaveHandler(name, location)}>Save changes</Button>
+      <Button type="submit">Save changes</Button>
       <Button variant="secondary" role="cancel" onClick={onCancelHandler}>Cancel</Button>
     </>
   )
 
   return (
-    <AppDialog title="Device settings" onClosed={onClosed} footer={footer} forceClose={forceClose}>
+    <AppDialog title="Device settings" onClosed={onClosed} footer={footer} forceClose={forceClose} onSubmit={saveHandler}>
       <Form.Group as={Row} className="mb-3">
         <Form.Label column sm="4">Display name</Form.Label>
         <Col><Form.Control value={name} onChange={event => setName(event.target.value)} placeholder={device.zespInfo.ModelId}/></Col>

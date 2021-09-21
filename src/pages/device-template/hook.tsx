@@ -3,24 +3,22 @@ import {useContext, useEffect, useState} from "react";
 import {ZespContext} from "../../shared/agents/ZespAgent";
 import {TypedZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
-import {useSelector} from "react-redux";
-import {getAllDevices} from "../../store/slices/devicesSlice";
-import {DeviceInfo} from "../../models/DeviceInfo";
+import {useDispatch, useSelector} from "react-redux";
+import {getAllDevices, updateReport} from "../../store/slices/devicesSlice";
+import {ReportKeyInfo} from "../../models/ReportKeyInfo";
+import {ZespDeviceInfo} from "../../services/zesp/models/ZespDeviceInfo";
+import toast from "react-hot-toast";
 
 type hookStatuses = "loading" | "error" | "loaded";
 
-export interface IDeviceTemplate {
-  title: string,
-  devType: string,
-  reports: { [key: string]: ZespReportInfo },
-}
-
 export default () => {
+  const dispatch = useDispatch()
   const {ieee} = useParams<{ ieee: string }>();
   const {zespRequestAsync} = useContext(ZespContext);
   const fileName = `/Devices/${ieee}`;
-  const [template, setTemplate] = useState<IDeviceTemplate>();
+  const [template, setTemplate] = useState<ZespDeviceInfo>();
   const [status, setStatus] = useState<hookStatuses>("loading");
+  const [showSettings, setShowSettings] = useState<{ keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }>();
 
   const devices = useSelector(getAllDevices)
     .map(x => ({
@@ -36,15 +34,8 @@ export default () => {
 
         // we need 'any' type here, but later will expose it by types
         // eslint-disable-next-line
-        const response = JSON.parse(event.dataParts[0]) as { [key: string]: any }
-        return {
-          title: response["Name"] || response["ModelId"],
-          reports: response["Report"],
-          devType: response["DevType"],
-        } as IDeviceTemplate
-      })
-      .then(result => {
-        setTemplate(result);
+        const response = JSON.parse(event.dataParts[0]) as ZespDeviceInfo
+        setTemplate(response);
         setStatus("loaded");
       })
       .catch(() => {
@@ -52,11 +43,33 @@ export default () => {
       })
   }, [ieee]);
 
+  const onSaveReportSettings = (keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo): void => {
+    const reportKey = `${keyInfo.endpoint}${keyInfo.clusterId}${keyInfo.attributeId}`
+    const updatedReports = {...template!.Report, ...{[reportKey]: reportInfo}}
+    const updatedTemplate = {...template, ...{Report: updatedReports}}
+    const json = JSON.stringify(updatedTemplate);
+
+    zespRequestAsync({
+      data: `SaveJson|${fileName}|${json}`,
+      responseValidator: TypedZespResponseValidator("ZD_RSP")
+    })
+      .then(event => {
+        if (event.dataParts.length < 2 || event.dataParts[1].toLowerCase() !== "ok") throw Error("Cannot save device settings");
+        dispatch(updateReport({ieee, reportKey, update: reportInfo}))
+        setTemplate(updatedTemplate as ZespDeviceInfo)
+        toast.success("Report settings updated");
+      })
+  }
+
   return {
     template,
     devices,
     status,
     ieee,
+    showSettings,
+
+    setShowSettings,
+    onSaveReportSettings,
   }
 }
 

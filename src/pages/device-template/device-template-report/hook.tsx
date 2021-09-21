@@ -1,20 +1,16 @@
 import {Devices} from "../../../services/devices";
 import HomeAutoClusters from "../../../data/reports.json";
 import {IClusterAttribute, IClusterInfo} from "../../../interfaces/IClusterInfo";
-import {IDeviceTemplate} from "../hook";
 import toast from "react-hot-toast";
-
-interface IProps {
-  template: IDeviceTemplate,
-  reportKey: string,
-}
+import {IDeviceTemplateReportProps} from "./index";
 
 const DeviceTemplateReportHook = ({
   template,
-  reportKey
-}: IProps) => {
-  const report = template.reports[reportKey]
-  const keyInfo = Devices.getReportKeyDetails(reportKey, template.devType)
+  reportKey,
+  showSettingsHandler,
+}: IDeviceTemplateReportProps) => {
+  const report = template.Report[reportKey]
+  const keyInfo = Devices.getReportKeyDetails(reportKey, template.DevType)
 
   if (!report || !keyInfo) return undefined;
 
@@ -27,7 +23,7 @@ const DeviceTemplateReportHook = ({
       : clusterInfo.attributes[`${keyInfo.attributeId}:${role}`] || clusterInfo.attributes[keyInfo.attributeId] || undefined
 
   const runHandler = () => toast.success("Not implemented yet", {icon: "🤭"})
-  const editHandler = () => toast.success("Not implemented yet", {icon: "🤪"})
+  const editHandler = () => showSettingsHandler({keyInfo, reportInfo: report}) //toast.success("Not implemented yet", {icon: "🤪"})
   const deleteHandler = () => toast.success("Not implemented yet", {icon: "🤤"})
 
   return {

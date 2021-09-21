@@ -1,14 +1,18 @@
 import React, {Fragment, useState} from "react";
 import useHook from "./hook";
-import {IDeviceTemplate} from "../hook";
 import {Dropdown, OverlayTrigger, Popover} from "react-bootstrap";
+import {ZespReportInfo} from "../../../services/zesp/models/ZespReportInfo";
+import {ReportKeyInfo} from "../../../models/ReportKeyInfo";
+import {ZespDeviceInfo} from "../../../services/zesp/models/ZespDeviceInfo";
 
-interface IProps {
-  template: IDeviceTemplate,
+export interface IDeviceTemplateReportProps {
+  template: ZespDeviceInfo,
   reportKey: string,
+
+  showSettingsHandler: (data: { keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }) => void,
 }
 
-export const DeviceTemplateReport: React.FC<IProps> = (props): React.ReactElement => {
+export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props): React.ReactElement => {
   const hook = useHook(props);
   if (!hook) {
     console.warn(`Unknown report with key ${props.reportKey}`)
