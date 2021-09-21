@@ -1,10 +1,12 @@
 import React from "react";
+import "./style.scss";
 import useHook from "./hook";
 import {FadeIn} from "../../shared/fadein-transition";
-import {Card} from "react-bootstrap";
+import {Card, Col} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import {CustomSpinner} from "../../shared/loading-spinner";
 import ErrorMessage from "../../shared/error-message";
+import DeviceTemplateReport from "./device-template-report";
 
 export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
   const {
@@ -22,19 +24,18 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
   return (
     <FadeIn>
       <div>
-        <Card>
+        <Card className="device-template">
           <Card.Header className="breadcrumb">
             <NavLink to="/devices" className="breadcrumb-item">Devices</NavLink>
             <NavLink to={`/devices/${ieee}`} className="breadcrumb-item">{template.title}</NavLink>
             <span className="breadcrumb-item">Template data</span>
           </Card.Header>
           <Card.Body>
-            {Object.keys(template.reports).map(key => {
-              const report = template.reports[key]
-              return (
-                <div key={key}>{key}: {report.label}</div>
-              )
-            })}
+            <Col xs={6}>
+              {Object.keys(template.reports).map(key => {
+                return (<DeviceTemplateReport key={key} reportKey={key} template={template}/>)
+              })}
+            </Col>
           </Card.Body>
         </Card>
       </div>

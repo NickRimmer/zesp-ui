@@ -92,7 +92,7 @@ $space_between_spacer: 1rem;
   margin: 0;
 
   .breadcrumb-item {
-    padding: 5px 5px 5px 25px;
+    padding: 10px 5px 10px 25px;
     position: relative;
     color: #000;
     text-decoration: none;
@@ -114,8 +114,8 @@ $space_between_spacer: 1rem;
       width: 0;
       height: 0;
       font-size: 0;
-      border-top: 17px solid transparent;
-      border-bottom: 17px solid transparent;
+      border-top: 22px solid transparent;
+      border-bottom: 22px solid transparent;
       border-left: 17px solid #e6e6e6;
       top: 0;
       position: absolute;

@@ -7,6 +7,9 @@
     "clusterId": "0006",
     "name": "On/Off",
     "attributes": {
+      "0000": {
+        "name": "Current state"
+      },
       "0000:light": {
         "id": "on_off_toggle",
         "arguments": {

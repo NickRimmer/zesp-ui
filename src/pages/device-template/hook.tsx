@@ -6,8 +6,9 @@ import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 
 type hookStatuses = "loading" | "error" | "loaded";
 
-interface ITemplate {
+export interface IDeviceTemplate {
   title: string,
+  devType: string,
   reports: { [key: string]: ZespReportInfo },
 }
 
@@ -15,7 +16,7 @@ export default () => {
   const {ieee} = useParams<{ ieee: string }>();
   const {zespRequestAsync} = useContext(ZespContext);
   const fileName = `/Devices/${ieee}`;
-  const [template, setTemplate] = useState<ITemplate>();
+  const [template, setTemplate] = useState<IDeviceTemplate>();
   const [status, setStatus] = useState<hookStatuses>("loading");
 
   useEffect(() => {
@@ -27,9 +28,10 @@ export default () => {
         // eslint-disable-next-line
         const response = JSON.parse(event.dataParts[0]) as { [key: string]: any }
         return {
-          title: response["Name"] || response["DeviceId"],
-          reports: response["Report"]
-        } as ITemplate
+          title: response["Name"] || response["ModelId"],
+          reports: response["Report"],
+          devType: response["DevType"],
+        } as IDeviceTemplate
       })
       .then(result => {
         setTemplate(result);
