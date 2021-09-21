@@ -23,10 +23,10 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
     <FadeIn>
       <div>
         <Card>
-          <Card.Header>
-            <NavLink to="/devices">Devices</NavLink> <i className="bi bi-chevron-right" style={{fontSize: ".9rem"}}/>
-            <NavLink to={`/devices/${ieee}`}>{template.title}</NavLink> <i className="bi bi-chevron-right" style={{fontSize: ".9rem"}}/>
-            Template data
+          <Card.Header className="breadcrumb">
+            <NavLink to="/devices" className="breadcrumb-item">Devices</NavLink>
+            <NavLink to={`/devices/${ieee}`} className="breadcrumb-item">{template.title}</NavLink>
+            <span className="breadcrumb-item">Template data</span>
           </Card.Header>
           <Card.Body>
             {Object.keys(template.reports).map(key => {
