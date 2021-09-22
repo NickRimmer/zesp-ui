@@ -38,4 +38,14 @@
       }
     }
   }
+
+  .results {
+    display: flex;
+    justify-content: space-between;
+    //padding: 5px 10px 20px;
+
+    span {
+      font-weight: bold;
+    }
+  }
 }

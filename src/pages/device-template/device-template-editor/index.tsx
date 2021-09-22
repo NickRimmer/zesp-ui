@@ -1,23 +1,46 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import "./styles.scss";
 import HomeAutoClusters from "../../../data/reports.json";
+import ResponseDataTypes from "./data-types.json";
 import {ReportKeyInfo} from "../../../models/ReportKeyInfo";
 import {Button, ButtonGroup, Col, ListGroup, Row} from "react-bootstrap";
 import {IClusterAttributeCollection, IClusterInfo} from "../../../interfaces/IClusterInfo";
 import toast from "react-hot-toast";
+import {ZespDeviceInfo} from "../../../services/zesp/models/ZespDeviceInfo";
+import {ZespContext} from "../../../shared/agents/ZespAgent";
+import {ReportZespResponseValidator} from "../../../services/zesp/common/ZespResponseValidators";
+import {ZespDeviceUpdate} from "../../../services/zesp/models/ZespDeviceUpdate";
+import {DictionaryStrings} from "../../../models/DictionaryStrings";
 
-interface IProps {
-  play?: ReportKeyInfo
+interface IResponse {
+  type: string,
+  data?: string,
+  parsed?: string
 }
 
-export const DeviceTemplateEditor: React.FC<IProps> = ({play}): React.ReactElement => {
+interface IReadMessage {
+  type: "info" | "error",
+  message: string
+}
+
+interface IProps {
+  play?: ReportKeyInfo,
+  template: ZespDeviceInfo,
+}
+
+export const DeviceTemplateEditor: React.FC<IProps> = ({play, template}): React.ReactElement => {
   const [cluster, setCluster] = useState<string>(play?.clusterId || "")
   const [attribute, setAttribute] = useState<string>(play?.attributeId || "")
   const [attributes, setAttributes] = useState<IClusterAttributeCollection>()
+  const [readData, setReadData] = useState<IResponse>();
+  const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
+  const [readDataMessage, setReadDataMessage] = useState<IReadMessage>();
+  const {zespRequestAsync} = useContext(ZespContext);
   const alignTimers = useRef<NodeJS.Timeout[]>([]);
   const clusters = HomeAutoClusters
     .map(x => x as IClusterInfo)
     .filter(x => Object.keys(x.attributes).length > 0)
+  const responseDataTypes = ResponseDataTypes as DictionaryStrings
 
   useEffect(() => {
     if (!play) return;
@@ -36,7 +59,7 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play}): React.ReactEleme
     alignTimers.current.push(setTimeout(() => alignSelected(), 500))
   }, [cluster, attribute])
 
-  const alignSelected = () => {
+  const alignSelected = (): void => {
     const lists = document.getElementsByClassName("list-group")
     let delay = 0;
     alignTimers.current.forEach(x => clearTimeout(x));
@@ -52,8 +75,46 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play}): React.ReactEleme
     }
   }
 
-  const onReadHandler = () => {
-    toast.success("Not implemented yet", {icon: "😵‍💫"})
+  const onReadHandler = (): void => {
+    setReadDataMessage(undefined);
+    setReadData(undefined);
+
+    if (!cluster && cluster.trim().length === 0) {
+      toast.error("Cluster value required", {icon: "👾"})
+      return
+    }
+    if (!attribute && attribute.trim().length === 0) {
+      toast.error("Attribute value required", {icon: "☢️"})
+      return
+    }
+
+    readingDataBegin(template.Device, "01", cluster, attribute);
+  }
+
+  const readingDataBegin = (deviceId: string, endpointId: string, clusterId: string, attributeId: string): void => {
+    setReadDataMessage({type: "info", message: "Reading..."})
+    setSendButtonDisabled(true)
+    zespRequestAsync({
+      data: `reqAtribute|${deviceId}|${endpointId}|${clusterId}|${attributeId}|0000`,
+      responseValidator: ReportZespResponseValidator(deviceId, endpointId, clusterId, attributeId)
+    })
+      .then(event => {
+        const data = JSON.parse(event.dataParts[0]) as ZespDeviceUpdate
+        const response: IResponse = {
+          type: responseDataTypes[data.Dtype] || data.Dtype,
+          data: data.Data,
+          parsed: data.parsed
+        }
+
+        setReadDataMessage(undefined)
+        setReadData(response)
+      })
+      .catch(reason => {
+        setReadDataMessage({type: "error", message: reason})
+      })
+      .finally(() => {
+        setSendButtonDisabled(false)
+      })
   }
 
   return (
@@ -62,9 +123,23 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play}): React.ReactEleme
         <input type="text" className="form-control text-center flex-grow-0" style={{width: "95px"}} defaultValue="01" readOnly/>
         <input type="text" className="form-control text-center" placeholder="Cluster" value={cluster} onChange={(event) => setCluster(event.target.value)}/>
         <input type="text" className="form-control text-center" placeholder="Attribute" value={attribute} onChange={(event) => setAttribute(event.target.value)}/>
-        <button className="btn btn-primary flex-grow-0" style={{width: "100px"}} type="button" onClick={onReadHandler}><i className="bi bi-cloud-arrow-down-fill me-2"/> Read
+        <button className="btn btn-primary flex-grow-0" style={{width: "100px"}} type="button" onClick={onReadHandler} disabled={sendButtonDisabled}>
+          <i className="bi bi-cloud-arrow-down-fill me-2"/> Read
         </button>
       </div>
+
+      {readDataMessage && (
+        <div className={`alert ${readDataMessage.type === "error" ? "alert-warning" : "alert-info"}`}>{readDataMessage.message}</div>
+      )}
+
+      {readData && (
+        <div className="results alert alert-success">
+          <div><span>Data type:</span> {readData.type}</div>
+          <div><span>Response:</span> {readData.data || "undefined"}</div>
+          <div><span>Parsed:</span> {readData.parsed || "undefined"}</div>
+        </div>
+      )}
+
       <Row>
         <Col xs={6} className="lists">
           <ListGroup as={ButtonGroup} vertical={true}>

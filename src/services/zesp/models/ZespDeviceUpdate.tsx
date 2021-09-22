@@ -3,7 +3,7 @@ export type ZespDeviceUpdate = {
   EndPoint: string,
   ClusterId: string,
   AttribId: string,
-  Dtype: number,
+  Dtype: string,
   Data: string,
   parsed: string,
   time: number,

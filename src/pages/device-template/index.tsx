@@ -56,7 +56,7 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
                   return (<DeviceTemplateReport key={key} reportKey={key} template={template} showSettingsHandler={setShowSettings} playHandler={playHandler}/>)
                 })}
               </Col>
-              <Col xs={12} lg={6}><DeviceTemplateEditor play={play}/></Col>
+              <Col xs={12} lg={6}><DeviceTemplateEditor play={play} template={template}/></Col>
             </Card.Body>
           </Card>
         </div>
