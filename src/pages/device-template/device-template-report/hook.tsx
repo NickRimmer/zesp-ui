@@ -22,7 +22,6 @@ const DeviceTemplateReportHook = ({
       ? clusterInfo.attributes[keyInfo.attributeId] || undefined
       : clusterInfo.attributes[`${keyInfo.attributeId}:${role}`] || clusterInfo.attributes[keyInfo.attributeId] || undefined
 
-  const runHandler = () => toast.success("Not implemented yet", {icon: "🤭"})
   const editHandler = () => showSettingsHandler({keyInfo, reportInfo: report}) //toast.success("Not implemented yet", {icon: "🤪"})
   const deleteHandler = () => toast.success("Not implemented yet", {icon: "🤤"})
 
@@ -32,7 +31,6 @@ const DeviceTemplateReportHook = ({
     clusterInfo,
     attributeInfo,
 
-    runHandler,
     editHandler,
     deleteHandler
   }

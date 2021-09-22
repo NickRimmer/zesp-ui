@@ -10,6 +10,7 @@ export interface IDeviceTemplateReportProps {
   reportKey: string,
 
   showSettingsHandler: (data: { keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }) => void,
+  playHandler: (keyInfo: ReportKeyInfo) => void,
 }
 
 export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props): React.ReactElement => {
@@ -25,16 +26,21 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
     clusterInfo,
     attributeInfo,
 
-    runHandler,
     editHandler,
     deleteHandler
   } = hook;
+
+  const {
+    playHandler
+  } = props;
 
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
 
   const deleteConfirmedHandler = () => {
     if (deleteConfirmed) deleteHandler();
   }
+
+  const runHandler = () => playHandler(keyInfo);
 
   const popover = (
     <Popover id="popover-basic">

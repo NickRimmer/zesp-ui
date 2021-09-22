@@ -18,6 +18,7 @@ export default () => {
   const fileName = `/Devices/${ieee}`;
   const [template, setTemplate] = useState<ZespDeviceInfo>();
   const [status, setStatus] = useState<hookStatuses>("loading");
+  const [play, setPlay] = useState<ReportKeyInfo>();
   const [showSettings, setShowSettings] = useState<{ keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }>();
 
   const devices = useSelector(getAllDevices)
@@ -61,15 +62,19 @@ export default () => {
       })
   }
 
+  const playHandler = (keyInfo: ReportKeyInfo): void => setPlay(keyInfo);
+
   return {
     template,
     devices,
     status,
     ieee,
     showSettings,
+    play,
 
     setShowSettings,
     onSaveReportSettings,
+    playHandler,
   }
 }
 

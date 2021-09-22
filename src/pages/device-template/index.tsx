@@ -8,6 +8,7 @@ import {CustomSpinner} from "../../shared/loading-spinner";
 import ErrorMessage from "../../shared/error-message";
 import DeviceTemplateReport from "./device-template-report";
 import DeviceReportSettings from "./device-report-settings";
+import DeviceTemplateEditor from "./device-template-editor";
 
 export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
   const {
@@ -16,9 +17,11 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
     status,
     ieee,
     showSettings,
+    play,
 
     setShowSettings,
-    onSaveReportSettings
+    onSaveReportSettings,
+    playHandler,
   } = useHook();
 
   const history = useHistory();
@@ -36,9 +39,9 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
           <Card className="device-template">
             <Card.Header className="breadcrumb">
               <NavLink to="/devices" className="breadcrumb-item">Devices</NavLink>
-              <NavLink to={`/devices/${ieee}`} className="breadcrumb-item">{template.Name || template.ModelId}</NavLink>
+              <NavLink to={`/devices/${ieee}`} className="breadcrumb-item">Settings</NavLink>
               <Dropdown className="d-inline-block">
-                <Dropdown.Toggle variant="link" as={"span"} className="breadcrumb-item">Template data</Dropdown.Toggle>
+                <Dropdown.Toggle variant="link" as={"span"} className="breadcrumb-item">{template.Name || template.ModelId}</Dropdown.Toggle>
                 <Dropdown.Menu>
                   {devices.map((device, i) => (
                     <Dropdown.Item onClick={() => history.push(`/device/template/${device.ieee}`)} key={i}
@@ -47,12 +50,13 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
                 </Dropdown.Menu>
               </Dropdown>
             </Card.Header>
-            <Card.Body>
-              <Col xs={6}>
+            <Card.Body className="row">
+              <Col xs={12} lg={6}>
                 {Object.keys(template.Report).map(key => {
-                  return (<DeviceTemplateReport key={key} reportKey={key} template={template} showSettingsHandler={setShowSettings}/>)
+                  return (<DeviceTemplateReport key={key} reportKey={key} template={template} showSettingsHandler={setShowSettings} playHandler={playHandler}/>)
                 })}
               </Col>
+              <Col xs={12} lg={6}><DeviceTemplateEditor play={play}/></Col>
             </Card.Body>
           </Card>
         </div>

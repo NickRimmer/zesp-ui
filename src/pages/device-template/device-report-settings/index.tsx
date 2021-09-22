@@ -21,6 +21,9 @@ export const DeviceReportSettings: React.FC<IProps> = ({
   const [mat, setMat] = useState(data.reportInfo.mat)
   const [forceClose, setForceClose] = useState(false);
 
+  const roleDataList = ["binary_sensor", "fan", "alarm_control_panel", "lock", "climate", "light_XY", "light_rgb", "light_hue", "light_temp", "light_level", "light_onoff", "light", "livolo_swith1ch", "outlet", "switch", "cover", "sensor"]
+    .sort();
+
   const onSaveHandler = (): void => {
     const result = {...data.reportInfo, ...{label, role, mat}}
     onSave(data.keyInfo, result);
@@ -44,13 +47,17 @@ export const DeviceReportSettings: React.FC<IProps> = ({
 
       <Form.Group as={Row} className="mb-3">
         <Form.Label column sm="4">Role</Form.Label>
-        <Col><Form.Control value={role || ""} onChange={event => setRole(event.target.value)} placeholder="Default"/></Col>
+        <Col><Form.Control value={role || ""} onChange={event => setRole(event.target.value)} placeholder="Default" {...{list: "roles-list"}}/></Col>
       </Form.Group>
 
       <Form.Group as={Row} className="mb-3">
         <Form.Label column sm="4">Mat (???)</Form.Label>
         <Col><Form.Control value={mat || ""} onChange={event => setMat(event.target.value)} placeholder="Default"/></Col>
       </Form.Group>
+
+      <datalist id="roles-list">
+        {roleDataList.map((x, i) => (<option key={i} value={x}/>))}
+      </datalist>
     </AppDialog>
   )
 }

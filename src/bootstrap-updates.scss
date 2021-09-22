@@ -92,7 +92,7 @@ $space_between_spacer: 1rem;
   margin: 0;
 
   .breadcrumb-item {
-    padding: 10px 5px 10px 25px;
+    padding: 10px 5px 10px 30px;
     position: relative;
     color: #000;
     text-decoration: none;
@@ -137,6 +137,24 @@ $space_between_spacer: 1rem;
 
     .breadcrumb-item {
       padding-left: 25px;
+    }
+  }
+}
+
+.badges {
+  .rounded-pill {
+    &:not(:first-child):not(:last-child) {
+      border-radius: 0 !important;
+    }
+
+    &:first-child:not(:last-child) {
+      border-radius: 50rem 0 0 50rem !important;
+      padding-right: 5px;
+    }
+
+    &:last-child:not(:first-child) {
+      border-radius: 0 50rem 50rem 0 !important;
+      padding-left: 5px;
     }
   }
 }
