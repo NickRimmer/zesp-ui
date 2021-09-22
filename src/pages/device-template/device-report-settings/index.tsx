@@ -5,7 +5,7 @@ import {ReportKeyInfo} from "../../../models/ReportKeyInfo";
 import {Button, Col, Form, Row} from "react-bootstrap";
 
 interface IProps {
-  data: { keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo },
+  data: { keyInfo: ReportKeyInfo, reportInfo?: ZespReportInfo },
 
   onClosed: () => void,
   onSave: (keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo) => void,
@@ -16,16 +16,16 @@ export const DeviceReportSettings: React.FC<IProps> = ({
   onClosed,
   onSave,
 }): React.ReactElement => {
-  const [label, setLabel] = useState(data.reportInfo.label)
-  const [role, setRole] = useState(data.reportInfo.role)
-  const [mat, setMat] = useState(data.reportInfo.mat)
+  const [label, setLabel] = useState(data.reportInfo?.label || "")
+  const [role, setRole] = useState(data.reportInfo?.role || "")
+  const [mat, setMat] = useState(data.reportInfo?.mat || "")
   const [forceClose, setForceClose] = useState(false);
 
   const roleDataList = ["binary_sensor", "fan", "alarm_control_panel", "lock", "climate", "light_XY", "light_rgb", "light_hue", "light_temp", "light_level", "light_onoff", "light", "livolo_swith1ch", "outlet", "switch", "cover", "sensor"]
     .sort();
 
   const onSaveHandler = (): void => {
-    const result = {...data.reportInfo, ...{label, role, mat}}
+    const result = {...data.reportInfo || {} as ZespReportInfo, ...{label, role, mat}}
     onSave(data.keyInfo, result);
     setForceClose(true);
   }

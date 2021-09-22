@@ -3,6 +3,7 @@ import {DeviceInfo} from "../../models/DeviceInfo";
 import {RootState} from "../configure";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {ZespReportUpdates} from "../../services/zesp/service-root";
+import {ZespDeviceInfo} from "../../services/zesp/models/ZespDeviceInfo";
 
 export interface DevicesState {
   devices: DeviceInfo[]
@@ -41,6 +42,16 @@ export const devicesSlice = createSlice({
       }
     },
 
+    updateZespInfo: (state, action: PayloadAction<ZespDeviceInfo>): void => {
+      const deviceIndex = state.devices.findIndex(x => x.zespInfo.IEEE === action.payload.IEEE);
+      if (deviceIndex < 0) {
+        console.warn("Cannot update zesp data, cause device information not found")
+        return
+      } else {
+        state.devices[deviceIndex].zespInfo = action.payload;
+      }
+    },
+
     updateReport: (state, action: PayloadAction<{ ieee: string, reportKey: string, update: Partial<ZespReportInfo> }>): void => {
       const device = state.devices.find(x => x.zespInfo.IEEE === action.payload.ieee);
       if (!device) {
@@ -70,5 +81,5 @@ const getters = {
 }
 
 export const {getDevicesByModelId, getDeviceByIee, getAllDevices} = getters;
-export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice} = devicesSlice.actions;
+export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice, updateZespInfo} = devicesSlice.actions;
 export default devicesSlice.reducer;

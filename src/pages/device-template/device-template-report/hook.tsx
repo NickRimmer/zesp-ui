@@ -1,7 +1,6 @@
 import {Devices} from "../../../services/devices";
 import HomeAutoClusters from "../../../data/reports.json";
 import {IClusterAttribute, IClusterInfo} from "../../../interfaces/IClusterInfo";
-import toast from "react-hot-toast";
 import {IDeviceTemplateReportProps} from "./index";
 
 const DeviceTemplateReportHook = ({
@@ -22,8 +21,7 @@ const DeviceTemplateReportHook = ({
       ? clusterInfo.attributes[keyInfo.attributeId] || undefined
       : clusterInfo.attributes[`${keyInfo.attributeId}:${role}`] || clusterInfo.attributes[keyInfo.attributeId] || undefined
 
-  const editHandler = () => showSettingsHandler({keyInfo, reportInfo: report}) //toast.success("Not implemented yet", {icon: "🤪"})
-  const deleteHandler = () => toast.success("Not implemented yet", {icon: "🤤"})
+  const editHandler = () => showSettingsHandler({keyInfo, reportInfo: report})
 
   return {
     report,
@@ -32,7 +30,6 @@ const DeviceTemplateReportHook = ({
     attributeInfo,
 
     editHandler,
-    deleteHandler
   }
 }
 

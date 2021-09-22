@@ -11,6 +11,8 @@ import {ZespContext} from "../../../shared/agents/ZespAgent";
 import {ReportZespResponseValidator} from "../../../services/zesp/common/ZespResponseValidators";
 import {ZespDeviceUpdate} from "../../../services/zesp/models/ZespDeviceUpdate";
 import {DictionaryStrings} from "../../../models/DictionaryStrings";
+import DeviceReportSettings from "../device-report-settings";
+import {ZespReportInfo} from "../../../services/zesp/models/ZespReportInfo";
 
 interface IResponse {
   type: string,
@@ -26,17 +28,19 @@ interface IReadMessage {
 interface IProps {
   play?: ReportKeyInfo,
   template: ZespDeviceInfo,
+  onAddReport: (keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo) => void,
 }
 
-export const DeviceTemplateEditor: React.FC<IProps> = ({play, template}): React.ReactElement => {
+export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddReport}): React.ReactElement => {
   const [cluster, setCluster] = useState<string>(play?.clusterId || "")
   const [attribute, setAttribute] = useState<string>(play?.attributeId || "")
   const [attributes, setAttributes] = useState<IClusterAttributeCollection>()
-  const [readData, setReadData] = useState<IResponse>();
-  const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
-  const [readDataMessage, setReadDataMessage] = useState<IReadMessage>();
-  const {zespRequestAsync} = useContext(ZespContext);
-  const alignTimers = useRef<NodeJS.Timeout[]>([]);
+  const [readData, setReadData] = useState<IResponse>()
+  const [sendButtonDisabled, setSendButtonDisabled] = useState(false)
+  const [readDataMessage, setReadDataMessage] = useState<IReadMessage>()
+  const [showAddSettings, setShowAddSettings] = useState(false)
+  const {zespRequestAsync} = useContext(ZespContext)
+  const alignTimers = useRef<NodeJS.Timeout[]>([])
   const clusters = HomeAutoClusters
     .map(x => x as IClusterInfo)
     .filter(x => Object.keys(x.attributes).length > 0)
@@ -91,6 +95,19 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template}): React.
     readingDataBegin(template.Device, "01", cluster, attribute);
   }
 
+  const onAddHandler = (): void => {
+    if (!cluster && cluster.trim().length === 0) {
+      toast.error("Cluster value required", {icon: "👾"})
+      return
+    }
+    if (!attribute && attribute.trim().length === 0) {
+      toast.error("Attribute value required", {icon: "☢️"})
+      return
+    }
+
+    setShowAddSettings(true);
+  }
+
   const readingDataBegin = (deviceId: string, endpointId: string, clusterId: string, attributeId: string): void => {
     setReadDataMessage({type: "info", message: "Reading..."})
     setSendButtonDisabled(true)
@@ -123,7 +140,12 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template}): React.
         <input type="text" className="form-control text-center flex-grow-0" style={{width: "95px"}} defaultValue="01" readOnly/>
         <input type="text" className="form-control text-center" placeholder="Cluster" value={cluster} onChange={(event) => setCluster(event.target.value)}/>
         <input type="text" className="form-control text-center" placeholder="Attribute" value={attribute} onChange={(event) => setAttribute(event.target.value)}/>
-        <button className="btn btn-primary flex-grow-0" style={{width: "100px"}} type="button" onClick={onReadHandler} disabled={sendButtonDisabled}>
+
+        <button className="btn btn-outline-primary flex-grow-0" style={{width: "100px"}} type="button" onClick={onAddHandler} disabled={sendButtonDisabled}>
+          <i className="bi bi-plus"/> Add
+        </button>
+
+        <button className="btn btn-outline-primary flex-grow-0" style={{width: "100px"}} type="button" onClick={onReadHandler} disabled={sendButtonDisabled}>
           <i className="bi bi-cloud-arrow-down-fill me-2"/> Read
         </button>
       </div>
@@ -174,6 +196,10 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template}): React.
           )}
         </Col>
       </Row>
+      {showAddSettings && (
+        <DeviceReportSettings data={{reportInfo: undefined, keyInfo: {endpoint: "01", clusterId: cluster, attributeId: attribute}}}
+                              onClosed={() => setShowAddSettings(false)}
+                              onSave={onAddReport}/>)}
     </div>
   )
 }

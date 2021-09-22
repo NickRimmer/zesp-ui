@@ -11,7 +11,7 @@ export const ValueSensor = (props: IDeviceControlProps<DataControlSettings>) => 
   if (!report) return (<div className="alert alert-warning">Report missed</div>);
 
   const value = report.parsed || report.val;
-  const unit = props.config.zespRoleSettings["unit_of_measurement"] || "";
+  const unit = (props.config.zespRoleSettings && props.config.zespRoleSettings["unit_of_measurement"]) || "";
 
   return (
     <Row>

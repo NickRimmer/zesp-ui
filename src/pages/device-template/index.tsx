@@ -22,6 +22,8 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
     setShowSettings,
     onSaveReportSettings,
     playHandler,
+    onAddReport,
+    onDelete,
   } = useHook();
 
   const history = useHistory();
@@ -53,10 +55,12 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
             <Card.Body className="row">
               <Col xs={12} lg={6}>
                 {Object.keys(template.Report).map(key => {
-                  return (<DeviceTemplateReport key={key} reportKey={key} template={template} showSettingsHandler={setShowSettings} playHandler={playHandler}/>)
+                  return (<DeviceTemplateReport key={key} reportKey={key} template={template}
+                                                showSettingsHandler={setShowSettings} playHandler={playHandler}
+                                                deleteHandler={onDelete}/>)
                 })}
               </Col>
-              <Col xs={12} lg={6}><DeviceTemplateEditor play={play} template={template}/></Col>
+              <Col xs={12} lg={6}><DeviceTemplateEditor play={play} template={template} onAddReport={onAddReport}/></Col>
             </Card.Body>
           </Card>
         </div>

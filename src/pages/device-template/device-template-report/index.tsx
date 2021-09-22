@@ -11,6 +11,7 @@ export interface IDeviceTemplateReportProps {
 
   showSettingsHandler: (data: { keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }) => void,
   playHandler: (keyInfo: ReportKeyInfo) => void,
+  deleteHandler: (keyInfo: ReportKeyInfo) => void,
 }
 
 export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props): React.ReactElement => {
@@ -26,8 +27,7 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
     clusterInfo,
     attributeInfo,
 
-    editHandler,
-    deleteHandler
+    editHandler
   } = hook;
 
   const {
@@ -37,7 +37,7 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
 
   const deleteConfirmedHandler = () => {
-    if (deleteConfirmed) deleteHandler();
+    if (deleteConfirmed) props.deleteHandler(keyInfo);
   }
 
   const runHandler = () => playHandler(keyInfo);
