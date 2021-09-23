@@ -8,6 +8,15 @@
     width: 130px;
     margin-right: 7px;
 
+    .title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      text-align: center;
+      padding: 0 5px;
+    }
+
     .code {
       font-size: .8rem;
       color: #7B7B7B;

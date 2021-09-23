@@ -61,18 +61,18 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
             <OverlayTrigger trigger="click" overlay={popover} rootClose={true} onToggle={setDeleteConfirmed}>
               <button className="dropdown-item" onClick={deleteConfirmedHandler}>Delete report</button>
             </OverlayTrigger>
-            <Dropdown.Divider/>
-            <Dropdown.Item onClick={runHandler}>Run to read</Dropdown.Item>
+            {/*<Dropdown.Divider/>
+            <Dropdown.Item onClick={runHandler}>Run to read</Dropdown.Item>*/}
           </Dropdown.Menu>
         </Dropdown>
       </div>
       <div className="report-key">
-        <div className="title">{clusterInfo.name}</div>
+        <div className="title" title={clusterInfo.name}>{clusterInfo.name}</div>
         <div className="code">{keyInfo.clusterId}</div>
       </div>
 
       <div className="report-key">
-        <div className="title">{attributeInfo?.name || attributeInfo?.id || "Unknown"}</div>
+        <div className="title" title={attributeInfo?.name || attributeInfo?.id}>{attributeInfo?.name || attributeInfo?.id || "Unknown"}</div>
         <div className="code">{keyInfo.attributeId || "-"}</div>
       </div>
 

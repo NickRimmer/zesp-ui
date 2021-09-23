@@ -23,6 +23,7 @@ export default () => {
   const [showSettings, setShowSettings] = useState<{ keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }>();
 
   const devices = useSelector(getAllDevices)
+    .filter(x => x.zespInfo.Device !== "0000")
     .map(x => ({
       name: x.zespInfo.Name || x.zespInfo.ModelId,
       ieee: x.zespInfo.IEEE,
@@ -46,7 +47,10 @@ export default () => {
   }, [ieee]);
 
   const onSaveReportSettings = (keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo): void => {
-    const reportKey = `${keyInfo.endpoint}${keyInfo.clusterId}${keyInfo.attributeId}`
+    const reportKey = keyInfo.attributeId
+      ? `${keyInfo.endpoint}${keyInfo.clusterId}${keyInfo.attributeId}`
+      : keyInfo.clusterId; // for BLE devices without endpoints and attributes
+
     const updatedReports = {...template!.Report, ...{[reportKey]: reportInfo}}
     const updatedTemplate = {...template, ...{Report: updatedReports}}
     const json = JSON.stringify(updatedTemplate);

@@ -3,7 +3,7 @@ import {DictionaryStrings} from "../models/DictionaryStrings";
 export interface IClusterInfo {
   clusterId: string,
   name: string,
-  attributes: IClusterAttributeCollection
+  attributes?: IClusterAttributeCollection
 }
 
 export type IClusterAttributeCollection = { [attributeId: string]: IClusterAttribute };

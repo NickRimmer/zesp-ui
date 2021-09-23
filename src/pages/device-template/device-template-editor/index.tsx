@@ -43,7 +43,7 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
   const alignTimers = useRef<NodeJS.Timeout[]>([])
   const clusters = HomeAutoClusters
     .map(x => x as IClusterInfo)
-    .filter(x => Object.keys(x.attributes).length > 0)
+    .filter(x => x.attributes && Object.keys(x.attributes).length > 0)
   const responseDataTypes = ResponseDataTypes as DictionaryStrings
 
   useEffect(() => {
@@ -100,10 +100,10 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
       toast.error("Cluster value required", {icon: "👾"})
       return
     }
-    if (!attribute && attribute.trim().length === 0) {
-      toast.error("Attribute value required", {icon: "☢️"})
-      return
-    }
+    // if (!attribute && attribute.trim().length === 0) {
+    //   toast.error("Attribute value required", {icon: "☢️"})
+    //   return
+    // }
 
     setShowAddSettings(true);
   }
