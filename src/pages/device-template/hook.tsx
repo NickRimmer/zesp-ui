@@ -96,6 +96,37 @@ export default () => {
       })
   }
 
+  const moveReport = (keyInfo: ReportKeyInfo, amount: number): void => {
+    // if (!template) throw Error("Unexpected empty template");
+    //
+    // const reportKey = `${keyInfo.endpoint}${keyInfo.clusterId}${keyInfo.attributeId}`
+    // const reportKeys = Object.keys(template.Report);
+    //
+    // const currentIndex = reportKeys.indexOf(reportKey)
+    // if (currentIndex == -1) {
+    //   console.warn("Cannot find report current index...")
+    //   return
+    // }
+    //
+    // const newIndex = currentIndex + amount;
+    // if (newIndex < 0 || newIndex >= reportKeys.length) {
+    //   console.debug("Didn't moved, cause limited")
+    //   return;
+    // }
+    //
+    // const newReportKeys = [
+    //   ...reportKeys.slice(0, newIndex),
+    //   reportKeys[currentIndex],
+    //   ...reportKeys.slice(newIndex, currentIndex),
+    //   ...reportKeys.slice(currentIndex + 1, reportKeys.length)]
+    //
+    // template.Report = newReportKeys.reduce((a, key) => ({...a, [key]: template.Report[key]}), {});
+    // // setTemplate({...template});
+    // console.log(JSON.stringify(template.Report))
+
+    throw new Error("Not implemented yet")
+  }
+
   return {
     template,
     devices,
@@ -109,6 +140,7 @@ export default () => {
     playHandler,
     onAddReport,
     onDelete,
+    moveReport,
   }
 }
 

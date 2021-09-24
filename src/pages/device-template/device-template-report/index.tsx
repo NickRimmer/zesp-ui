@@ -12,6 +12,7 @@ export interface IDeviceTemplateReportProps {
   showSettingsHandler: (data: { keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo }) => void,
   playHandler: (keyInfo: ReportKeyInfo) => void,
   deleteHandler: (keyInfo: ReportKeyInfo) => void,
+  onMoveReport: (keyInfo: ReportKeyInfo, amount: number) => void,
 }
 
 export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props): React.ReactElement => {
@@ -31,7 +32,8 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
   } = hook;
 
   const {
-    playHandler
+    playHandler,
+    // onMoveReport
   } = props;
 
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
@@ -62,7 +64,8 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
               <button className="dropdown-item" onClick={deleteConfirmedHandler}>Delete report</button>
             </OverlayTrigger>
             {/*<Dropdown.Divider/>
-            <Dropdown.Item onClick={runHandler}>Run to read</Dropdown.Item>*/}
+            <Dropdown.Item onClick={() => onMoveReport(keyInfo, -1)}>Move up</Dropdown.Item>
+            <Dropdown.Item onClick={() => onMoveReport(keyInfo, 1)}>Move down</Dropdown.Item>*/}
           </Dropdown.Menu>
         </Dropdown>
       </div>
