@@ -45,7 +45,6 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
   const alignTimers = useRef<NodeJS.Timeout[]>([])
   const endpointClusters = template.EP && Object.entries(template.EP)[0] && Object.entries(template.EP)[0][1]
 
-
   const clusters = HomeAutoClusters
     .map(x => x as IClusterInfo)
     .filter(x => x.attributes && Object.keys(x.attributes).length > 0)
@@ -54,13 +53,17 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
   const responseDataTypes = ResponseDataTypes as DictionaryStrings
 
   useEffect(() => {
-    console.log(play)
-    if (!play) {
+    if (template) {
       setCluster("")
       setAttribute("")
       setAttributes(undefined)
-      return;
+      setReadDataMessage(undefined)
+      setReadData(undefined)
     }
+  }, [template])
+
+  useEffect(() => {
+    if (!play) return;
 
     setCluster(play.clusterId)
     setAttribute(play.attributeId)
@@ -114,10 +117,6 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
       toast.error("Cluster value required", {icon: "👾"})
       return
     }
-    // if (!attribute && attribute.trim().length === 0) {
-    //   toast.error("Attribute value required", {icon: "☢️"})
-    //   return
-    // }
 
     setShowAddSettings(true);
   }
@@ -146,6 +145,13 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
       .finally(() => {
         setSendButtonDisabled(false)
       })
+  }
+
+  const getClusterType = (clusterId: string): string | undefined => {
+    if (endpointClusters.ClO.indexOf(clusterId) !== -1 && endpointClusters.ClI.indexOf(clusterId) !== -1) return "in/out";
+    if (endpointClusters.ClO.indexOf(clusterId) !== -1) return "out";
+    if (endpointClusters.ClI.indexOf(clusterId) !== -1) return "in";
+    return undefined;
   }
 
   return (
@@ -180,17 +186,22 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
         <Row>
           <Col xs={6} className="lists">
             <ListGroup as={ButtonGroup} vertical={true}>
-              {clusters.map((x, i) => (
-                <ListGroup.Item key={i} as={Button} onClick={() => setCluster(x.clusterId)} active={x.clusterId === cluster}
-                                className="d-flex justify-content-between align-items-center">
-                  <div className="me-auto item-title" title={x.name}>{x.name}</div>
-                  <span className="badge bg-primary rounded-pill">{x.clusterId}</span>
-                </ListGroup.Item>
-              ))}
+              {clusters.map((x, i) => {
+                const type = getClusterType(x.clusterId)
+                return (
+                  <ListGroup.Item key={i} as={Button} onClick={() => setCluster(x.clusterId)} active={x.clusterId === cluster}
+                                  className="d-flex justify-content-between align-items-center">
+                    <div className="me-auto item-title" title={x.name}>{x.name}</div>
+                    <div className="badges">
+                      {type && (<span className="badge bg-info rounded-pill">{type}</span>)}
+                      <span className="badge bg-secondary rounded-pill">{x.clusterId}</span>
+                    </div>
+                  </ListGroup.Item>
+                )
+              })}
             </ListGroup>
           </Col>
           <Col xs={6} className="lists">
-            {!attributes && (<span>Select cluster first</span>)}
             {attributes && (
               <ListGroup as={ButtonGroup} vertical={true}>
                 {Object.entries(attributes).map(([attributeId, x], i) => {

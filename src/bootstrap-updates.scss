@@ -142,6 +142,8 @@ $space_between_spacer: 1rem;
 }
 
 .badges {
+  white-space: nowrap;
+
   .rounded-pill {
     &:not(:first-child):not(:last-child) {
       border-radius: 0 !important;
