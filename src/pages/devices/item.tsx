@@ -21,7 +21,7 @@ export default (props: IProps) => {
             <div className="title">{device.title}</div>
             <div className="ieee text-muted small">{device.ieee}</div>
             {device.tags.length > 0 && (
-              <div className="badges small">
+              <div className="badges small text-wrap">
                 {device.tags.map((x, i) => (<span key={i} className="badge bg-secondary">{x}</span>))}
               </div>
             )}
