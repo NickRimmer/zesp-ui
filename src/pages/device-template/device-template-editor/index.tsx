@@ -148,9 +148,9 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
   }
 
   const getClusterType = (clusterId: string): string | undefined => {
-    if (endpointClusters.ClO && endpointClusters.ClO.indexOf(clusterId) !== -1 && endpointClusters.ClI && endpointClusters.ClI.indexOf(clusterId) !== -1) return "in/out";
-    if (endpointClusters.ClO && endpointClusters.ClO.indexOf(clusterId) !== -1) return "out";
-    if (endpointClusters.ClI && endpointClusters.ClI.indexOf(clusterId) !== -1) return "in";
+    if (endpointClusters?.ClO && endpointClusters.ClO.indexOf(clusterId) !== -1 && endpointClusters?.ClI && endpointClusters.ClI.indexOf(clusterId) !== -1) return "in/out";
+    if (endpointClusters?.ClO && endpointClusters.ClO.indexOf(clusterId) !== -1) return "out";
+    if (endpointClusters?.ClI && endpointClusters.ClI.indexOf(clusterId) !== -1) return "in";
     return undefined;
   }
 
