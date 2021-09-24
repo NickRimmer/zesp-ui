@@ -33,7 +33,7 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
 
   const {
     playHandler,
-    // onMoveReport
+    onMoveReport
   } = props;
 
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
@@ -63,9 +63,9 @@ export const DeviceTemplateReport: React.FC<IDeviceTemplateReportProps> = (props
             <OverlayTrigger trigger="click" overlay={popover} rootClose={true} onToggle={setDeleteConfirmed}>
               <button className="dropdown-item" onClick={deleteConfirmedHandler}>Delete report</button>
             </OverlayTrigger>
-            {/*<Dropdown.Divider/>
+            <Dropdown.Divider/>
             <Dropdown.Item onClick={() => onMoveReport(keyInfo, -1)}>Move up</Dropdown.Item>
-            <Dropdown.Item onClick={() => onMoveReport(keyInfo, 1)}>Move down</Dropdown.Item>*/}
+            <Dropdown.Item onClick={() => onMoveReport(keyInfo, 1)}>Move down</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

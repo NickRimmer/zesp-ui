@@ -3,7 +3,7 @@ import "./styles.scss";
 import HomeAutoClusters from "../../../data/reports.json";
 import ResponseDataTypes from "./data-types.json";
 import {ReportKeyInfo} from "../../../models/ReportKeyInfo";
-import {Button, ButtonGroup, Col, ListGroup, Row} from "react-bootstrap";
+import {Button, ButtonGroup, Col, FormGroup, FormLabel, ListGroup, Row} from "react-bootstrap";
 import {IClusterAttributeCollection, IClusterInfo} from "../../../interfaces/IClusterInfo";
 import toast from "react-hot-toast";
 import {ZespDeviceInfo} from "../../../services/zesp/models/ZespDeviceInfo";
@@ -13,6 +13,7 @@ import {ZespDeviceUpdate} from "../../../services/zesp/models/ZespDeviceUpdate";
 import {DictionaryStrings} from "../../../models/DictionaryStrings";
 import DeviceReportSettings from "../device-report-settings";
 import {ZespReportInfo} from "../../../services/zesp/models/ZespReportInfo";
+import FormCheckInput from "react-bootstrap/FormCheckInput";
 
 interface IResponse {
   type: string,
@@ -36,18 +37,31 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
   const [attribute, setAttribute] = useState<string>(play?.attributeId || "")
   const [attributes, setAttributes] = useState<IClusterAttributeCollection>()
   const [readData, setReadData] = useState<IResponse>()
+  const [showAll, setShowAll] = useState(false)
   const [sendButtonDisabled, setSendButtonDisabled] = useState(false)
   const [readDataMessage, setReadDataMessage] = useState<IReadMessage>()
   const [showAddSettings, setShowAddSettings] = useState(false)
   const {zespRequestAsync} = useContext(ZespContext)
   const alignTimers = useRef<NodeJS.Timeout[]>([])
+  const endpointClusters = template.EP && Object.entries(template.EP)[0] && Object.entries(template.EP)[0][1]
+
+
   const clusters = HomeAutoClusters
     .map(x => x as IClusterInfo)
     .filter(x => x.attributes && Object.keys(x.attributes).length > 0)
+    .filter(x => showAll || endpointClusters?.ClO.indexOf(x.clusterId) >= 0 || endpointClusters?.ClI.indexOf(x.clusterId) >= 0)
+
   const responseDataTypes = ResponseDataTypes as DictionaryStrings
 
   useEffect(() => {
-    if (!play) return;
+    console.log(play)
+    if (!play) {
+      setCluster("")
+      setAttribute("")
+      setAttributes(undefined)
+      return;
+    }
+
     setCluster(play.clusterId)
     setAttribute(play.attributeId)
   }, [play])
@@ -162,44 +176,56 @@ export const DeviceTemplateEditor: React.FC<IProps> = ({play, template, onAddRep
         </div>
       )}
 
-      <Row>
-        <Col xs={6} className="lists">
-          <ListGroup as={ButtonGroup} vertical={true}>
-            {clusters.map((x, i) => (
-              <ListGroup.Item key={i} as={Button} onClick={() => setCluster(x.clusterId)} active={x.clusterId === cluster}
-                              className="d-flex justify-content-between align-items-center">
-                <div className="me-auto item-title" title={x.name}>{x.name}</div>
-                <span className="badge bg-primary rounded-pill">{x.clusterId}</span>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
-        <Col xs={6} className="lists">
-          {!attributes && (<span>Select cluster first</span>)}
-          {attributes && (
+      {clusters && clusters.length > 0 && (
+        <Row>
+          <Col xs={6} className="lists">
             <ListGroup as={ButtonGroup} vertical={true}>
-              {Object.entries(attributes).map(([attributeId, x], i) => {
-                const attributeParts = attributeId.split(":");
-                return (
-                  <ListGroup.Item key={i} as={Button} onClick={() => setAttribute(attributeParts[0])} active={attributeParts[0] === attribute}
-                                  className="d-flex justify-content-between align-items-center">
-                    <div className="me-auto item-title" title={x.name}>{x.name || "Unnamed"}</div>
-
-                    <div className="badges">
-                      {attributeParts.length > 1 && (<span className="badge bg-info rounded-pill">{attributeParts[1]}</span>)}
-                      <span className="badge bg-secondary rounded-pill">{attributeParts[0]}</span>
-                    </div>
-                  </ListGroup.Item>
-                )
-              })}
+              {clusters.map((x, i) => (
+                <ListGroup.Item key={i} as={Button} onClick={() => setCluster(x.clusterId)} active={x.clusterId === cluster}
+                                className="d-flex justify-content-between align-items-center">
+                  <div className="me-auto item-title" title={x.name}>{x.name}</div>
+                  <span className="badge bg-primary rounded-pill">{x.clusterId}</span>
+                </ListGroup.Item>
+              ))}
             </ListGroup>
-          )}
-        </Col>
-      </Row>
+          </Col>
+          <Col xs={6} className="lists">
+            {!attributes && (<span>Select cluster first</span>)}
+            {attributes && (
+              <ListGroup as={ButtonGroup} vertical={true}>
+                {Object.entries(attributes).map(([attributeId, x], i) => {
+                  const attributeParts = attributeId.split(":");
+                  return (
+                    <ListGroup.Item key={i} as={Button} onClick={() => setAttribute(attributeParts[0])} active={attributeParts[0] === attribute}
+                                    className="d-flex justify-content-between align-items-center">
+                      <div className="me-auto item-title" title={x.name}>{x.name || "Unnamed"}</div>
+
+                      <div className="badges">
+                        {attributeParts.length > 1 && (<span className="badge bg-info rounded-pill">{attributeParts[1]}</span>)}
+                        <span className="badge bg-secondary rounded-pill">{attributeParts[0]}</span>
+                      </div>
+                    </ListGroup.Item>
+                  )
+                })}
+              </ListGroup>
+            )}
+          </Col>
+        </Row>
+      )}
+
+      {(!clusters || clusters.length === 0) && (<div className="alert alert-warning text-center">No device related clusters found</div>)}
+
       {showAddSettings && (
         <DeviceReportSettings data={{reportInfo: undefined, keyInfo: {endpoint: "01", clusterId: cluster, attributeId: attribute}}}
                               onClosed={() => setShowAddSettings(false)}
                               onSave={onAddReport}/>)}
+
+      <FormGroup className="text-end border-top mt-1 pt-2 d-flex align-items-center justify-content-end">
+        <FormLabel className="m-0">
+          Show all clusters and attributes
+          <FormCheckInput className="ms-2" checked={showAll} onChange={() => setShowAll(!showAll)}/>
+        </FormLabel>
+      </FormGroup>
     </div>
   )
 }

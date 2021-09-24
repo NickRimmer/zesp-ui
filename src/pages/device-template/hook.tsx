@@ -4,7 +4,7 @@ import {ZespContext} from "../../shared/agents/ZespAgent";
 import {TypedZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllDevices, updateReport, updateZespInfo} from "../../store/slices/devicesSlice";
+import {getAllDevices, updateReport, updateReportsOrder, updateZespInfo} from "../../store/slices/devicesSlice";
 import {ReportKeyInfo} from "../../models/ReportKeyInfo";
 import {ZespDeviceInfo} from "../../services/zesp/models/ZespDeviceInfo";
 import toast from "react-hot-toast";
@@ -67,7 +67,7 @@ export default () => {
       })
   }
 
-  const playHandler = (keyInfo: ReportKeyInfo): void => setPlay(keyInfo);
+  const playHandler = (keyInfo?: ReportKeyInfo): void => setPlay(keyInfo);
 
   const onAddReport = (keyInfo: ReportKeyInfo, reportInfo: ZespReportInfo): void => {
     onSaveReportSettings(keyInfo, reportInfo)
@@ -97,34 +97,48 @@ export default () => {
   }
 
   const moveReport = (keyInfo: ReportKeyInfo, amount: number): void => {
-    // if (!template) throw Error("Unexpected empty template");
-    //
-    // const reportKey = `${keyInfo.endpoint}${keyInfo.clusterId}${keyInfo.attributeId}`
-    // const reportKeys = Object.keys(template.Report);
-    //
-    // const currentIndex = reportKeys.indexOf(reportKey)
-    // if (currentIndex == -1) {
-    //   console.warn("Cannot find report current index...")
-    //   return
-    // }
-    //
-    // const newIndex = currentIndex + amount;
-    // if (newIndex < 0 || newIndex >= reportKeys.length) {
-    //   console.debug("Didn't moved, cause limited")
-    //   return;
-    // }
-    //
-    // const newReportKeys = [
-    //   ...reportKeys.slice(0, newIndex),
-    //   reportKeys[currentIndex],
-    //   ...reportKeys.slice(newIndex, currentIndex),
-    //   ...reportKeys.slice(currentIndex + 1, reportKeys.length)]
-    //
-    // template.Report = newReportKeys.reduce((a, key) => ({...a, [key]: template.Report[key]}), {});
-    // // setTemplate({...template});
-    // console.log(JSON.stringify(template.Report))
+    if (!template) throw Error("Unexpected empty template");
 
-    throw new Error("Not implemented yet")
+    const reportKey = `${keyInfo.endpoint}${keyInfo.clusterId}${keyInfo.attributeId}`
+    const reportKeys = Object.keys(template.Report);
+
+    const currentIndex = reportKeys.indexOf(reportKey)
+    if (currentIndex == -1) {
+      console.warn("Cannot find report current index...")
+      return
+    }
+
+    const newIndex = currentIndex + amount;
+    if (newIndex < 0 || newIndex >= reportKeys.length) {
+      console.debug("Didn't moved, cause limited")
+      return;
+    }
+
+    const tmp = reportKeys[newIndex]
+    reportKeys[newIndex] = reportKeys[currentIndex]
+    reportKeys[currentIndex] = tmp
+
+    console.log(`old: ${currentIndex}; new: ${newIndex}`)
+    console.log(reportKeys)
+
+    const reports = reportKeys.reduce((a, key) => ({...a, [key]: template.Report[key]}), {});
+    const json = JSON.stringify({...template, ...{Report: reports}});
+
+    dispatch(setSpinner({show: true, message: "Reordering..."}))
+    zespRequestAsync({
+      data: `SaveJson|${fileName}|${json}`,
+      responseValidator: TypedZespResponseValidator("ZD_RSP")
+    })
+      .then(event => {
+        if (event.dataParts.length < 2 || event.dataParts[1].toLowerCase() !== "ok") throw Error("Cannot save device settings");
+        template.Report = reports;
+        setTemplate(template);
+        dispatch(updateReportsOrder({ieee: template.IEEE, orderedReportKeys: reportKeys}))
+      })
+      .catch(reason => toast.error(reason))
+      .finally(() => {
+        dispatch(setSpinnerShow(false))
+      })
   }
 
   return {

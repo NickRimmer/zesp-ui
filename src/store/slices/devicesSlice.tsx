@@ -70,6 +70,16 @@ export const devicesSlice = createSlice({
       }
 
       device.zespInfo.Report = {...device.zespInfo.Report, ...action.payload} as { [reportId: string]: ZespReportInfo };
+    },
+
+    updateReportsOrder: (state, action: PayloadAction<{ ieee: string, orderedReportKeys: string[] }>) => {
+      const device = state.devices.find(x => x.zespInfo.IEEE === action.payload.ieee);
+      if (!device) {
+        console.warn(`Root device not found to update`);
+        return;
+      }
+
+      device.zespInfo.Report = action.payload.orderedReportKeys.reduce((a, key) => ({...a, [key]: device.zespInfo.Report[key]}), {});
     }
   }
 })
@@ -81,5 +91,5 @@ const getters = {
 }
 
 export const {getDevicesByModelId, getDeviceByIee, getAllDevices} = getters;
-export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice, updateZespInfo} = devicesSlice.actions;
+export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice, updateZespInfo, updateReportsOrder} = devicesSlice.actions;
 export default devicesSlice.reducer;

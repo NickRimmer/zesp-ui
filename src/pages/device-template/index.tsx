@@ -28,6 +28,10 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
   } = useHook();
 
   const history = useHistory();
+  const changeDeviceHandler = (device: { ieee: string }): void => {
+    history.push(`/device/template/${device.ieee}`)
+    playHandler(undefined);
+  }
 
   if (status === "loading")
     return (<CustomSpinner message="Template loading..."/>)
@@ -47,7 +51,7 @@ export const DeviceTemplatePage: React.FC = (): React.ReactElement => {
                 <Dropdown.Toggle variant="link" as={"span"} className="breadcrumb-item">{template.Name || template.ModelId}</Dropdown.Toggle>
                 <Dropdown.Menu>
                   {devices.map((device, i) => (
-                    <Dropdown.Item onClick={() => history.push(`/device/template/${device.ieee}`)} key={i}
+                    <Dropdown.Item onClick={() => changeDeviceHandler(device)} key={i}
                                    className={device.ieee === ieee ? "text-primary" : ""}>{device.name}</Dropdown.Item>
                   ))}
                 </Dropdown.Menu>

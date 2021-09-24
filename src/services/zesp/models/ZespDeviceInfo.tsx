@@ -10,5 +10,11 @@ export type ZespDeviceInfo = {
   DevType: string,
   Img: string,
   class: string,
-  // EP: { [epKey: string]: object },
+  EP: { [epKey: string]: ZespEndpoint },
+}
+
+type ZespEndpoint = {
+  PrfId: string,
+  ClI: string[],
+  ClO: string[],
 }
