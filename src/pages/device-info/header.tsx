@@ -12,7 +12,7 @@ export default (props: {
   onSettingsHandler: () => void,
   onDeleteDeviceHandler: () => void,
   onDebugDeviceHandler: () => void,
-  onEditTemplateHandler: () => void,
+  onReportsHandler: () => void,
 }) => {
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const title = props.device.zespInfo.Name || props.device.zespInfo.ModelId;
@@ -47,7 +47,7 @@ export default (props: {
     <Popover id="popover-basic">
       <Popover.Header as="h3" className="bg-danger text-light">Achtung! Are you sure?</Popover.Header>
       <Popover.Body>
-        To delete device registration, click <span className="badge bg-danger">Unpair device</span> one more time...
+        To delete device registration, click <span className="text-danger">Unpair device</span> one more time...
       </Popover.Body>
     </Popover>
   );
@@ -60,7 +60,7 @@ export default (props: {
           <Dropdown.Toggle variant="link"><i className="bi bi-three-dots-vertical"/></Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item onClick={props.onSettingsHandler}>Settings</Dropdown.Item>
-            <Dropdown.Item onClick={props.onEditTemplateHandler}>Edit template</Dropdown.Item>
+            <Dropdown.Item onClick={props.onReportsHandler}>Edit template</Dropdown.Item>
             <OverlayTrigger trigger="click" placement="left" overlay={popover} rootClose={true} onToggle={setDeleteConfirmed}>
               <button className="dropdown-item" onClick={onDeleteDeviceHandler}>Unpair device</button>
             </OverlayTrigger>

@@ -2,9 +2,11 @@ import {ReportKeyInfo} from "./ReportKeyInfo";
 
 export type DataControlSettings = {
   id: string,
-  reportKey?: ReportKeyInfo,
   group?: string,
-  label?: string,
+  name?: string,
+
+  // additional properties
+  reportKey?: ReportKeyInfo,
   zespRoleSettings?: any,
 }
 

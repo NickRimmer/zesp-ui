@@ -5,8 +5,7 @@ import {Modal} from "react-bootstrap";
 import CustomHeader from "./header";
 import CustomBody from "./body";
 import CustomDeviceNotFound from "./not-found";
-import toast from "react-hot-toast";
-import {DeviceSettings} from "./settings";
+import DeviceSettingsDialog from "../../shared/device-settings-dialog";
 
 export default () => {
 
@@ -22,6 +21,7 @@ export default () => {
     onCloseClickHandler,
     onSettingsHandler,
     onSettingsClosedHandler,
+    onReportsHandler,
   } = useHook()
 
   if (!groups || groups.length === 0) {
@@ -33,11 +33,11 @@ export default () => {
 
   const headerHandlers = {
     onCloseClickHandler,
-    onEditTemplateHandler: () => toast.success("Edit page is not implemented yet", {icon: "😅"}),
     onSettingsHandler,
     onSettingsClosedHandler,
     onDeleteDeviceHandler,
     onDebugDeviceHandler,
+    onReportsHandler
   }
 
   return (
@@ -56,7 +56,7 @@ export default () => {
           device={deviceInfo}
           activeGroupName={activeGroupName}/>
       </Modal>
-      {showSettings && (<DeviceSettings onClosed={onSettingsClosedHandler} device={deviceInfo}/>)}
+      {showSettings && (<DeviceSettingsDialog onClosed={onSettingsClosedHandler} device={deviceInfo}/>)}
     </>
   )
 }

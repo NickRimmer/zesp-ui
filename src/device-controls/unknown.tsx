@@ -14,7 +14,7 @@ export const UnknownControl = (props: IDeviceControlProps<DataControlSettings>) 
   const report = DeviceControls.getControlReport(props);
   if (!report) return (<NoReport id={props.config.id} reportData={reportData} configData={configData}/>)
 
-  const label = report.label || props.config.label || props.config.id || "Unknown data";
+  const label = report.label || props.config.name || props.config.id || "Unknown data";
   const value =
     (report.parsed && report.parsed.toString().trim() === report.val.toString().trim() && report.parsed)
     || (report.parsed && report.val && `${report.parsed} (${report.val})`)

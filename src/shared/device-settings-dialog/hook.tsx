@@ -1,11 +1,11 @@
 import {useContext, useState} from "react";
-import {TypedZespResponseValidator} from "../../../services/zesp/common/ZespResponseValidators";
-import {DeviceInfo} from "../../../models/DeviceInfo";
-import {ZespContext} from "../../../shared/agents/ZespAgent";
+import {TypedZespResponseValidator} from "../../services/zesp/common/ZespResponseValidators";
+import {DeviceInfo} from "../../models/DeviceInfo";
+import {ZespContext} from "../agents/ZespAgent";
 import toast from "react-hot-toast";
-import {DictionaryStrings} from "../../../models/DictionaryStrings";
+import {DictionaryStrings} from "../../models/DictionaryStrings";
 import {useDispatch} from "react-redux";
-import {updateDevice} from "../../../store/slices/devicesSlice";
+import {updateDevice} from "../../store/slices/devicesSlice";
 
 export default (device: DeviceInfo) => {
   const [forceClose, setForceClose] = useState(false)

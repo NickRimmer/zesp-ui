@@ -3,6 +3,7 @@ import {DeviceInfo} from "../../models/DeviceInfo";
 import {RootState} from "../configure";
 import {ZespReportInfo} from "../../services/zesp/models/ZespReportInfo";
 import {ZespReportUpdates} from "../../services/zesp/service-root";
+import {ZespDeviceInfo} from "../../services/zesp/models/ZespDeviceInfo";
 
 export interface DevicesState {
   devices: DeviceInfo[]
@@ -41,6 +42,16 @@ export const devicesSlice = createSlice({
       }
     },
 
+    updateZespInfo: (state, action: PayloadAction<ZespDeviceInfo>): void => {
+      const deviceIndex = state.devices.findIndex(x => x.zespInfo.IEEE === action.payload.IEEE);
+      if (deviceIndex < 0) {
+        console.warn("Cannot update zesp data, cause device information not found")
+        return
+      } else {
+        state.devices[deviceIndex].zespInfo = action.payload;
+      }
+    },
+
     updateReport: (state, action: PayloadAction<{ ieee: string, reportKey: string, update: Partial<ZespReportInfo> }>): void => {
       const device = state.devices.find(x => x.zespInfo.IEEE === action.payload.ieee);
       if (!device) {
@@ -59,6 +70,16 @@ export const devicesSlice = createSlice({
       }
 
       device.zespInfo.Report = {...device.zespInfo.Report, ...action.payload} as { [reportId: string]: ZespReportInfo };
+    },
+
+    updateReportsOrder: (state, action: PayloadAction<{ ieee: string, orderedReportKeys: string[] }>) => {
+      const device = state.devices.find(x => x.zespInfo.IEEE === action.payload.ieee);
+      if (!device) {
+        console.warn(`Root device not found to update`);
+        return;
+      }
+
+      device.zespInfo.Report = action.payload.orderedReportKeys.reduce((a, key) => ({...a, [key]: device.zespInfo.Report[key]}), {});
     }
   }
 })
@@ -70,5 +91,5 @@ const getters = {
 }
 
 export const {getDevicesByModelId, getDeviceByIee, getAllDevices} = getters;
-export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice} = devicesSlice.actions;
+export const {setDevices, updateReport, updateRootReports, updateDevices, updateDevice, updateZespInfo, updateReportsOrder} = devicesSlice.actions;
 export default devicesSlice.reducer;

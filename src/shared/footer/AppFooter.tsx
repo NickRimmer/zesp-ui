@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {getZespFirmwareInstalledVersion} from "../../store/slices/zespFirmwareSlice";
 
 export const AppFooter: React.FC = (): React.ReactElement => {
-  const uiVersion = "0.0.1 alfa";
+  const uiVersion = process.env["REACT_APP_VERSION"];
   const zespVersion = useSelector(getZespFirmwareInstalledVersion);
 
   return (

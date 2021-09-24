@@ -1,44 +1,690 @@
 [
   {
     "clusterId": "0000",
-    "name": "Basic"
+    "name": "Basic",
+    "attributes": {
+      "0000": {
+        "name": "ZCLVERSION"
+      },
+      "0001": {
+        "name": "APPLICATIONVERSION"
+      },
+      "0002": {
+        "name": "STACKVERSION"
+      },
+      "0003": {
+        "name": "HWVERSION"
+      },
+      "0004": {
+        "name": "MANUFACTURERNAME"
+      },
+      "0005": {
+        "name": "MODELIDENTIFIER"
+      },
+      "0006": {
+        "name": "ATTR_DATECODE"
+      },
+      "0007": {
+        "name": "POWERSOURCE"
+      },
+      "0008": {
+        "name": "GENERICDEVICECLASS"
+      },
+      "0009": {
+        "name": "GENERICDEVICETYPE"
+      },
+      "000A": {
+        "name": "PRODUCTCODE"
+      },
+      "000B": {
+        "name": "PRODUCTURL"
+      },
+      "0010": {
+        "name": "LOCATIONDESCRIPTION"
+      },
+      "0011": {
+        "name": "PHYSICALENVIRONMENT"
+      },
+      "0012": {
+        "name": "DEVICEENABLED"
+      },
+      "0013": {
+        "name": "ALARMMASK"
+      },
+      "0014": {
+        "name": "DISABLELOCALCONFIG"
+      }
+    }
+  },
+  {
+    "clusterId": "0001",
+    "name": "Power_cfg",
+    "attributes": {
+      "0000": {
+        "name": "MAINSVOLTAGE"
+      },
+      "0001": {
+        "name": "MAINSFREQUENCY"
+      },
+      "0010": {
+        "name": "MAINSALARMMASK"
+      },
+      "0011": {
+        "name": "MAINSVOLTAGEMINTHRESHOLD"
+      },
+      "0012": {
+        "name": "MAINSVOLTAGEMAXTHRESHOLD"
+      },
+      "0013": {
+        "name": "MAINSVOLTAGEDWELLTRIPPOINT"
+      },
+      "0020": {
+        "name": "BATTERYVOLTAGE"
+      },
+      "0021": {
+        "name": "BATTERYPERCENTAGEREMAINING"
+      },
+      "0030": {
+        "name": "BATTERYMANUFACTURER"
+      },
+      "0031": {
+        "name": "BATTERYSIZE"
+      },
+      "0032": {
+        "name": "BATTERYAHRRATING"
+      },
+      "0033": {
+        "name": "BATTERYQUANTITY"
+      },
+      "0034": {
+        "name": "BATTERYRATEDVOLTAGE"
+      },
+      "0035": {
+        "name": "BATTERYALARMMASK"
+      },
+      "0036": {
+        "name": "BATTERYVOLTAGEMINTHRESHOLD"
+      },
+      "0037": {
+        "name": "BATTERYVOLTAGETHRESHOLD1"
+      },
+      "0038": {
+        "name": "BATTERYVOLTAGETHRESHOLD2"
+      },
+      "0039": {
+        "name": "BATTERYVOLTAGETHRESHOLD3"
+      },
+      "003A": {
+        "name": "BATTERYPERCENTAGEMINTHRESHOLD"
+      },
+      "003B": {
+        "name": "BATTERYPERCENTAGETHRESHOLD1"
+      },
+      "003C": {
+        "name": "BATTERYPERCENTAGETHRESHOLD2"
+      },
+      "003D": {
+        "name": "BATTERYPERCENTAGETHRESHOLD3"
+      },
+      "003E": {
+        "name": "BATTERYALARMSTATE"
+      }
+    }
+  },
+  {
+    "clusterId": "0002",
+    "name": "Device_Temperature_cfg",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0003",
+    "name": "Identify",
+    "attributes": {
+      "0000": {
+        "name": "IDENTIFYTIME"
+      }
+    }
+  },
+  {
+    "clusterId": "0004",
+    "name": "Groups",
+    "attributes": {
+      "0000": {
+        "name": "NAMESUPPORT"
+      }
+    }
+  },
+  {
+    "clusterId": "0005",
+    "name": "Scenes",
+    "attributes": {
+      "0000": {
+        "name": "SCENECOUNT"
+      },
+      "0001": {
+        "name": "CURRENTSCENE"
+      },
+      "0002": {
+        "name": "CURRENTGROUP"
+      },
+      "0003": {
+        "name": "SCENEVALID"
+      },
+      "0004": {
+        "name": "NAMESUPPORT"
+      },
+      "0005": {
+        "name": "LASTCONFIGUREDBY"
+      }
+    }
   },
   {
     "clusterId": "0006",
-    "name": "On/Off",
+    "name": "On_Off",
     "attributes": {
+      "0000": {
+        "name": "ONOFF"
+      },
       "0000:light": {
         "id": "on_off_toggle",
+        "name": "On/Off/Toggle",
         "arguments": {
           "commandOn": "01 {device} 01 01",
           "commandOff": "01 {device} 01 00",
           "commandToggle": "01 {device} 01 02"
         }
+      },
+      "4000": {
+        "name": "GLOBALSCENECONTROL"
+      },
+      "4001": {
+        "name": "ONTIME"
+      },
+      "4002": {
+        "name": "OFFWAITTIME"
+      },
+      "4003": {
+        "name": "STARTUPONOFF"
+      }
+    }
+  },
+  {
+    "clusterId": "0007",
+    "name": "On_Off_Switch_cfg",
+    "attributes": {
+      "0000": {
+        "name": "SWITCHTYPE"
+      },
+      "0010": {
+        "name": "SWITCHACTIONS"
       }
     }
   },
   {
     "clusterId": "0008",
-    "name": "Level",
+    "name": "Level_Control",
     "attributes": {
+      "0000": {
+        "name": "CURRENTLEVEL"
+      },
       "0000:light": {
         "id": "level_control",
+        "name": "Light level",
         "arguments": {
           "command": "MoveToLevel|{device}|1|01|1|{value}|0001|0",
           "min": 0,
           "max": 255
         }
+      },
+      "0001": {
+        "name": "REMAININGTIME"
+      },
+      "0002": {
+        "name": "MINIMUMLEVEL"
+      },
+      "0003": {
+        "name": "MAXIMUMLEVEL"
+      },
+      "0004": {
+        "name": "CURRENTFREQUENCY"
+      },
+      "0005": {
+        "name": "MINIMUMFREQUENCY"
+      },
+      "0006": {
+        "name": "MAXIMUMFREQUENCY"
+      },
+      "000F": {
+        "name": "OPTIONS"
+      },
+      "0010": {
+        "name": "ONOFFTRANSITIONTIME"
+      },
+      "0011": {
+        "name": "ONLEVEL"
+      },
+      "0012": {
+        "name": "ONTRANSITIONTIME"
+      },
+      "0013": {
+        "name": "OFFTRANSITIONTIME"
+      },
+      "0014": {
+        "name": "DEFAULTMOVERATE"
+      },
+      "4000": {
+        "name": "STARTUPCURRENTLEVEL"
       }
     }
   },
   {
-    "clusterId": "0106",
-    "name": "Illuminance"
+    "clusterId": "0009",
+    "name": "Alarms",
+    "attributes": {
+      "0000": {
+        "name": "ALARMCOUNT"
+      }
+    }
+  },
+  {
+    "clusterId": "000A",
+    "name": "Time",
+    "attributes": {
+      "0000": {
+        "name": "TIME"
+      },
+      "0001": {
+        "name": "TIMESTATUS"
+      },
+      "0002": {
+        "name": "TIMEZONE"
+      },
+      "0003": {
+        "name": "DSTSTART"
+      },
+      "0004": {
+        "name": "DSTEND"
+      },
+      "0005": {
+        "name": "DSTSHIFT"
+      },
+      "0006": {
+        "name": "STANDARDTIME"
+      },
+      "0007": {
+        "name": "LOCALTIME"
+      },
+      "0008": {
+        "name": "LASTSETTIME"
+      },
+      "0009": {
+        "name": "VALIDUNTILTIME"
+      }
+    }
+  },
+  {
+    "clusterId": "000F",
+    "name": "Binary_Input",
+    "attributes": {
+      "0004": {
+        "name": "ACTIVETEXT"
+      },
+      "001C": {
+        "name": "DESCRIPTION"
+      },
+      "002E": {
+        "name": "INACTIVETEXT"
+      },
+      "0051": {
+        "name": "OUTOFSERVICE"
+      },
+      "0054": {
+        "name": "POLARITY"
+      },
+      "0055": {
+        "name": "PRESENTVALUE"
+      },
+      "0067": {
+        "name": "RELIABILITY"
+      },
+      "006F": {
+        "name": "STATUSFLAGS"
+      },
+      "0100": {
+        "name": "APPLICATIONTYPE"
+      }
+    }
+  },
+  {
+    "clusterId": "0012",
+    "name": "Multistate",
+    "attributes": {
+      "000E": {
+        "name": "StateText"
+      },
+      "001C": {
+        "name": "Description"
+      },
+      "004A": {
+        "name": "NumberOfStates"
+      },
+      "0051": {
+        "name": "OutOfService"
+      },
+      "0055": {
+        "name": "PresentValue"
+      },
+      "0067": {
+        "name": "Reliability"
+      },
+      "006F": {
+        "name": "StatusFlags"
+      },
+      "0100": {
+        "name": "ApplicationType"
+      }
+    }
+  },
+  {
+    "clusterId": "0016",
+    "name": "Partition",
+    "attributes": {}
+  },
+  {
+    "clusterId": "001A",
+    "name": "Power_Profile",
+    "attributes": {}
+  },
+  {
+    "clusterId": "001B",
+    "name": "En50523_Appliance_Control",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0020",
+    "name": "Poll_Control",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0021",
+    "name": "Green_Power",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0100",
+    "name": "Shade_cfg",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0101",
+    "name": "Door_Lock",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0102",
+    "name": "Window_Covering",
+    "attributes": {
+      "0000": {
+        "name": "WINDOWCOVERINGTYPE"
+      },
+      "0001": {
+        "name": "PHYSICALCLOSEDLIMITLIFT"
+      },
+      "0002": {
+        "name": "PHYSICALCLOSEDLIMITTILT"
+      },
+      "0003": {
+        "name": "CURRENTPOSITIONLIFT"
+      },
+      "0004": {
+        "name": "CURRENTPOSITIONTILT"
+      },
+      "0005": {
+        "name": "NUMBEROFACTUATIONSLIFT"
+      },
+      "0006": {
+        "name": "NUMBEROFACTUATIONSTILT"
+      },
+      "0007": {
+        "name": "CONFIGSTATUS"
+      },
+      "0008": {
+        "name": "CURRENTPOSITIONLIFTPERCENTAGE"
+      },
+      "0009": {
+        "name": "CURRENTPOSITIONTILTPERCENTAGE"
+      },
+      "0010": {
+        "name": "INSTALLEDOPENLIMITLIFT"
+      },
+      "0011": {
+        "name": "INSTALLEDCLOSEDLIMITLIFT"
+      },
+      "0012": {
+        "name": "INSTALLEDOPENLIMITTILT"
+      },
+      "0013": {
+        "name": "INSTALLEDCLOSEDLIMITTILT"
+      },
+      "0014": {
+        "name": "VELOCITYLIFT"
+      },
+      "0015": {
+        "name": "ACCELERATIONTIMELIFT"
+      },
+      "0016": {
+        "name": "DECELERATIONTIMELIFT"
+      },
+      "0017": {
+        "name": "MODE"
+      },
+      "0018": {
+        "name": "INTERMEDIATESETPOINTSLIFT"
+      },
+      "0019": {
+        "name": "INTERMEDIATESETPOINTSTILT"
+      }
+    }
+  },
+  {
+    "clusterId": "0200",
+    "name": "Pump_cfg_And_Control",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0201",
+    "name": "Thermostat",
+    "attributes": {
+      "0000": {
+        "name": "LOCALTEMPERATURE"
+      },
+      "0001": {
+        "name": "OUTDOORTEMPERATURE"
+      },
+      "0002": {
+        "name": "OCCUPANCY"
+      },
+      "0003": {
+        "name": "ABSMINHEATSETPOINTLIMIT"
+      },
+      "0004": {
+        "name": "ABSMAXHEATSETPOINTLIMIT"
+      },
+      "0005": {
+        "name": "ABSMINCOOLSETPOINTLIMIT"
+      },
+      "0006": {
+        "name": "ABSMAXCOOLSETPOINTLIMIT"
+      },
+      "0007": {
+        "name": "PICOOLINGDEMAND"
+      },
+      "0008": {
+        "name": "PIHEATINGDEMAND"
+      },
+      "0009": {
+        "name": "HVACSYSTEMTYPECONFIGURATION"
+      },
+      "0010": {
+        "name": "LOCALTEMPERATURECALIBRATION"
+      },
+      "0011": {
+        "name": "OCCUPIEDCOOLINGSETPOINT"
+      },
+      "0012": {
+        "name": "OCCUPIEDHEATINGSETPOINT"
+      },
+      "0013": {
+        "name": "UNOCCUPIEDCOOLINGSETPOINT"
+      },
+      "0014": {
+        "name": "UNOCCUPIEDHEATINGSETPOINT"
+      },
+      "0015": {
+        "name": "MINHEATSETPOINTLIMIT"
+      },
+      "0016": {
+        "name": "MAXHEATSETPOINTLIMIT"
+      },
+      "0017": {
+        "name": "MINCOOLSETPOINTLIMIT"
+      },
+      "0018": {
+        "name": "MAXCOOLSETPOINTLIMIT"
+      },
+      "0019": {
+        "name": "MINSETPOINTDEADBAND"
+      },
+      "001A": {
+        "name": "REMOTESENSING"
+      },
+      "001B": {
+        "name": "CONTROLSEQUENCEOFOPERATION"
+      },
+      "001C": {
+        "name": "SYSTEMMODE"
+      },
+      "001D": {
+        "name": "ALARMMASK"
+      },
+      "001E": {
+        "name": "THERMOSTATRUNNINGMODE"
+      },
+      "0020": {
+        "name": "STARTOFWEEK"
+      },
+      "0021": {
+        "name": "NUMEROFWEEKLYTRANSITIONS"
+      },
+      "0022": {
+        "name": "NUMEROFDAILYTRANSITIONS"
+      },
+      "0023": {
+        "name": "TEMPERATURESETPOINTHOLD"
+      },
+      "0024": {
+        "name": "TEMPERATURESETPOINTHOLDDURATION"
+      },
+      "0025": {
+        "name": "THERMOSTATPROGRAMMINGOPERATIONMODE"
+      },
+      "0029": {
+        "name": "THERMOSTATRUNNINGSTATE"
+      },
+      "0030": {
+        "name": "SETPOINTCHANGESOURCE"
+      },
+      "0031": {
+        "name": "SETPOINTCHANGEAMOUNT"
+      },
+      "0032": {
+        "name": "SETPOINTCHANGESOURCETIMESTAMP"
+      },
+      "0034": {
+        "name": "OCCUPIEDSETBACK"
+      },
+      "0035": {
+        "name": "OCCUPIEDSETBACKMIN"
+      },
+      "0036": {
+        "name": "OCCUPIEDSETBACKMAX"
+      },
+      "0037": {
+        "name": "UNOCCUPIEDSETBACK"
+      },
+      "0038": {
+        "name": "UNOCCUPIEDSETBACKMIN"
+      },
+      "0039": {
+        "name": "UNOCCUPIEDSETBACKMAX"
+      },
+      "003A": {
+        "name": "EMERGENCYHEATDELTA"
+      },
+      "0040": {
+        "name": "ACTYPE"
+      },
+      "0041": {
+        "name": "ACCAPACITY"
+      },
+      "0042": {
+        "name": "ACREFRIGERANTTYPE"
+      },
+      "0043": {
+        "name": "ACCOMPRESSORTYPE"
+      },
+      "0044": {
+        "name": "ACERRORCODE"
+      },
+      "0045": {
+        "name": "ACLOUVERPOSITION"
+      },
+      "0046": {
+        "name": "ACCOILTEMPERATURE"
+      },
+      "0047": {
+        "name": "ACCAPACITYFORMAT"
+      }
+    }
+  },
+  {
+    "clusterId": "0202",
+    "name": "Fan_Control",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0204",
+    "name": "Thermostat_User_Interface_cfg",
+    "attributes": {}
   },
   {
     "clusterId": "0300",
-    "name": "Color",
+    "name": "Color_Control",
     "attributes": {
+      "0000": {
+        "name": "CURRENTHUE"
+      },
+      "0001": {
+        "name": "CURRENTSATURATION"
+      },
+      "0002": {
+        "name": "REMAININGTIME"
+      },
+      "0003": {
+        "name": "CURRENTX"
+      },
+      "0004": {
+        "name": "CURRENTY"
+      },
+      "0005": {
+        "name": "DRIFTCOMPENSATION"
+      },
+      "0006": {
+        "name": "COMPENSATIONTEXT"
+      },
+      "0007": {
+        "name": "COLORTEMPERATURE"
+      },
       "0007:light": {
         "id": "level_control",
         "arguments": {
@@ -46,12 +692,613 @@
           "min": 100,
           "max": 600
         }
+      },
+      "0008": {
+        "name": "COLORMODE"
+      },
+      "4000": {
+        "name": "ENHANCEDCURRENTHUE"
+      },
+      "4001": {
+        "name": "ENHANCEDCOLORMODE"
+      },
+      "4002": {
+        "name": "COLORLOOPACTIVE"
+      },
+      "4003": {
+        "name": "COLORLOOPDIRECTION"
+      },
+      "4004": {
+        "name": "COLORLOOPTIME"
+      },
+      "4005": {
+        "name": "COLORLOOPSTARTHUE"
+      },
+      "4006": {
+        "name": "COLORLOOPSTOREDHUE"
+      },
+      "400A": {
+        "name": "COLORCAPABILITIES"
+      },
+      "400B": {
+        "name": "COLORTEMPERATUREMIN"
+      },
+      "400C": {
+        "name": "COLORTEMPERATUREMAX"
+      }
+    }
+  },
+  {
+    "clusterId": "0400",
+    "name": "Illuminance_Measurement",
+    "attributes": {
+      "0000": {
+        "name": "MEASUREDVALUE"
+      },
+      "0001": {
+        "name": "MINMEASUREDVALUE"
+      },
+      "0002": {
+        "name": "MAXMEASUREDVALUE"
+      },
+      "0003": {
+        "name": "TOLERANCE"
+      },
+      "0004": {
+        "name": "LIGHTSENSORTYPE"
+      }
+    }
+  },
+  {
+    "clusterId": "0401",
+    "name": "Illuminance_Level_Sensing",
+    "attributes": {
+      "0000": {
+        "name": "LEVELSTATUS"
+      },
+      "0001": {
+        "name": "LIGHTSENSORTYPE"
+      },
+      "0010": {
+        "name": "ILLUMINANCETARGETLEVEL"
+      }
+    }
+  },
+  {
+    "clusterId": "0402",
+    "name": "Temperature_Measurement",
+    "attributes": {
+      "0000": {
+        "name": "MEASUREDVALUE"
+      },
+      "0001": {
+        "name": "MINMEASUREDVALUE"
+      },
+      "0002": {
+        "name": "MAXMEASUREDVALUE"
+      },
+      "0003": {
+        "name": "TOLERANCE"
+      }
+    }
+  },
+  {
+    "clusterId": "0403",
+    "name": "Pressure_Measurement",
+    "attributes": {
+      "0000": {
+        "name": "MEASUREDVALUE"
+      },
+      "0001": {
+        "name": "MINMEASUREDVALUE"
+      },
+      "0002": {
+        "name": "MAXMEASUREDVALUE"
+      },
+      "0003": {
+        "name": "TOLERANCE"
+      },
+      "0010": {
+        "name": "SCALEDVALUE"
+      },
+      "0011": {
+        "name": "MINSCALEDVALUE"
+      },
+      "0012": {
+        "name": "MAXSCALEDVALUE"
+      },
+      "0013": {
+        "name": "SCALEDTOLERANCE"
+      },
+      "0014": {
+        "name": "SCALE"
+      }
+    }
+  },
+  {
+    "clusterId": "0404",
+    "name": "Flow_Measurement",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0405",
+    "name": "Relative_Humidity_Measurement",
+    "attributes": {
+      "0000": {
+        "name": "Humidity"
       }
     }
   },
   {
     "clusterId": "0406",
-    "name": "Occupancy"
+    "name": "Occupancy_Sensing",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0500",
+    "name": "Ias_Zone",
+    "attributes": {
+      "0000": {
+        "name": "ZONESTATE"
+      },
+      "0001": {
+        "name": "ZONETYPE"
+      },
+      "0002": {
+        "name": "ZONESTATUS"
+      },
+      "0010": {
+        "name": "IASCIEADDRESS"
+      },
+      "0011": {
+        "name": "ZONEID"
+      },
+      "0012": {
+        "name": "NUMBEROFZONESENSITIVITYLEVELSSUPPORTED"
+      },
+      "0013": {
+        "name": "CURRENTZONESENSITIVITYLEVEL"
+      }
+    }
+  },
+  {
+    "clusterId": "0501",
+    "name": "Ias_Ace",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0502",
+    "name": "Ias_Wd",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0702",
+    "name": "Metering",
+    "attributes": {
+      "0000": {
+        "name": "CURRENTSUMMATIONDELIVERED"
+      }
+    }
+  },
+  {
+    "clusterId": "0B00",
+    "name": "En50523_Appliance_Identification",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0B01",
+    "name": "Meter_Identification",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0B02",
+    "name": "En50523_Appliance_Events_And_Alert",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0B03",
+    "name": "Appliance_Statistics",
+    "attributes": {}
+  },
+  {
+    "clusterId": "0B04",
+    "name": "Electricity_Measurement",
+    "attributes": {
+      "0000": {
+        "name": "MEASUREMENTTYPE"
+      },
+      "0100": {
+        "name": "DCVOLTAGE"
+      },
+      "0101": {
+        "name": "DCVOLTAGEMIN"
+      },
+      "0102": {
+        "name": "DCVOLTAGEMAX"
+      },
+      "0103": {
+        "name": "DCCURRENT"
+      },
+      "0104": {
+        "name": "DCCURRENTMIN"
+      },
+      "0105": {
+        "name": "DCCURRENTMAX"
+      },
+      "0106": {
+        "name": "DCPOWER"
+      },
+      "0107": {
+        "name": "DCPOWERMIN"
+      },
+      "0108": {
+        "name": "DCPOWERMAX"
+      },
+      "0200": {
+        "name": "DCVOLTAGEMULTIPLIER"
+      },
+      "0201": {
+        "name": "DCVOLTAGEDIVISOR"
+      },
+      "0202": {
+        "name": "DCCURRENTMULTIPLIER"
+      },
+      "0203": {
+        "name": "DCCURRENTDIVISOR"
+      },
+      "0204": {
+        "name": "DCPOWERMULTIPLIER"
+      },
+      "0205": {
+        "name": "DCPOWERDIVISOR"
+      },
+      "0300": {
+        "name": "ACFREQUENCY"
+      },
+      "0301": {
+        "name": "ACFREQUENCYMIN"
+      },
+      "0302": {
+        "name": "ACFREQUENCYMAX"
+      },
+      "0303": {
+        "name": "NEUTRALCURRENT"
+      },
+      "0304": {
+        "name": "TOTALACTIVEPOWER"
+      },
+      "0305": {
+        "name": "TOTALREACTIVEPOWER"
+      },
+      "0306": {
+        "name": "TOTALAPPARENTPOWER"
+      },
+      "0307": {
+        "name": "MEASURED1STHARMONICCURRENT"
+      },
+      "0308": {
+        "name": "MEASURED3RDHARMONICCURRENT"
+      },
+      "0309": {
+        "name": "MEASURED5THHARMONICCURRENT"
+      },
+      "030A": {
+        "name": "MEASURED7THHARMONICCURRENT"
+      },
+      "030B": {
+        "name": "MEASURED9THHARMONICCURRENT"
+      },
+      "030C": {
+        "name": "MEASURED11THHARMONICCURRENT"
+      },
+      "030D": {
+        "name": "MEASUREDPHASE1STHARMONICCURRENT"
+      },
+      "030E": {
+        "name": "MEASUREDPHASE3RDHARMONICCURRENT"
+      },
+      "030F": {
+        "name": "MEASUREDPHASE5THHARMONICCURRENT"
+      },
+      "0310": {
+        "name": "MEASUREDPHASE7THHARMONICCURRENT"
+      },
+      "0311": {
+        "name": "MEASUREDPHASE9THHARMONICCURRENT"
+      },
+      "0312": {
+        "name": "MEASUREDPHASE11THHARMONICCURRENT"
+      },
+      "0400": {
+        "name": "ACFREQUENCYMULTIPLIER"
+      },
+      "0401": {
+        "name": "ACFREQUENCYDIVISOR"
+      },
+      "0402": {
+        "name": "POWERMULTIPLIER"
+      },
+      "0403": {
+        "name": "POWERDIVISOR"
+      },
+      "0404": {
+        "name": "HARMONICCURRENTMULTIPLIER"
+      },
+      "0405": {
+        "name": "PHASEHARMONICCURRENTMULTIPLIER"
+      },
+      "0500": {
+        "name": "INSTANTANEOUSVOLTAGE"
+      },
+      "0501": {
+        "name": "INSTANTANEOUSLINECURRENT"
+      },
+      "0502": {
+        "name": "INSTANTANEOUSACTIVECURRENT"
+      },
+      "0503": {
+        "name": "INSTANTANEOUSREACTIVECURRENT"
+      },
+      "0504": {
+        "name": "INSTANTANEOUSPOWER"
+      },
+      "0505": {
+        "name": "RMSVOLTAGE"
+      },
+      "0506": {
+        "name": "RMSVOLTAGEMIN"
+      },
+      "0507": {
+        "name": "RMSVOLTAGEMAX"
+      },
+      "0508": {
+        "name": "RMSCURRENT"
+      },
+      "0509": {
+        "name": "RMSCURRENTMIN"
+      },
+      "050A": {
+        "name": "RMSCURRENTMAX"
+      },
+      "050B": {
+        "name": "ACTIVEPOWER"
+      },
+      "050C": {
+        "name": "ACTIVEPOWERMIN"
+      },
+      "050D": {
+        "name": "ACTIVEPOWERMAX"
+      },
+      "050E": {
+        "name": "REACTIVEPOWER"
+      },
+      "050F": {
+        "name": "APPARENTPOWER"
+      },
+      "0510": {
+        "name": "POWERFACTOR"
+      },
+      "0511": {
+        "name": "AVERAGERMSVOLTAGEMEASUREMENTPERIOD"
+      },
+      "0513": {
+        "name": "AVERAGERMSUNDERVOLTAGECOUNTER"
+      },
+      "0514": {
+        "name": "RMSEXTREMEOVERVOLTAGEPERIOD"
+      },
+      "0515": {
+        "name": "RMSEXTREMEUNDERVOLTAGEPERIOD"
+      },
+      "0516": {
+        "name": "RMSVOLTAGESAGPERIOD"
+      },
+      "0517": {
+        "name": "RMSVOLTAGESWELLPERIOD"
+      },
+      "0600": {
+        "name": "ACVOLTAGEMULTIPLIER"
+      },
+      "0601": {
+        "name": "ACVOLTAGEDIVISOR"
+      },
+      "0602": {
+        "name": "ACCURRENTMULTIPLIER"
+      },
+      "0603": {
+        "name": "ACCURRENTDIVISOR"
+      },
+      "0604": {
+        "name": "ACPOWERMULTIPLIER"
+      },
+      "0605": {
+        "name": "ACPOWERDIVISOR"
+      },
+      "0700": {
+        "name": "OVERLOADALARMSMASK"
+      },
+      "0701": {
+        "name": "VOLTAGEOVERLOAD"
+      },
+      "0702": {
+        "name": "CURRENTOVERLOAD"
+      },
+      "0800": {
+        "name": "ACOVERLOADALARMSMASK"
+      },
+      "0801": {
+        "name": "ACVOLTAGEOVERLOAD"
+      },
+      "0802": {
+        "name": "ACCURRENTOVERLOAD"
+      },
+      "0803": {
+        "name": "ACACTIVEPOWEROVERLOAD"
+      },
+      "0804": {
+        "name": "ACREACTIVEPOWEROVERLOAD"
+      },
+      "0805": {
+        "name": "AVERAGERMSOVERVOLTAGE"
+      },
+      "0806": {
+        "name": "AVERAGERMSUNDERVOLTAGE"
+      },
+      "0807": {
+        "name": "RMSEXTREMEOVERVOLTAGE"
+      },
+      "0808": {
+        "name": "RMSEXTREMEUNDERVOLTAGE"
+      },
+      "0809": {
+        "name": "RMSVOLTAGESAG"
+      },
+      "080A": {
+        "name": "RMSVOLTAGESWELL"
+      },
+      "0901": {
+        "name": "LINECURRENTPHASEB"
+      },
+      "0902": {
+        "name": "ACTIVECURRENTPHASEB"
+      },
+      "0903": {
+        "name": "REACTIVECURRENTPHASEB"
+      },
+      "0905": {
+        "name": "RMSVOLTAGEPHASEB"
+      },
+      "0906": {
+        "name": "RMSVOLTAGEMINPHASEB"
+      },
+      "0907": {
+        "name": "RMSVOLTAGEMAXPHASEB"
+      },
+      "0908": {
+        "name": "RMSCURRENTPHASEB"
+      },
+      "0909": {
+        "name": "RMSCURRENTMINPHASEB"
+      },
+      "090A": {
+        "name": "RMSCURRENTMAXPHASEB"
+      },
+      "090B": {
+        "name": "ACTIVEPOWERPHASEB"
+      },
+      "090C": {
+        "name": "ACTIVEPOWERMINPHASEB"
+      },
+      "090D": {
+        "name": "ACTIVEPOWERMAXPHASEB"
+      },
+      "090E": {
+        "name": "REACTIVEPOWERPHASEB"
+      },
+      "090F": {
+        "name": "APPARENTPOWERPHASEB"
+      },
+      "0910": {
+        "name": "POWERFACTORPHASEB"
+      },
+      "0911": {
+        "name": "AVERAGERMSVOLTAGEMEASUREMENTPERIODPHASEB"
+      },
+      "0912": {
+        "name": "AVERAGERMSOVERVOLTAGECOUNTERPHASEB"
+      },
+      "0913": {
+        "name": "AVERAGERMSUNDERVOLTAGECOUNTERPHASEB"
+      },
+      "0914": {
+        "name": "RMSEXTREMEOVERVOLTAGEPERIODPHASEB"
+      },
+      "0915": {
+        "name": "RMSEXTREMEUNDERVOLTAGEPERIODPHASEB"
+      },
+      "0916": {
+        "name": "RMSVOLTAGESAGPERIODPHASEB"
+      },
+      "0917": {
+        "name": "RMSVOLTAGESWELLPERIODPHASEB"
+      },
+      "0A01": {
+        "name": "LINECURRENTPHASEC"
+      },
+      "0A02": {
+        "name": "ACTIVECURRENTPHASEC"
+      },
+      "0A03": {
+        "name": "REACTIVECURRENTPHASEC"
+      },
+      "0A05": {
+        "name": "RMSVOLTAGEPHASEC"
+      },
+      "0A06": {
+        "name": "RMSVOLTAGEMINPHASEC"
+      },
+      "0A07": {
+        "name": "RMSVOLTAGEMAXPHASEC"
+      },
+      "0A08": {
+        "name": "RMSCURRENTPHASEC"
+      },
+      "0A09": {
+        "name": "RMSCURRENTMINPHASEC"
+      },
+      "0A0A": {
+        "name": "RMSCURRENTMAXPHASEC"
+      },
+      "0A0B": {
+        "name": "ACTIVEPOWERPHASEC"
+      },
+      "0A0C": {
+        "name": "ACTIVEPOWERMINPHASEC"
+      },
+      "0A0D": {
+        "name": "ACTIVEPOWERMAXPHASEC"
+      },
+      "0A0E": {
+        "name": "REACTIVEPOWERPHASEC"
+      },
+      "0A0F": {
+        "name": "APPARENTPOWERPHASEC"
+      },
+      "0A10": {
+        "name": "POWERFACTORPHASEC"
+      },
+      "0A11": {
+        "name": "AVERAGERMSVOLTAGEMEASUREMENTPERIODPHASEC"
+      },
+      "0A12": {
+        "name": "AVERAGERMSOVERVOLTAGECOUNTERPHASEC"
+      },
+      "0A13": {
+        "name": "AVERAGERMSUNDERVOLTAGECOUNTERPHASEC"
+      },
+      "0A14": {
+        "name": "RMSEXTREMEOVERVOLTAGEPERIODPHASEC"
+      },
+      "0A15": {
+        "name": "RMSEXTREMEUNDERVOLTAGEPERIODPHASEC"
+      },
+      "0A16": {
+        "name": "RMSVOLTAGESAGPERIODPHASEC"
+      },
+      "0A17": {
+        "name": "RMSVOLTAGESWELLPERIODPHASEC"
+      }
+    }
+  },
+  {
+    "clusterId": "0B05",
+    "name": "Diagnostics",
+    "attributes": {}
+  },
+  {
+    "clusterId": "1000",
+    "name": "Zll_Commissioning",
+    "attributes": {}
   },
   {
     "clusterId": "BBBB",

@@ -5,6 +5,7 @@ import {NotImplementedYetPage, SetupMqttPage, SetupWifiPage} from "./pages/setup
 import {getInitialized} from "./store/slices/zespSlice"
 import {setSpinnerShow} from "./store/slices/spinnerSlice"
 import {useDispatch, useSelector} from "react-redux";
+import DeviceTemplatePage from "./pages/device-template";
 
 export const Routes = () => {
   const isInitialized = useSelector(getInitialized);
@@ -24,6 +25,7 @@ export const Routes = () => {
       <Route exact path="/"><Redirect to="/devices"/></Route>
       <Route path="/devices" component={DevicesPage}/>
       <Route path="/devices/:ieee" component={DeviceInfoPage}/>
+      <Route path="/device/template/:ieee" component={DeviceTemplatePage}/>
       <Route path="/setup" component={SetupPage}/>
       <Route exact path="/setup" component={SetupWifiPage}/>
       <Route path="/setup/mqtt" component={SetupMqttPage}/>

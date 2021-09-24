@@ -1,0 +1,51 @@
+.template-editor {
+  border-left: solid 4px #f5f5f5;
+  padding-left: 15px;
+
+  .lists {
+    padding-top: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 410px;
+
+    .item-title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      padding-right: 5px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #f6f6f6;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d5d5d5;
+      border-radius: 5px;
+    }
+
+    .list-group-item {
+      border: solid 1px transparent;
+      box-shadow: none !important;
+
+      &.active:not(:hover) {
+        background-color: #72abfe;
+        outline: none;
+      }
+    }
+  }
+
+  .results {
+    display: flex;
+    justify-content: space-between;
+    //padding: 5px 10px 20px;
+
+    span {
+      font-weight: bold;
+    }
+  }
+}

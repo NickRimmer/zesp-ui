@@ -36,7 +36,7 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
     zespSend({data: data});
   }
 
-  const label = report?.label || props.config.label || "Level";
+  const label = report?.label || props.config.name || "Level";
 
   return (
     <Row>

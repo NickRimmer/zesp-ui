@@ -56,6 +56,10 @@ export default () => {
     setShowDialog(true);
   }
 
+  const onReportsHandler = () => {
+    history.push(`/device/template/${deviceInfo.zespInfo.IEEE}`)
+  }
+
   const onExitHandler = () => {
     if (!autoExit) return;
     setTimeout(_returnBack, 100)
@@ -78,6 +82,7 @@ export default () => {
     onCloseClickHandler,
     onSettingsHandler,
     onSettingsClosedHandler,
+    onReportsHandler,
   }
 }
 
