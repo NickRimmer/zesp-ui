@@ -20,18 +20,30 @@ Definitely yes.
 ## How to install Self-Hosted version
 
 ### Install
-```
-rm -f ~/zesp-ui-install.sh&&curl https://gist.githubusercontent.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/411e6b1d9451e4970a49c042112aeed6565e5241/zesp-ui-self-hosted-install.sh -o ~/zesp-ui-install.sh&&sudo chmod 777 ~/zesp-ui-install.sh&&sudo ~/zesp-ui-install.sh&&rm -f ~/zesp-ui-install.sh
-```
 
-### Run
 ```
-/opt/zesp-ui/run.sh 
+wget https://gist.github.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/zesp-ui-self-hosted-install.sh -O ~/zesp-ui-install.sh
+chmod a+x ~/zesp-ui-install.sh
+~/zesp-ui-install.sh
+rm -f ~/zesp-ui-install.sh
 ```
 
 ### Uninstall
+
 ```
-sudo rm -fr /opt/zesp-ui
+wget https://gist.github.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/uninstall.sh -O ~/zesp-ui-uninstall.sh
+chmod a+x ~/zesp-ui-uninstall.sh
+~/zesp-ui-uninstall.sh
+rm -f ~/zesp-ui-uninstall.sh
+```
+
+or
+
+```
+/etc/init.d/zesp_ui stop
+/etc/init.d/zesp_ui disable
+rm -f /etc/init.d/zesp_ui
+rm -fr /opt/zesp-ui
 ```
 
 # Contributing
