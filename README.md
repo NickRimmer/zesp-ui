@@ -17,6 +17,14 @@ Definitely yes.
 - Just download the already built application from [gh-page branch](https://github.com/NickRimmer/zesp-ui/tree/gh-pages) and open `index.html`
 - If you want to play with source codes, to build it as a regular React application execute `npm run build` or `npm start` to start it locally for development.
 
+## How to install Self-Hosted version
+
+TBD
+
+```
+sudo curl https://gist.githubusercontent.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/89ddfe47fd121de567f1eda0a2d75d822e7c6244/zesp-ui-self-hosted-install.sh -o ~/zesp-ui-install.sh&&chmod 777 ~/zesp-ui-install.sh&&~/zesp-ui-install.sh&&rm -f ~/zesp-ui-install.sh
+```
+
 # Contributing
 
 We love your input. This all is possible only because of you 🥳
