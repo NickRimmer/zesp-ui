@@ -19,10 +19,14 @@ Definitely yes.
 
 ## How to install Self-Hosted version
 
-TBD
-
+### Install
 ```
 sudo curl https://gist.githubusercontent.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/89ddfe47fd121de567f1eda0a2d75d822e7c6244/zesp-ui-self-hosted-install.sh -o ~/zesp-ui-install.sh&&chmod 777 ~/zesp-ui-install.sh&&~/zesp-ui-install.sh&&rm -f ~/zesp-ui-install.sh
+```
+
+### Uninstall
+```
+sudo rm -fr /opt/zesp-ui
 ```
 
 # Contributing
