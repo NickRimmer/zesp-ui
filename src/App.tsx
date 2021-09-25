@@ -12,6 +12,18 @@ import {AppFooter} from "./shared/footer";
 import AppHeader from "./shared/header";
 
 const Content = () => {
+  const selfHosted = process.env.REACT_APP_SELF_HOSTED === "1"
+  if (selfHosted) {
+    const selfHostedServer: IServerInfo = {
+      address: process.env.REACT_APP_SELF_HOSTED_DEV || document.location.hostname,
+      name: "Self-hosted"
+    }
+
+    console.log(selfHostedServer)
+    return <App server={selfHostedServer}/>
+  }
+
+
   const [serverIndex, setServerIndex] = useState<number | null>(null);
   const serversString = window.localStorage.getItem("servers");
   const servers = (serversString && JSON.parse(serversString)) || [];

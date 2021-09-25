@@ -4,7 +4,6 @@ import {NavLink} from "react-router-dom";
 import {FadeIn} from "../../shared/fadein-transition";
 import {ZespSettings} from "../../services/zesp/models/ZespSettings";
 import toast from "react-hot-toast";
-import {BsGearFill} from "react-icons/bs";
 import {useDispatch, useSelector} from "react-redux";
 import {setSpinnerShow} from "../../store/slices/spinnerSlice"
 import {setZespSettings, getZespSettings} from "../../store/slices/settingsSlice"
@@ -44,7 +43,7 @@ const Result = () => {
           <Nav.Item><NavLink className="nav-link" to="/setup/telegram">Telegram bot</NavLink></Nav.Item>
           <Nav.Item><NavLink className="nav-link" to="/setup/z2m">Z2M client</NavLink></Nav.Item>
           <Nav.Item><NavLink className="nav-link" to="/setup/firmware">Firmware manager</NavLink></Nav.Item>
-          <Nav.Item className="ms-auto"><NavLink className="nav-link" to="/setup/zesp-ui"><BsGearFill style={{marginTop: "-3px"}}/> ZESP:UI</NavLink></Nav.Item>
+          <Nav.Item className="ms-auto"><NavLink className="nav-link" to="/setup/zesp-ui"><i className="bi bi-gear-fill"/> ZESP:UI</NavLink></Nav.Item>
         </Nav>
       </Container>
     </FadeIn>
