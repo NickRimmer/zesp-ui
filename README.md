@@ -21,7 +21,12 @@ Definitely yes.
 
 ### Install
 ```
-sudo curl https://gist.githubusercontent.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/89ddfe47fd121de567f1eda0a2d75d822e7c6244/zesp-ui-self-hosted-install.sh -o ~/zesp-ui-install.sh&&chmod 777 ~/zesp-ui-install.sh&&~/zesp-ui-install.sh&&rm -f ~/zesp-ui-install.sh
+rm -f ~/zesp-ui-install.sh&&curl https://gist.githubusercontent.com/NickRimmer/8163d849d5b88f435a87dc28de1313c9/raw/411e6b1d9451e4970a49c042112aeed6565e5241/zesp-ui-self-hosted-install.sh -o ~/zesp-ui-install.sh&&sudo chmod 777 ~/zesp-ui-install.sh&&sudo ~/zesp-ui-install.sh&&rm -f ~/zesp-ui-install.sh
+```
+
+### Run
+```
+/opt/zesp-ui/run.sh 
 ```
 
 ### Uninstall
