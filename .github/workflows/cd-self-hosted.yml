@@ -29,8 +29,8 @@ jobs:
           npm run build:self-hosted
           ls
 
-      # Deploy to gh-pages
-      - name: Deploy to gh-pages
+      # Deploy to self-hosted
+      - name: Deploy to self-hosted
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: self-hosted
