@@ -1,32 +1,29 @@
 import {FormEvent} from "react";
 
-// we need this 'any' type to provide general solution
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type IAction = (arg: any) => void;
+type IAction = (arg: { [key: string]: string }) => void;
 
 const Result = {
   handleSubmit: function handleSubmit(e: FormEvent, action: IAction) {
     e.preventDefault();
 
-    // // we need this 'any' type to provide general solution
-    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // const data: any = {};
-    //
-    // for (const input of $(e.target).find("input")) {
-    //   const id = $(input).prop("id");
-    //   if (id == null) return;
-    //
-    //   if ($(input).prop("type") === "checkbox") {
-    //     if ($(input).prop("checked") === true) data[id] = $(input).attr("checked_value") || "true";
-    //     else data[id] = $(input).attr("unchecked_value") || "false";
-    //   } else {
-    //     data[id] = $(input).val();
-    //   }
-    // }
-    // // console.log(data);
-    // action(data)
+    const data: { [key: string]: string } = {};
+    const inputs = e.currentTarget.getElementsByTagName("input");
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      const id = input.attributes.getNamedItem("id")?.value;
+      const type = input.attributes.getNamedItem("type")?.value;
+      if (!id || !type) continue;
 
-    console.warn("Not implemented yet")
+      if (type === "checkbox") {
+        data[id] = input.checked
+          ? input.attributes.getNamedItem("checked_value")?.value || "true"
+          : input.attributes.getNamedItem("unchecked_value")?.value || "false"
+      } else {
+        data[id] = input.value
+      }
+    }
+
+    action(data)
   }
 };
 

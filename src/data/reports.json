@@ -189,9 +189,9 @@
         "id": "on_off_toggle",
         "name": "On/Off/Toggle",
         "arguments": {
-          "commandOn": "01 {device} 01 01",
-          "commandOff": "01 {device} 01 00",
-          "commandToggle": "01 {device} 01 02"
+          "commandOn": "{endpoint} {device} 01 01",
+          "commandOff": "{endpoint} {device} 01 00",
+          "commandToggle": "{endpoint} {device} 01 02"
         }
       },
       "4000": {
@@ -231,7 +231,7 @@
         "id": "level_control",
         "name": "Light level",
         "arguments": {
-          "command": "MoveToLevel|{device}|1|01|1|{value}|0001|0",
+          "command": "MoveToLevel|{device}|1|{endpoint}|1|{value}|0001|0",
           "min": 0,
           "max": 255
         }

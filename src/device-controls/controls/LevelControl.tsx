@@ -63,6 +63,7 @@ export const LevelControl = (props: IDeviceControlProps<LayoutSettingsLevel>) =>
 }
 
 const formatCommand = (command: string, value: number, props: IDeviceControlProps<LayoutSettingsLevel>): string => command
+  .replace("{endpoint}", props.config.reportKey?.endpoint || "")
   .replace("{device}", props.deviceInfo.zespInfo.Device)
   .replace("{value}", value.toString(16))
   .replace("{value:dec}", value.toString());
