@@ -10,18 +10,22 @@ export const OnOffToggle = (props: IDeviceControlProps<LayoutSettingsOnOffToggle
   const {zespSend} = useContext(ZespContext);
   const report = DeviceControls.getControlReport(props);
 
+  const applyTemplate = (template: string): string => template
+    .replace("{endpoint}", props.config.reportKey?.endpoint || "")
+    .replace("{device}", props.deviceInfo.zespInfo.Device)
+
   const onHandler = () => {
-    const command = props.config.arguments.commandOn.replace("{device}", props.deviceInfo.zespInfo.Device)
+    const command = applyTemplate(props.config.arguments.commandOn)
     zespSend({data: command, isBinary: true});
   };
 
   const offHandler = () => {
-    const command = props.config.arguments.commandOff.replace("{device}", props.deviceInfo.zespInfo.Device)
+    const command = applyTemplate(props.config.arguments.commandOff)
     zespSend({data: command, isBinary: true});
   };
 
   const toggleHandler = () => {
-    const command = props.config.arguments.commandToggle.replace("{device}", props.deviceInfo.zespInfo.Device)
+    const command = applyTemplate(props.config.arguments.commandToggle)
     zespSend({data: command, isBinary: true});
   }
 

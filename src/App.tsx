@@ -19,7 +19,6 @@ const Content = () => {
       name: "Self-hosted"
     }
 
-    console.log(selfHostedServer)
     return <App server={selfHostedServer}/>
   }
 
